@@ -11,4 +11,29 @@ public class UIController {
         model.addAttribute("message", "Success!!");
         return "landing";
     }
+
+    @GetMapping("/login")
+    public String loginUI(){
+        return "login";
+    }
+
+    @GetMapping("/bookstore")
+    public String bookstoreUI(){
+        return "bookstore";
+    }
+
+    @GetMapping("/profile")
+    public String profileUI(){
+        return "profile";
+    }
+
+    @GetMapping("/listing")
+    public String listingUI(){
+        return "listing";
+    }
+
+    @GetMapping("/cart")
+    public String cartUI(){
+        return "cart";
+    }
 }
