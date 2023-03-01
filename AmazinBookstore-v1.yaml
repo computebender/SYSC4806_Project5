@@ -1,0 +1,1037 @@
+openapi: '3.0.2'
+info:
+  title: Amazin online bookstore API
+  version: '1.0'
+servers:
+  - url: https://localhost/api
+
+tags:
+  - name: User
+    description: Operations related to user accounts
+  - name: Book
+    description: Operations related to books
+  - name: Bookstore
+    description: Operations related to bookstores.
+  - name: Author
+    description: Operations related to authors.
+  - name: Publisher
+    description: Operations related to publishers.
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        primaryAddress:
+          $ref: '#/components/schemas/Address'
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+        purchases:
+          type: array
+          items:
+            $ref: '#/components/schemas/Purchase'
+
+    Bookstore:
+      type: object
+      properties:
+        name:
+          type: string
+        listings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Listing'
+        owner:
+          $ref: '#/components/schemas/User'
+
+    Listing:
+      type: object
+      properties:
+        book:
+          $ref: '#/components/schemas/Book'
+        stock:
+          type: integer
+          format: int32
+        price:
+          type: number
+          format: double
+        bookstore:
+          $ref: '#/components/schemas/Bookstore'
+
+    Book:
+      type: object
+      properties:
+        isbn:
+          type: string
+        picture:
+          type: string
+        description:
+          type: string
+        authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Author'
+        publishers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Publisher'
+
+    Author:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        books:
+          type: array
+          items:
+            $ref: '#/components/schemas/Book'
+
+    Publisher:
+      type: object
+      properties:
+        name:
+          type: string
+        books:
+          type: array
+          items:
+            $ref: '#/components/schemas/Book'
+
+    Purchase:
+      type: object
+      properties:
+        listing:
+          $ref: '#/components/schemas/Listing'
+        user:
+          $ref: '#/components/schemas/User'
+        price:
+          type: number
+          format: double
+        quantity:
+          type: integer
+          format: int32
+
+    Address:
+      type: object
+      properties:
+        country:
+          $ref: '#/components/schemas/Country'
+        subdivision:
+          $ref: '#/components/schemas/Subdivision'
+        postalCode:
+          type: string
+        city:
+          type: string
+        shipping:
+          type: boolean
+        payment:
+          type: boolean
+
+    Country:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        alpha2:
+          type: string
+        alpha3:
+          type: string
+        name:
+          type: string
+
+    Subdivision:
+      type: object
+      properties:
+        country:
+          type: string
+        code:
+          type: string
+        name:
+          type: string
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /register:
+    post:
+      summary: User registration
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+              required:
+                - email
+                - password
+                - firstName
+                - lastName
+      responses:
+        '201':
+          description: User successfully registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid input parameters
+        '409':
+          description: User already exists
+
+  /login:
+    post:
+      summary: User login
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: User successfully authenticated
+          headers:
+            Authorization:
+              schema:
+                type: string
+                description: JWT token for future requests
+        '401':
+          description: Invalid email or password
+
+  /users/{userId}:
+    get:
+      summary: Retrieve user information
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: User ID
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User information retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Authentication required
+        '403':
+          description: User not authorized to access the resource
+        '404':
+          description: User not found
+
+    delete:
+      summary: Delete user account
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: User ID
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: User account deleted
+        '401':
+          description: Authentication required
+        '403':
+          description: User not authorized to access the resource
+        '404':
+          description: User not found
+
+  /users/{userId}/addresses:
+    get:
+      summary: Get all addresses for a user
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: User ID
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of user addresses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Address'
+
+    post:
+      summary: Add an address for a user
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: User ID
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+      responses:
+        '201':
+          description: Address added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        '400':
+          description: Invalid input parameters
+        '401':
+          description: Authentication required
+
+  /users/{userId}/addresses/{addressId}:
+    get:
+      summary: Get an address for a user
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: User ID
+          schema:
+            type: integer
+        - in: path
+          name: addressId
+          required: true
+          description: Address ID
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User address retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        '401':
+          description: Authentication required
+        '403':
+          description: User not authorized to access the resource
+        '404':
+          description: Address not found
+
+    put:
+      summary: Update an address for a user
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: User ID
+          schema:
+            type: integer
+        - in: path
+          name: addressId
+          required: true
+          description: Address ID
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+      responses:
+        '200':
+          description: Address updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        '400':
+          description: Invalid input parameters
+        '401':
+          description: Authentication required
+        '403':
+          description: User not authorized to access the resource
+        '404':
+          description: Address not found
+
+    delete:
+      summary: Delete an address for a user
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: User ID
+          schema:
+            type: integer
+        - in: path
+          name: addressId
+          required: true
+          description: Address ID
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Address deleted successfully
+        '401':
+          description: Authentication required
+        '403':
+          description: User not authorized to access the resource
+        '404':
+          description: Address not found
+
+  /users/{userId}/purchases:
+    get:
+      summary: Get all purchases for a user
+      tags:
+        - User
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: User ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of all purchases for the user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Purchase'
+        '404':
+          description: User not found
+
+  /books:
+    get:
+        summary: Get all books
+        tags:
+        - Book
+        responses:
+          '200':
+            description: List of all books
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Book'
+    
+    post:
+      summary: Create a new book
+      tags:
+        - Book
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '201':
+          description: Book created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Invalid input parameters
+        '401':
+          description: Authentication required
+        '403':
+          description: User not authorized to access the resource
+
+  /books/{bookId}:
+    get:
+      summary: Get a book by ID
+      tags:
+        - Book
+      parameters:
+        - in: path
+          name: bookId
+          required: true
+          description: Book ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Book information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          description: Book not found
+
+    put:
+      summary: Update a book by ID
+      tags:
+        - Book
+      parameters:
+        - in: path
+          name: bookId
+          required: true
+          description: Book ID
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: Book information updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Invalid input parameters
+        '401':
+          description: Authentication required
+        '403':
+          description: User not authorized to access the resource
+        '404':
+          description: Book not found
+
+    delete:
+      summary: Delete a book by ID
+      tags:
+        - Book
+      parameters:
+        - in: path
+          name: bookId
+          required: true
+          description: Book ID
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Book deleted successfully
+        '401':
+          description: Authentication required
+        '403':
+          description: User not authorized to access the resource
+        '404':
+          description: Book not found
+  
+  /bookstores:
+    post:
+      summary: Create a new bookstore
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Bookstore'
+      responses:
+        '201':
+          description: Bookstore created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bookstore'
+        '400':
+          description: Invalid input
+
+  /bookstores/{bookstoreId}:
+    get:
+      summary: Get a bookstore by ID
+      tags:
+        - Bookstore
+      parameters:
+        - in: path
+          name: bookstoreId
+          required: true
+          description: Bookstore ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Bookstore information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bookstore'
+        '404':
+          description: Bookstore not found
+    
+    put:
+      summary: Update bookstore information
+      tags:
+        - Bookstore
+      parameters:
+        - in: path
+          name: bookstoreId
+          required: true
+          description: Bookstore ID
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Bookstore'
+      responses:
+        '200':
+          description: Bookstore information updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bookstore'
+        '400':
+          description: Invalid input parameters
+        '401':
+          description: Authentication required
+        '403':
+          description: User not authorized to access the resource
+        '404':
+          description: Bookstore not found
+    
+  /bookstores/{bookstoreId}/listings:
+    post:
+      summary: Add a listing to a bookstore
+      tags:
+        - Bookstore
+      parameters:
+        - in: path
+          name: bookstoreId
+          required: true
+          description: Bookstore ID
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Listing'
+      responses:
+        '201':
+          description: Listing added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Listing'
+        '400':
+          description: Invalid input parameters
+        '401':
+          description: Authentication required
+        '403':
+          description: User not authorized to access the resource
+        '404':
+          description: Bookstore not found
+  
+  /bookstores/{bookstoreId}/listings/{listingId}:
+    get:
+      summary: Get a specific listing from a bookstore
+      tags:
+        - Bookstore
+      parameters:
+        - in: path
+          name: bookstoreId
+          required: true
+          description: Bookstore ID
+          schema:
+            type: integer
+        - in: path
+          name: listingId
+          required: true
+          description: Listing ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Listing information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Listing'
+        '404':
+          description: Listing not found
+    
+    put:
+      summary: Update a specific listing in a bookstore
+      tags:
+        - Bookstore
+      parameters:
+        - in: path
+          name: bookstoreId
+          required: true
+          description: Bookstore ID
+          schema:
+            type: integer
+        - in: path
+          name: listingId
+          required: true
+          description: Listing ID
+          schema:
+            type: integer
+        - in: header
+          name: Authorization
+          required: true
+          description: Bearer token
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Listing'
+      responses:
+        '200':
+          description: Listing updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Listing'
+        '400':
+          description: Invalid input parameters
+        '401':
+          description: Authentication required
+        '403':
+          description: User not authorized to access the resource
+        '404':
+          description: Bookstore or listing not found
+    delete:
+      summary: Delete a specific listing from a bookstore
+      tags:
+        - Bookstore
+      parameters:
+        - in: path
+          name: bookstoreId
+          required: true
+          description: Bookstore ID
+          schema:
+            type: integer
+        - in: path
+          name: listingId
+          required: true
+          description: Listing ID
+          schema:
+            type: integer
+        - in: header
+          name: Authorization
+          required: true
+          description: Bearer token
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Listing deleted successfully
+        '401':
+          description: Authentication required
+        '403':
+          description: User not authorized to access the resource
+        '404':
+          description: Bookstore or listing not found
+
+  /authors:
+    get:
+      summary: Get all authors
+      tags:
+        - Author
+      responses:
+        '200':
+          description: List of all authors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Author'
+    
+    post:
+      summary: Create a new author
+      tags:
+        - Author
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Author'
+      responses:
+        '201':
+          description: Author created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+        '400':
+          description: Invalid input parameters
+        '401':
+          description: Authentication required
+        '403':
+          description: User not authorized to access the resource
+
+  /authors/{authorId}:
+    get:
+      summary: Get an author by ID
+      tags:
+        - Author
+      parameters:
+        - in: path
+          name: authorId
+          required: true
+          description: Author ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Author information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+        '404':
+          description: Author not found
+
+    put:
+      summary: Update an author by ID
+      tags:
+        - Author
+      parameters:
+        - in: path
+          name: authorId
+          required: true
+          description: Author ID
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Author'
+      responses:
+        '200':
+          description: Author information updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+        '400':
+          description: Invalid input parameters
+        '401':
+          description: Authentication required
+        '403':
+          description: User not authorized to access the resource
+        '404':
+          description: Author not found
+
+    delete:
+      summary: Delete an author by ID
+      tags:
+        - Author
+      parameters:
+        - in: path
+          name: authorId
+          required: true
+          description: Author ID
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Author deleted successfully
+        '401':
+          description: Authentication required
+        '403':
+          description: User not authorized to access the resource
+        '404':
+          description: Author not found
+
+  /publishers:
+    post:
+      summary: Create a new publisher
+      tags:
+        - Publisher
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Publisher'
+      responses:
+        '201':
+          description: Publisher created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Publisher'
+        '400':
+          description: Invalid input parameters
+        '401':
+          description: Authentication required
+        '403':
+          description: User not authorized to access the resource
+
+  /publishers/{publisherId}:
+    get:
+      summary: Get a publisher by ID
+      tags:
+        - Publisher
+      parameters:
+        - in: path
+          name: publisherId
+          required: true
+          description: Publisher ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Publisher information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Publisher'
+        '404':
+          description: Publisher not found
+
+    put:
+      summary: Update a publisher by ID
+      tags:
+        - Publisher
+      parameters:
+        - in: path
+          name: publisherId
+          required: true
+          description: Publisher ID
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Publisher'
+      responses:
+        '200':
+          description: Publisher information updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Publisher'
+        '400':
+          description: Invalid input parameters
+        '401':
+          description: Authentication required
+        '403':
+          description: User not authorized to access the resource
+        '404':
+          description: Publisher not found
+
+    delete:
+      summary: Delete a publisher by ID
+      tags:
+        - Publisher
+      parameters:
+        - in: path
+          name: publisherId
+          required: true
+          description: Publisher ID
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Publisher deleted successfully
+        '401':
+          description: Authentication required
+        '403':
+          description: User not authorized to access the resource
+        '404':
+          description: Publisher not found
+
+
