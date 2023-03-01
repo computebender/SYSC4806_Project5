@@ -11,4 +11,9 @@ public class UIController {
         model.addAttribute("message", "Success!!");
         return "landing";
     }
+
+    @GetMapping("/author")
+    public String author(){
+        return "author";
+    }
 }
