@@ -45,7 +45,7 @@ public class AuthorService {
         }
 
         if(Objects.nonNull(partialAuthor.getLastName())){
-            author.setFirstName(partialAuthor.getLastName());
+            author.setLastName(partialAuthor.getLastName());
         }
 
         this.authorRepository.save(author);
