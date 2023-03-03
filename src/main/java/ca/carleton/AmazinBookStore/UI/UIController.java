@@ -13,8 +13,9 @@ public class UIController {
     }
 
     @GetMapping("/author")
-    public String author(){
+    public String author() {
         return "author";
+    }
 
     @GetMapping("/login")
     public String loginUI(){
