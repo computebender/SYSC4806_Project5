@@ -12,6 +12,11 @@ public class UIController {
         return "landing";
     }
 
+    @GetMapping("/author")
+    public String author() {
+        return "author";
+    }
+
     @GetMapping("/login")
     public String loginUI(){
         return "login";
