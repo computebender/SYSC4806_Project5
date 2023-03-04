@@ -21,6 +21,22 @@
           // do something else after user is created
         });
       });
+
+      $('#user-lookup-form').submit(function (event) {
+        event.preventDefault();
+        var email = $('#emailLogin').val();
+        userService.getUserByEmail(email, function (user) {
+          var userInfoDiv = $('#user-info');
+          userInfoDiv.empty();
+          userInfoDiv.append(
+                  '<p><strong>ID:</strong> ' + user.id + '</p>' +
+                  '<p><strong>Email:</strong> ' + user.email + '</p>' +
+                  '<p><strong>First Name:</strong> ' + user.firstName + '</p>' +
+                  '<p><strong>Last Name:</strong> ' + user.lastName + '</p>'
+          );
+        });
+      });
+
     });
   </script>
 </head>
@@ -49,6 +65,22 @@
     </div>
     <button type="submit" class="btn btn-primary">Register</button>
   </form>
+</div>
+<div class="container">
+  <h1>User Lookup</h1>
+
+  <form id="user-lookup-form">
+    <div class="form-group">
+      <label for="email">Email address</label>
+      <input type="email" class="form-control" id="emailLogin" placeholder="Enter email">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+  <hr>
+
+  <div id="user-info"></div>
+
 </div>
 <div th:replace="fragments/footer :: footer"> </div>
 </body>

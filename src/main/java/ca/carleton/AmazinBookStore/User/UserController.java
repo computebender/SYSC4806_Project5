@@ -36,13 +36,29 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    /*
+    Temp endpoint to be used until login works
+    TODO: remove
+     */
+    @GetMapping("/email/{email}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
+        User user;
+        try {
+            user = userService.getUserByEmail(email);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(user);
+    }
+
+
     @GetMapping("")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User partialUser) {
         User user;
         try {

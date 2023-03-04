@@ -31,6 +31,14 @@ public class UserService {
         return user.get();
     }
 
+    public User getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new ResourceNotFoundException("User not found with email: " + email);
+        }
+        return user;
+    }
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }

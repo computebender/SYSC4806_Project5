@@ -34,6 +34,15 @@ const userService = (function() {
             });
         },
 
+        getUserByEmail: function(email, successCallback) {
+            $.ajax({
+                url: "/api/users/email/" + email,
+                type: "GET",
+                success: successCallback,
+                error: handleAjaxError
+            });
+        },
+
         updateUserById: function(userId, partialUser, successCallback) {
             $.ajax({
                 url: "/api/users/" + userId,
