@@ -46,7 +46,7 @@ const userService = (function() {
         updateUserById: function(userId, partialUser, successCallback) {
             $.ajax({
                 url: "/api/users/" + userId,
-                type: "PATCH",
+                type: "PUT",
                 data: JSON.stringify(partialUser),
                 contentType: "application/json",
                 success: successCallback,
