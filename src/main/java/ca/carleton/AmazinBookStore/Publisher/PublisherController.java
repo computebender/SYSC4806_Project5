@@ -30,9 +30,13 @@ public class PublisherController {
 
     @GetMapping("/{publisherId}")
     public ResponseEntity<Publisher> getPublisherById(@PathVariable long publisherId){
-        Optional<Publisher> publisher;
-        publisher = this.publisherService.findPublisherById(publisherId);
-        return ResponseEntity.ok(publisher.get());
+        Publisher publisher;
+        try {
+            publisher = this.publisherService.findPublisherById(publisherId);
+        }catch (ResourceNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(publisher);
     }
     @PutMapping("/{publisherId}")
     public ResponseEntity<Publisher> updatePublisherById(@PathVariable long publisherId, @RequestBody Publisher publisherUpdated){
@@ -44,7 +48,7 @@ public class PublisherController {
     @DeleteMapping("/{publisherId}")
     public ResponseEntity<Void> deletePublisherById(@PathVariable long publisherId){
         try {
-        Publisher publisher = publisherService.deletePublisher(publisherId);
+            publisherService.deletePublisher(publisherId);
         } catch (
         ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();

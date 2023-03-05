@@ -60,11 +60,11 @@ public class PublisherServiceTest {
         publisher.setLastName("Last");
         publisher = publisherRepository.save(publisher);
 
-        Optional<Publisher> retrievedPublisher = publisherService.findPublisherById(publisher.getId());
+        Publisher retrievedPublisher = publisherService.findPublisherById(publisher.getId());
 
-        assertEquals(publisher.getId(), retrievedPublisher.get().getId());
-        assertEquals(publisher.getFirstName(), retrievedPublisher.get().getFirstName());
-        assertEquals(publisher.getLastName(), retrievedPublisher.get().getLastName());
+        assertEquals(publisher.getId(), retrievedPublisher.getId());
+        assertEquals(publisher.getFirstName(), retrievedPublisher.getFirstName());
+        assertEquals(publisher.getLastName(), retrievedPublisher.getLastName());
     }
 
     @Test

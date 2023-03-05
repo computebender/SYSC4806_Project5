@@ -25,12 +25,18 @@ public class PublisherService {
         return this.publisherRepository.findAll();
     }
 
-    public Optional<Publisher> findPublisherById(long publisherId){
-        return this.publisherRepository.findById(publisherId);
+    public Publisher findPublisherById(long publisherId){
+        Optional<Publisher> publisher = this.publisherRepository.findById(publisherId);
+
+        if(publisher.isEmpty()){
+            throw new ResourceNotFoundException("Publisher with ID " + publisherId + " not found.");
+        }
+
+        return publisher.get();
     }
 
     public Publisher updatePublisher(Long publisherId, Publisher updatedPublisher){
-        Optional<Publisher> oldPublisher = findPublisherById(publisherId);
+        Optional<Publisher> oldPublisher = this.publisherRepository.findById(publisherId);
         if(oldPublisher.isEmpty()){
             throw new ResourceNotFoundException("Publisher with ID " + publisherId + " not found.");
         }
