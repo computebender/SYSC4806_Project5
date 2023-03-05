@@ -1,5 +1,7 @@
 package ca.carleton.AmazinBookStore.Publisher;
 
+import ca.carleton.AmazinBookStore.Author.Author;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.*;
 
@@ -15,9 +17,9 @@ public class PublisherController {
     }
 
     @PostMapping()
-    public ResponseEntity<Publisher> createPublisher(){
-        Publisher newPublisher = new Publisher();
-        return ResponseEntity.status(HttpStatus.CREATED).body(newPublisher);
+    public ResponseEntity<Publisher> createPublisher(@RequestBody Publisher publisher){
+        Publisher savedPublisher = this.publisherService.createPublisher(publisher);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedPublisher);
     }
 
     @GetMapping()
@@ -40,10 +42,14 @@ public class PublisherController {
     }
 
     @DeleteMapping("/{publisherId}")
-    public ResponseEntity<Publisher> deletePublisherById(@PathVariable long publisherId, @RequestBody Publisher publisherUpdated){
-        Publisher publisher;
-        publisher = publisherService.deletePublisher(publisherId);
-        return ResponseEntity.ok(publisher);
+    public ResponseEntity<Void> deletePublisherById(@PathVariable long publisherId){
+        try {
+        Publisher publisher = publisherService.deletePublisher(publisherId);
+        } catch (
+        ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.noContent().build();
     }
 
 }

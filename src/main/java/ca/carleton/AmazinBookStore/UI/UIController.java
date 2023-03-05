@@ -41,4 +41,9 @@ public class UIController {
     public String cartUI(){
         return "cart";
     }
+
+    @GetMapping("/publisher")
+    public String publisherUI(){
+        return "publisher";
+    }
 }
