@@ -167,7 +167,7 @@ components:
       bearerFormat: JWT
 
 paths:
-  /register:
+  /users:
     post:
       summary: User registration
       tags:
