@@ -15,8 +15,7 @@
 	<packaging>jar</packaging>
 	<description>Project group 5 Amazin Book store</description>
 	<properties>
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
