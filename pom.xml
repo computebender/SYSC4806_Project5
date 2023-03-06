@@ -12,6 +12,7 @@
 	<artifactId>AmazinBookStore</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>AmazinBookStore</name>
+	<packaging>jar</packaging>
 	<description>Project group 5 Amazin Book store</description>
 	<properties>
 		<java.version>17</java.version>
