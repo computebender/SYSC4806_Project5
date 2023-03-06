@@ -41,7 +41,11 @@ public class PublisherController {
     @PutMapping("/{publisherId}")
     public ResponseEntity<Publisher> updatePublisherById(@PathVariable long publisherId, @RequestBody Publisher publisherUpdated){
         Publisher publisher;
-        publisher = publisherService.updatePublisher(publisherId, publisherUpdated);
+        try {
+            publisher = publisherService.updatePublisher(publisherId, publisherUpdated);
+        } catch (ResourceNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(publisher);
     }
 
