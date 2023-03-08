@@ -36,6 +36,11 @@ This group project is a web application that provides an online platform for sel
 - Author component implementation includes retrieving a list of all authors or a single author, creating a new author, deleting an author or updating information about an existing author. 
 - Publisher component implementation includes retrieving a list of all publishers or a single publisher, creating a new publisher or deleting an publisher or updating information about an existing publisher.
 - BookStore component implementation includes creating a new bookstore, retrieving information about a bookstore, creating and retrieving many or one listings and adding, updating or removing listings from a bookstore.
-
+## Milestone 2 Project RoadMap:
+- User authentication and login will be configured.
+- Users can search, browse, sort/filter based on Book information (ISBN, name, description, author, publisher).
+- User can select and add or remove books from a shopping cart and proceed to checkout/purchase the book if inventory is not exceeded.
+- User can view book recommendations based on user past purchase history and similar purchases from other users.
+- Persistent database configuration.
 ## Environment Configurations
 Java Version: Java 17
