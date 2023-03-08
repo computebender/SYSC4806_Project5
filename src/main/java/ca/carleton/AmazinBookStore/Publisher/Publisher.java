@@ -1,6 +1,7 @@
 package ca.carleton.AmazinBookStore.Publisher;
 
 import ca.carleton.AmazinBookStore.Book.Book;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class Publisher {
     private String lastName;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Book.class)
+    @JsonManagedReference(value="publisher-books")
     private List<Book> books;
 
     public Long getId() {
