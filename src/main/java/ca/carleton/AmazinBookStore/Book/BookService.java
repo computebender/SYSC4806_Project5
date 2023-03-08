@@ -1,5 +1,9 @@
 package ca.carleton.AmazinBookStore.Book;
 
+import ca.carleton.AmazinBookStore.Author.Author;
+import ca.carleton.AmazinBookStore.Author.AuthorRepository;
+import ca.carleton.AmazinBookStore.Publisher.Publisher;
+import ca.carleton.AmazinBookStore.Publisher.PublisherRepository;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +14,13 @@ import java.util.Optional;
 @Service
 public class BookService {
     private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
+    private final PublisherRepository publisherRepository;
 
-    public BookService(BookRepository bookRepository){
+    public BookService(BookRepository bookRepository, AuthorRepository authorRepository, PublisherRepository publisherRepository){
         this.bookRepository = bookRepository;
+        this.authorRepository = authorRepository;
+        this.publisherRepository = publisherRepository;
     }
 
     public List<Book> findAll(){
@@ -30,6 +38,15 @@ public class BookService {
     }
 
     public Book createBook(Book book){
+        Author author = book.getAuthor();
+        this.authorRepository.save(author);
+        author.getBooks().add(book);
+
+
+        Publisher publisher = book.getPublisher();
+        this.publisherRepository.save(publisher);
+        publisher.getBooks().add(book);
+
         return this.bookRepository.save(book);
     }
 

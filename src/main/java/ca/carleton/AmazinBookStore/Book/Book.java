@@ -1,7 +1,10 @@
 package ca.carleton.AmazinBookStore.Book;
 import ca.carleton.AmazinBookStore.Author.Author;
 import ca.carleton.AmazinBookStore.Publisher.Publisher;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Book {
@@ -12,10 +15,12 @@ public class Book {
     private int isbn;
     private String picture;
     private String description;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Author.class)
+    @JsonBackReference(value="author-books")
     @JoinColumn(name = "author_id")
     private Author author;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Publisher.class)
+    @JsonBackReference(value="publisher-books")
     @JoinColumn(name = "publisher_id")
     private Publisher publisher;
     private String title;

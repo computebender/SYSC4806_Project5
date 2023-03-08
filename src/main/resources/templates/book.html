@@ -22,6 +22,7 @@
         dropdown.appendChild(option);
 
         authors.forEach(function(author) {
+          console.log(author);
           var option = document.createElement("option");
           option.disabled = false;
           option.value = author.id;
@@ -46,6 +47,7 @@
 
 
         publishers.forEach(function(publisher) {
+          console.log(publisher);
           var option = document.createElement("option");
           option.disabled = false;
           option.value = publisher.id;
@@ -61,6 +63,7 @@
         var booksTable = $("#books-table tbody");
         booksTable.empty();
         $.each(data, function(index, book) {
+          console.log(book);
           var row = "<tr>";
           row += "<td>" + book.title + "</td>";
           row += "<td>" + book.isbn + "</td>";
