@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Books</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/js/bookService.js"></script>
+  <script src="/js/authorService.js"></script>
+  <script src="/js/publisherService.js"></script>
+  <script th:inline="javascript">
+    function getAllAuthors() {
+      authorService.getAllAuthors(function(authors) {
+        var dropdown = document.getElementById("authors-select");
+        dropdown.innerHTML = "";
+
+        var option = document.createElement("option");
+        option.value = null;
+        option.text = "Select Author";
+        option.hidden = true;
+        option.selected = true;
+        option.disabled = true;
+        dropdown.appendChild(option);
+
+        authors.forEach(function(author) {
+          var option = document.createElement("option");
+          option.disabled = false;
+          option.value = author.id;
+          option.text = author.firstName + " " + author.lastName;
+          dropdown.appendChild(option);
+        });
+      });
+    }
+
+    function getAllPublishers() {
+      publisherService.getAllPublishers(function(publishers) {
+        var dropdown = document.getElementById("publishers-select");
+        dropdown.innerHTML = "";
+
+        var option = document.createElement("option");
+        option.value = null;
+        option.text = "Select Publisher";
+        option.hidden = true;
+        option.selected = true;
+        option.disabled = true;
+        dropdown.appendChild(option);
+
+
+        publishers.forEach(function(publisher) {
+          var option = document.createElement("option");
+          option.disabled = false;
+          option.value = publisher.id;
+          option.text = publisher.firstName + " " + publisher.lastName;
+          dropdown.appendChild(option);
+        });
+      });
+    }
+
+
+    function getAllBooks() {
+      bookService.getAllBooks(function(data) {
+        var booksTable = $("#books-table tbody");
+        booksTable.empty();
+        $.each(data, function(index, book) {
+          var row = "<tr>";
+          row += "<td>" + book.title + "</td>";
+          row += "<td>" + book.isbn + "</td>";
+          row += "<td>" + book.description + "</td>";
+          row += "<td>" + book.author.firstName + ' '+ book.author.lastName + "</td>";
+          row += "<td>" + book.publisher.firstName + ' '+ book.publisher.lastName + "</td>";
+          row += "<td><button class='btn btn-danger' onclick='deleteBook(" + book.id + ")'>Delete</button></td>";
+          row += "</tr>";
+          booksTable.append(row);
+        });
+      });
+    }
+
+    function createBook() {
+      authorService.getAuthorById($("#authors-select").val(), function(author){
+        publisherService.getPublisherById($("#publishers-select").val(), function(publisher){
+          var book = {
+            title: $("#title").val(),
+            isbn: $("#isbn").val(),
+            description: $("#description").val(),
+            author: author,
+            publisher: publisher
+          };
+          bookService.createBook(book, function() {
+            getAllBooks();
+            $("#title").val("");
+            $("#isbn").val("");
+            $("#description").val("");
+            $("#authors-select").val("");
+            $("#publishers-select").val("");
+          });
+        });
+      });
+
+
+
+    }
+
+    function deleteBook(bookId) {
+      bookService.deleteBookById(bookId, function() {
+        getAllBooks();
+      });
+    }
+
+    $(function() {
+      getAllBooks();
+      getAllAuthors();
+      getAllPublishers();
+    });
+  </script>
+</head>
+<body>
+<h1>Books</h1>
+<table id="books-table">
+  <thead>
+  <tr>
+    <th>Title</th>
+    <th>ISBN</th>
+    <th>Description</th>
+    <th>Author</th>
+    <th>Publisher</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+<form onsubmit="createBook(); return false;">
+  <div>
+    <label for="isbn">ISBN:</label>
+    <input type="text" id="isbn" required>
+  </div>
+  <div>
+    <label for="description">Description:</label>
+    <input type="text" id="description" required>
+  </div>
+  <div id="authors-dropdown">
+    <label for="authors-select">Author:</label>
+    <select id="authors-select"></select>
+  </div>
+  <div id="publishers-dropdown">
+    <label for="publishers-select">Publisher:</label>
+    <select id="publishers-select"></select>
+  </div>
+  <div>
+    <label for="title">Title:</label>
+    <input type="text" id="title" required>
+  </div>
+  <button type="submit">Create Book</button>
+</form>
+</body>
+</html>

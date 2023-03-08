@@ -46,4 +46,9 @@ public class UIController {
     public String publisherUI(){
         return "publisher";
     }
+
+    @GetMapping("/book")
+    public String bookUI(){
+        return "book";
+    }
 }

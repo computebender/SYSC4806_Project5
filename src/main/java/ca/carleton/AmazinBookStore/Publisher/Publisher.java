@@ -1,9 +1,9 @@
 package ca.carleton.AmazinBookStore.Publisher;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Entity;
+import ca.carleton.AmazinBookStore.Book.Book;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Publisher {
@@ -15,12 +15,23 @@ public class Publisher {
 
     private String lastName;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Book.class)
+    private List<Book> books;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
     }
 
     public String getFirstName() {
