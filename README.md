@@ -13,6 +13,12 @@ This group project is a web application that provides an online platform for sel
 `java -jar path/to/your/jarfile/SYSC4806_Project5/target/AmazinBookStore-0.0.1-SNAPSHOT.jar fully.qualified.package.Application`
 ## Project Build/Deployment Status
 [![sysc4806_project5-master Actions Status](https://github.com/computebender/SYSC4806_Project5/actions/workflows/maven.yml/badge.svg)](https://github.com/computebender/SYSC4806_Project5/actions)
+## Database Schema
+![alt text](https://github.com/computebender/SYSC4806_Project5/blob/main/documentation/AmazinBookStore_ER_Database_Schema.png?raw=true)
+
+## UML Class Diagram
+![alt text](https://github.com/computebender/SYSC4806_Project5/blob/main/documentation/AmazinBookStore_UML_Class_Diagram.png?raw=true)
+
 ## Milestone 1 Project Kanban Status
 | Todo        | In Progress | Done          |
 | :---        |    :----:   |          ---: |
