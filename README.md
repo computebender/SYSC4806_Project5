@@ -16,19 +16,19 @@ This group project is a web application that provides an online platform for sel
 ## Milestone 1 Project Kanban Status
 | Todo        | In Progress | Done          |
 | :---        |    :----:   |          ---: |
-| Issue https://github.com/computebender/SYSC4806_Project5/issues/5   | Issue https://github.com/computebender/SYSC4806_Project5/issues/19       | Issue https://github.com/computebender/SYSC4806_Project5/issues/11   |
-| Issue https://github.com/computebender/SYSC4806_Project5/issues/13   | Issue https://github.com/computebender/SYSC4806_Project5/issues/4       | Issue https://github.com/computebender/SYSC4806_Project5/issues/2      |
-| Issue https://github.com/computebender/SYSC4806_Project5/issues/12   | Issue https://github.com/computebender/SYSC4806_Project5/issues/3       | Issue https://github.com/computebender/SYSC4806_Project5/issues/1   |
-| Issue https://github.com/computebender/SYSC4806_Project5/issues/26   | Issue https://github.com/computebender/SYSC4806_Project5/issues/27       | Issue https://github.com/computebender/SYSC4806_Project5/issues/16     |
-|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/14|
-|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/10|
-|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/7|
-|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/21|
-|     |      |          |
-|     |      |          |
-|     |      |          |
-|     |      |          |
-|     |      |          |
+| Issue https://github.com/computebender/SYSC4806_Project5/issues/5   |        | Issue https://github.com/computebender/SYSC4806_Project5/issues/11   |
+| Issue https://github.com/computebender/SYSC4806_Project5/issues/13   |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/2      |
+| Issue https://github.com/computebender/SYSC4806_Project5/issues/12   |        | Issue https://github.com/computebender/SYSC4806_Project5/issues/1   |
+| Issue https://github.com/computebender/SYSC4806_Project5/issues/26   |        | Issue https://github.com/computebender/SYSC4806_Project5/issues/16     |
+| Issue https://github.com/computebender/SYSC4806_Project5/issues/32    |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/14|
+| Issue https://github.com/computebender/SYSC4806_Project5/issues/29    |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/10|
+| Issue https://github.com/computebender/SYSC4806_Project5/issues/34    |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/7|
+| Issue https://github.com/computebender/SYSC4806_Project5/issues/33    |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/21|
+|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/27|
+|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/3|
+|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/4|
+|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/19|
+
 
 ## Milestone 1 Features
 - Users can view the main Bookstore user interface
