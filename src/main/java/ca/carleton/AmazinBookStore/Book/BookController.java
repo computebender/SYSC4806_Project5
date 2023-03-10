@@ -1,5 +1,9 @@
 package ca.carleton.AmazinBookStore.Book;
 
+import ca.carleton.AmazinBookStore.Author.Author;
+import ca.carleton.AmazinBookStore.Author.AuthorService;
+import ca.carleton.AmazinBookStore.Publisher.Publisher;
+import ca.carleton.AmazinBookStore.Publisher.PublisherService;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +15,13 @@ import java.util.List;
 @RequestMapping("/api/books")
 public class BookController {
     private final BookService bookService;
+    private final PublisherService publisherService;
+    private final AuthorService authorService;
 
-    public BookController(BookService bookService){
+    public BookController(BookService bookService, AuthorService authorService, PublisherService publisherService){
         this.bookService = bookService;
+        this.authorService = authorService;
+        this.publisherService = publisherService;
     }
 
     @GetMapping()
@@ -24,8 +32,23 @@ public class BookController {
 
     @PostMapping()
     public ResponseEntity<Book> createBook(@RequestBody Book book){
-        Book savedBook = this.bookService.createBook(book);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
+        //get the author from the database
+        Author author = authorService.getAuthorById(book.getAuthor().getId());
+        //set the author of the book to the one gathered
+        book.setAuthor(author);
+        //get the publisher from the database
+        Publisher publisher = publisherService.findPublisherById(book.getPublisher().getId());
+        //set the publisher of the book to the one gathered
+        book.setPublisher(publisher);
+        //create the book
+        bookService.createBook(book);
+        //add the book to the list of books the author has
+        author.getBooks().add(book);
+        authorService.updateAuthor(author.getId(), author);
+        //add the book to the list of books by the publisher
+        publisher.getBooks().add(book);
+        publisherService.updatePublisher(publisher.getId(), publisher);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{bookId}")

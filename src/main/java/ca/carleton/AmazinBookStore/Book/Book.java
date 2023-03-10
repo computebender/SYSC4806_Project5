@@ -1,9 +1,14 @@
 package ca.carleton.AmazinBookStore.Book;
 import ca.carleton.AmazinBookStore.Author.Author;
 import ca.carleton.AmazinBookStore.Publisher.Publisher;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "@id")
 public class Book {
 
     @Id

@@ -75,24 +75,20 @@
     }
 
     function createBook() {
-      authorService.getAuthorById($("#authors-select").val(), function(author){
-        publisherService.getPublisherById($("#publishers-select").val(), function(publisher){
-          var book = {
-            title: $("#title").val(),
-            isbn: $("#isbn").val(),
-            description: $("#description").val(),
-            author: author,
-            publisher: publisher
-          };
-          bookService.createBook(book, function() {
-            getAllBooks();
-            $("#title").val("");
-            $("#isbn").val("");
-            $("#description").val("");
-            $("#authors-select").val("");
-            $("#publishers-select").val("");
-          });
-        });
+      var book = {
+        title: $("#title").val(),
+        isbn: $("#isbn").val(),
+        description: $("#description").val(),
+        author: {id: $("#authors-select").val()},
+        publisher: {id: $("#publishers-select").val()}
+      };
+      bookService.createBook(book, function() {
+        getAllBooks();
+        $("#title").val("");
+        $("#isbn").val("");
+        $("#description").val("");
+        $("#authors-select").val("");
+        $("#publishers-select").val("");
       });
 
 
