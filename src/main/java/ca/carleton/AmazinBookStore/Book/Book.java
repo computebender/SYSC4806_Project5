@@ -1,11 +1,14 @@
 package ca.carleton.AmazinBookStore.Book;
 import ca.carleton.AmazinBookStore.Author.Author;
+import ca.carleton.AmazinBookStore.Genre.Genre;
 import ca.carleton.AmazinBookStore.Publisher.Publisher;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "@id")
@@ -23,6 +26,9 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "publisher_id")
     private Publisher publisher;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Genre.class)
+    private List<Genre> genres;
     private String title;
 
     public int getIsbn() {
@@ -79,5 +85,13 @@ public class Book {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
     }
 }

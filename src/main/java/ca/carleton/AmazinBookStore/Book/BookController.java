@@ -2,6 +2,8 @@ package ca.carleton.AmazinBookStore.Book;
 
 import ca.carleton.AmazinBookStore.Author.Author;
 import ca.carleton.AmazinBookStore.Author.AuthorService;
+import ca.carleton.AmazinBookStore.Genre.Genre;
+import ca.carleton.AmazinBookStore.Genre.GenreService;
 import ca.carleton.AmazinBookStore.Publisher.Publisher;
 import ca.carleton.AmazinBookStore.Publisher.PublisherService;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -9,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -18,10 +21,13 @@ public class BookController {
     private final PublisherService publisherService;
     private final AuthorService authorService;
 
-    public BookController(BookService bookService, AuthorService authorService, PublisherService publisherService){
+    private final GenreService genreService;
+
+    public BookController(BookService bookService, AuthorService authorService, PublisherService publisherService, GenreService genreService){
         this.bookService = bookService;
         this.authorService = authorService;
         this.publisherService = publisherService;
+        this.genreService= genreService;
     }
 
     @GetMapping()
@@ -40,11 +46,26 @@ public class BookController {
         Publisher publisher = publisherService.findPublisherById(book.getPublisher().getId());
         //set the publisher of the book to the one gathered
         book.setPublisher(publisher);
+
+        List<Genre> genres = new ArrayList<>();
+        for (Genre g: book.getGenres()) {
+            Genre genre = genreService.getGenreById(g.getId());
+            genres.add(genre);
+        }
+
+        book.setGenres(genres);
+
         //create the book
         bookService.createBook(book);
         //add the book to the list of books the author has
         author.getBooks().add(book);
         authorService.updateAuthor(author.getId(), author);
+
+        for(Genre savedGenre: genres){
+            savedGenre.getBooks().add(book);
+            genreService.updateGenre(savedGenre.getId(), savedGenre);
+        }
+
         //add the book to the list of books by the publisher
         publisher.getBooks().add(book);
         publisherService.updatePublisher(publisher.getId(), publisher);

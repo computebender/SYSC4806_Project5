@@ -1,5 +1,4 @@
-package ca.carleton.AmazinBookStore.Author;
-
+package ca.carleton.AmazinBookStore.Genre;
 import ca.carleton.AmazinBookStore.Book.Book;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -10,18 +9,15 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "@id")
-public class Author {
+@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class)
+public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String firstName;
-
-    private String lastName;
+    private String name;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Book.class)
-    @JsonIgnore
     private List<Book> books;
 
     public Long getId() {
@@ -40,19 +36,11 @@ public class Author {
         this.books = books;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 }
