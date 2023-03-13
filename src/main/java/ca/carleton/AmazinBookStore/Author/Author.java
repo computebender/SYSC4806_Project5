@@ -10,7 +10,6 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "@id")
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

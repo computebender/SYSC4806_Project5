@@ -1,5 +1,7 @@
 package ca.carleton.AmazinBookStore.Genre;
 
+import ca.carleton.AmazinBookStore.Book.Book;
+import jakarta.transaction.Transactional;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,16 @@ public class GenreService {
         }
 
         return genre.get();
+    }
+
+    public List<Book> getGenreBooksById(Long id){
+        Optional<Genre> genre = this.genreRepository.findById(id);
+
+        if(genre.isEmpty()){
+            throw new ResourceNotFoundException("Genre with ID " + id + " not found.");
+        }
+
+        return genre.get().getBooks();
     }
 
     public Genre createGenre(Genre genre){

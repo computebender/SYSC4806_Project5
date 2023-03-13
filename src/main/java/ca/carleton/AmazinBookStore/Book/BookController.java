@@ -61,10 +61,13 @@ public class BookController {
         author.getBooks().add(book);
         authorService.updateAuthor(author.getId(), author);
 
-        for(Genre savedGenre: genres){
-            savedGenre.getBooks().add(book);
-            genreService.updateGenre(savedGenre.getId(), savedGenre);
+        System.out.println(genres);
+        int length = genres.size();
+        for (int i = 0; i < length; i++) {
+            genres.get(i).getBooks().add(book);
+            genreService.updateGenre(genres.get(i).getId(), genres.get(i));
         }
+
 
         //add the book to the list of books by the publisher
         publisher.getBooks().add(book);

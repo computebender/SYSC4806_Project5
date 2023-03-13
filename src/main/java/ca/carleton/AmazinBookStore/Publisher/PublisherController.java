@@ -1,6 +1,7 @@
 package ca.carleton.AmazinBookStore.Publisher;
 
 import ca.carleton.AmazinBookStore.Author.Author;
+import ca.carleton.AmazinBookStore.Book.Book;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.*;
@@ -37,6 +38,17 @@ public class PublisherController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(publisher);
+    }
+
+    @GetMapping("/{publisherId}/books")
+    public ResponseEntity<List<Book>> getPublisherBooksById(@PathVariable long publisherId){
+        Publisher publisher;
+        try {
+            publisher = this.publisherService.findPublisherById(publisherId);
+        }catch (ResourceNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(publisher.getBooks());
     }
     @PutMapping("/{publisherId}")
     public ResponseEntity<Publisher> updatePublisherById(@PathVariable long publisherId, @RequestBody Publisher publisherUpdated){

@@ -9,7 +9,6 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class)
 public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +16,8 @@ public class Genre {
 
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Book.class)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Book.class)
+    @JsonIgnore
     private List<Book> books;
 
     public Long getId() {

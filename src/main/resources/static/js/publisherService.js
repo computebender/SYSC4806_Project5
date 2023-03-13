@@ -34,6 +34,15 @@ const publisherService = (function() {
             });
         },
 
+        getPublisherBooksById: function(publisherId, successCallback) {
+            $.ajax({
+                url: "/api/publishers/" + publisherId +"/books",
+                type: "GET",
+                success: successCallback,
+                error: handleAjaxError
+            });
+        },
+
         updatePublisherById: function(publisherId, partialPublisher, successCallback) {
             $.ajax({
                 url: "/api/publishers/" + publisherId,

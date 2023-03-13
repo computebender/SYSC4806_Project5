@@ -34,6 +34,15 @@ const genreService = (function() {
             });
         },
 
+        getGenreBooksById: function(genreId, successCallback) {
+            $.ajax({
+                url: "/api/genres/" + genreId +"/books",
+                type: "GET",
+                success: successCallback,
+                error: handleAjaxError
+            });
+        },
+
         updateGenreById: function(genreId, partialGenre, successCallback) {
             $.ajax({
                 url: "/api/genres/" + genreId,

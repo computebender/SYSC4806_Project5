@@ -11,7 +11,6 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class, property = "@id")
 public class Book {
 
     @Id
