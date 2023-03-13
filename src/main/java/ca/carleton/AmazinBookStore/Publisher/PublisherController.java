@@ -53,8 +53,7 @@ public class PublisherController {
     public ResponseEntity<Void> deletePublisherById(@PathVariable long publisherId){
         try {
             publisherService.deletePublisher(publisherId);
-        } catch (
-        ResourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.noContent().build();
