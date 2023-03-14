@@ -72,7 +72,7 @@ public class BookController {
         //add the book to the list of books by the publisher
         publisher.getBooks().add(book);
         publisherService.updatePublisher(publisher.getId(), publisher);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(book);
     }
 
     @GetMapping("/{bookId}")
