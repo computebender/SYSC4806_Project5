@@ -1,5 +1,6 @@
 package ca.carleton.AmazinBookStore.Author;
 
+import ca.carleton.AmazinBookStore.Book.Book;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,18 @@ public class AuthorController {
         }
 
         return ResponseEntity.ok(author);
+    }
+
+    @GetMapping("/{authorId}/books")
+    public ResponseEntity<List<Book>> getAuthorBooksById(@PathVariable long authorId) {
+        Author author;
+        try {
+            author = this.authorService.getAuthorById(authorId);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(author.getBooks());
     }
 
     @PutMapping("/{authorId}")

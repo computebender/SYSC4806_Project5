@@ -17,6 +17,11 @@ public class UIController {
         return "author";
     }
 
+    @GetMapping("/genre")
+    public String genre() {
+        return "genre";
+    }
+
     @GetMapping("/login")
     public String loginUI(){
         return "login";
