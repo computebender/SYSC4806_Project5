@@ -45,25 +45,29 @@ public class PublisherServiceTest {
     @Test
     public void testCreatePublisher() {
         Publisher publisher = new Publisher();
-        publisher.setName("First");
+        publisher.setFirstName("First");
+        publisher.setLastName("Last");
 
         publisher = publisherService.createPublisher(publisher);
 
         Optional<Publisher> optionalPublisher = publisherRepository.findById(publisher.getId());
         assertThat(optionalPublisher).isNotEmpty();
-        assertEquals(publisher.getName(), optionalPublisher.get().getName());
+        assertEquals(publisher.getFirstName(), optionalPublisher.get().getFirstName());
+        assertEquals(publisher.getLastName(), optionalPublisher.get().getLastName());
     }
 
     @Test
     public void testGetPublisherById() {
         Publisher publisher = new Publisher();
-        publisher.setName("First");
+        publisher.setFirstName("First");
+        publisher.setLastName("Last");
         publisher = publisherRepository.save(publisher);
 
         Publisher retrievedPublisher = publisherService.findPublisherById(publisher.getId());
 
         assertEquals(publisher.getId(), retrievedPublisher.getId());
-        assertEquals(publisher.getName(), retrievedPublisher.getName());
+        assertEquals(publisher.getFirstName(), retrievedPublisher.getFirstName());
+        assertEquals(publisher.getLastName(), retrievedPublisher.getLastName());
     }
 
     @Test
@@ -90,23 +94,26 @@ public class PublisherServiceTest {
     @Test
     public void testUpdatePublisher() {
         Publisher publisher = new Publisher();
-        publisher.setName("First");
+        publisher.setFirstName("First");
+        publisher.setLastName("Last");
         publisher = publisherRepository.save(publisher);
 
         Publisher partialPublisher = new Publisher();
-        partialPublisher.setName("Changed");
+        partialPublisher.setFirstName("Changed");
 
         Publisher updatedPublisher = publisherService.updatePublisher(publisher.getId(), partialPublisher);
 
         Optional<Publisher> optionalPublisher = publisherRepository.findById(publisher.getId());
         assertThat(optionalPublisher).isNotEmpty();
-        assertEquals(updatedPublisher.getName(), optionalPublisher.get().getName());
+        assertEquals(updatedPublisher.getFirstName(), optionalPublisher.get().getFirstName());
+        assertEquals(publisher.getLastName(), optionalPublisher.get().getLastName());
     }
 
     @Test
     public void testDeletePublisher() {
         Publisher publisher = new Publisher();
-        publisher.setName("John");
+        publisher.setFirstName("John");
+        publisher.setLastName("Doe");
         publisher = publisherRepository.save(publisher);
 
         publisherService.deletePublisher(publisher.getId());
