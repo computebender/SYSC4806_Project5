@@ -1,5 +1,7 @@
 package ca.carleton.AmazinBookStore.Publisher;
 
+import ca.carleton.AmazinBookStore.Author.Author;
+import ca.carleton.AmazinBookStore.Book.Book;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
