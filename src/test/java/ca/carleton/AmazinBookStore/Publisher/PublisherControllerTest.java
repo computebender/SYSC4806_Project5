@@ -40,10 +40,12 @@ public class PublisherControllerTest {
     public void testGetAllPublishers() {
         // Initialize 2 different Publisher Objects
         Publisher publisher1 = new Publisher();
-        publisher1.setName("First");
+        publisher1.setFirstName("First");
+        publisher1.setLastName("Last");
 
         Publisher publisher2 = new Publisher();
-        publisher2.setName("First2");
+        publisher2.setFirstName("First2");
+        publisher2.setLastName("Last2");
 
         HttpEntity<Publisher> request1 = new HttpEntity<>(publisher1);
         ResponseEntity<Publisher> response1 = restTemplate.postForEntity(baseUrl, request1, Publisher.class);
@@ -67,21 +69,24 @@ public class PublisherControllerTest {
     @Test
     public void testCreatePublisher() {
         Publisher publisher = new Publisher();
-        publisher.setName("First");
+        publisher.setFirstName("First");
+        publisher.setLastName("Last");
 
         HttpEntity<Publisher> request = new HttpEntity<>(publisher);
         ResponseEntity<Publisher> response = restTemplate.postForEntity(baseUrl, request, Publisher.class);
         Publisher savedPublisher = response.getBody();
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals("First", savedPublisher.getName());
+        assertEquals("First", savedPublisher.getFirstName());
+        assertEquals("Last", savedPublisher.getLastName());
     }
 
     @Test
     public void testGetPublisherById() {
         Publisher publisher1 = new Publisher();
         publisher1.setId(1L);
-        publisher1.setName("First");
+        publisher1.setFirstName("First");
+        publisher1.setLastName("Last");
         HttpEntity<Publisher> request1 = new HttpEntity<>(publisher1);
         ResponseEntity<Publisher> response1 = restTemplate.postForEntity(baseUrl, request1, Publisher.class);
         Publisher savedPublisher1 = response1.getBody();
@@ -89,28 +94,31 @@ public class PublisherControllerTest {
         ResponseEntity<Publisher> response = restTemplate.getForEntity(baseUrl + "/" + publisher1.getId(), Publisher.class);
         Publisher publisher = response.getBody();
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("First", publisher.getName());
+        assertEquals("First", publisher.getFirstName());
+        assertEquals("Last", publisher.getLastName());
     }
 
     @Test
     public void testUpdatePublisherById() {
         Publisher publisher1 = new Publisher();
         publisher1.setId(1L);
-        publisher1.setName("First");
+        publisher1.setFirstName("First");
+        publisher1.setLastName("Last");
         HttpEntity<Publisher> request1 = new HttpEntity<>(publisher1);
         ResponseEntity<Publisher> response1 = restTemplate.postForEntity(baseUrl, request1, Publisher.class);
         Publisher savedPublisher1 = response1.getBody();
 
 
         Publisher partialPublisher = new Publisher();
-        partialPublisher.setName("Test");
+        partialPublisher.setFirstName("Test");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Publisher> request = new HttpEntity<>(partialPublisher, headers);
         ResponseEntity<Publisher> response = restTemplate.exchange(baseUrl + "/" + publisher1.getId(), HttpMethod.PUT, request, Publisher.class);
         Publisher updatedPublisher = response.getBody();
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Test", updatedPublisher.getName());
+        assertEquals("Test", updatedPublisher.getFirstName());
+        assertEquals("Last", updatedPublisher.getLastName());
     }
 
     @Test

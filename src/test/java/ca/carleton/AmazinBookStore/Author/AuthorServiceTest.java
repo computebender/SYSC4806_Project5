@@ -4,10 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import ca.carleton.AmazinBookStore.AmazinBookStoreApplication;
+import ca.carleton.AmazinBookStore.Book.Book;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -66,6 +68,22 @@ public class AuthorServiceTest {
         assertEquals(author.getId(), retrievedAuthor.getId());
         assertEquals(author.getFirstName(), retrievedAuthor.getFirstName());
         assertEquals(author.getLastName(), retrievedAuthor.getLastName());
+    }
+
+    @Test
+    public void testGetAuthorBooksById(){
+        Author author = new Author();
+        author.setFirstName("John");
+        author.setLastName("Doe");
+        List<Book> books = new ArrayList<>();
+        Book b1 = new Book();
+        b1.setTitle("Test");
+        books.add(b1);
+        author.setBooks(books);
+        author = authorRepository.save(author);
+
+        List<Book> authorBooks = authorService.getAuthorBooksById(author.getId());
+        assertEquals(b1.getTitle(), authorBooks.get(0).getTitle());
     }
 
     @Test
