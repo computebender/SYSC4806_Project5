@@ -75,6 +75,16 @@ public class BookstoreService {
         return bookstore;
     }
 
+    public List<Listing> getAllListings(Long bookstoreId){
+        Optional<Bookstore> optionalBookstore = this.bookstoreRepository.findById(bookstoreId);
+        if(optionalBookstore.isEmpty()){
+            throw new ResourceNotFoundException("Bookstore with ID " + bookstoreId + " not found.");
+        }
+        Bookstore bookstore = optionalBookstore.get();
+        List<Listing> listings = bookstore.getListings();
+        return listings;
+    }
+
     public Listing getListingById(Long id, Bookstore bookstore) {
         Listing matchListing;
         Boolean matchingId = false;

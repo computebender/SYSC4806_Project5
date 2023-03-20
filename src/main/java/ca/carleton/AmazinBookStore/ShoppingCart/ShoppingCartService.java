@@ -1,4 +1,5 @@
 package ca.carleton.AmazinBookStore.ShoppingCart;
+import ca.carleton.AmazinBookStore.Listing.Listing;
 
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -12,9 +13,11 @@ import java.util.Optional;
 public class ShoppingCartService {
 
     private final CartRepository cartRepository;
+    private final ItemRepository itemRepository;
 
-    public ShoppingCartService(CartRepository cartRepository){
+    public ShoppingCartService(CartRepository cartRepository, ItemRepository itemRepository){
         this.cartRepository = cartRepository;
+        this.itemRepository = itemRepository;
     }
     public ShoppingCart createShoppingCart(ShoppingCart shoppingCart) {
         List<ShoppingCart> shoppingCarts = this.findAll();
@@ -40,16 +43,21 @@ public class ShoppingCartService {
         return shoppingCart.get();
     }
 
-    public ShoppingCart addShoppingCartItem(CartItem cartItem, String userId){
+    public ShoppingCart addShoppingCartItem(Listing listing, String userId){
         ShoppingCart shoppingCart = this.findShoppingCartByUserId(userId);
+        CartItem cartItem = new CartItem();
+        cartItem.setBookListing(listing);
+        cartItem.setQuantity(Integer.parseInt(listing.getCopies()));
+        cartItem.setPrice(Double.parseDouble(listing.getPrice()));
+        this.itemRepository.save(cartItem);
         shoppingCart.addItem(cartItem);
         this.cartRepository.save(shoppingCart);
         return shoppingCart;
     }
 
-    public ShoppingCart removeShoppingCartItem(CartItem cartItem, String userId){
+    public ShoppingCart removeShoppingCartItem(Long cartItemId, String userId){
         ShoppingCart shoppingCart = this.findShoppingCartByUserId(userId);
-        shoppingCart.removeItem(cartItem);
+        shoppingCart.removeItemById(cartItemId);
         this.cartRepository.save(shoppingCart);
         return shoppingCart;
     }

@@ -14,7 +14,6 @@ public class ShoppingCart {
     @Column(name = "user_id")
     private String userId;
 
-//    @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL, orphanRemoval = true)
     @OneToMany
     private List<CartItem> items;
 
@@ -48,6 +47,9 @@ public class ShoppingCart {
 
     public void removeItem(CartItem cartItem ) {
         this.items.remove(cartItem);
+    }
+    public void removeItemById(Long id ) {
+        this.items.removeIf(item -> item.getId().equals(id));
     }
 
     public void setItems(List<CartItem> items) {

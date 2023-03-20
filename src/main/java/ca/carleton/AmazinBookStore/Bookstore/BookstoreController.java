@@ -92,6 +92,17 @@ public class BookstoreController {
         return ResponseEntity.ok(listing);
     }
 
+    @GetMapping("/{bookstoreId}/listings")
+    public ResponseEntity<List<Listing>> getAllListings(@PathVariable long bookstoreId) {
+        List<Listing> listings;
+        try {
+            listings = this.bookstoreService.getAllListings(bookstoreId);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(listings);
+    }
+
     @PutMapping("/{bookstoreId}/listings/{listingId}")
     public ResponseEntity<Listing> updateListingById(@PathVariable long bookstoreId, @PathVariable long listingId, @RequestBody Listing partialListing) {
         Bookstore bookstore;

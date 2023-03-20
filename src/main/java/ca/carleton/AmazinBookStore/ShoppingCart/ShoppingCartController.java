@@ -1,6 +1,7 @@
     package ca.carleton.AmazinBookStore.ShoppingCart;
 
     import ca.carleton.AmazinBookStore.Book.BookRepository;
+    import ca.carleton.AmazinBookStore.Listing.Listing;
     import ca.carleton.AmazinBookStore.Publisher.PublisherService;
     import org.apache.coyote.Response;
     import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -47,16 +48,16 @@
             return ResponseEntity.ok(shoppingCart);
         }
 
-        @PostMapping("/{userId}/add-item/")
-        public ResponseEntity<ShoppingCart> addItem(@PathVariable String userId, @RequestBody CartItem item) {
-            ShoppingCart cart = this.shoppingCartService.addShoppingCartItem(item,userId);
+        @PostMapping("/{userId}/add-item")
+        public ResponseEntity<ShoppingCart> addItem(@PathVariable String userId, @RequestBody Listing listing) {
+            ShoppingCart cart = this.shoppingCartService.addShoppingCartItem(listing,userId);
             return ResponseEntity.status(HttpStatus.CREATED).body(cart);
         }
 
-        @DeleteMapping("/{userId}/remove-item/")
-        public ResponseEntity<ShoppingCart> removeItem(@PathVariable String userId, @RequestBody CartItem removeCartItem) {
+        @DeleteMapping("/{userId}/remove-item")
+        public ResponseEntity<Void> removeItem(@PathVariable String userId, @RequestBody Long cartItemId) {
            try {
-               ShoppingCart cart = this.shoppingCartService.removeShoppingCartItem(removeCartItem, userId);
+               this.shoppingCartService.removeShoppingCartItem(cartItemId, userId);
            }catch(ResourceNotFoundException e){
                return ResponseEntity.notFound().build();
            }

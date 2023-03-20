@@ -135,5 +135,4 @@ public class BookstoreControllerTest {
         ResponseEntity<Bookstore> response1 = restTemplate.postForEntity(baseUrl, request1, Bookstore.class);
         Bookstore savedBookstore1 = response1.getBody();
     }
-
 }
