@@ -55,8 +55,7 @@ public class BookControllerTest {
         Author savedAuthor1 = responseauthor1.getBody();
 
         Publisher publisher1 = new Publisher();
-        publisher1.setFirstName("First2");
-        publisher1.setLastName("Last2");
+        publisher1.setName("First2");
 
         HttpEntity<Publisher> requestpublisher1 = new HttpEntity<>(publisher1);
         ResponseEntity<Publisher> responsepublisher1 = restTemplate.postForEntity(publisherUrl, requestpublisher1, Publisher.class);
@@ -126,8 +125,7 @@ public class BookControllerTest {
         Author savedAuthor1 = responseauthor1.getBody();
 
         Publisher publisher1 = new Publisher();
-        publisher1.setFirstName("First2");
-        publisher1.setLastName("Last2");
+        publisher1.setName("First2");
 
         HttpEntity<Publisher> requestpublisher1 = new HttpEntity<>(publisher1);
         ResponseEntity<Publisher> responsepublisher1 = restTemplate.postForEntity(publisherUrl, requestpublisher1, Publisher.class);
@@ -178,8 +176,7 @@ public class BookControllerTest {
         Author savedAuthor1 = responseauthor1.getBody();
 
         Publisher publisher1 = new Publisher();
-        publisher1.setFirstName("First2");
-        publisher1.setLastName("Last2");
+        publisher1.setName("First2");
 
         HttpEntity<Publisher> requestpublisher1 = new HttpEntity<>(publisher1);
         ResponseEntity<Publisher> responsepublisher1 = restTemplate.postForEntity(publisherUrl, requestpublisher1, Publisher.class);
@@ -233,8 +230,7 @@ public class BookControllerTest {
         Author savedAuthor1 = responseauthor1.getBody();
 
         Publisher publisher1 = new Publisher();
-        publisher1.setFirstName("First2");
-        publisher1.setLastName("Last2");
+        publisher1.setName("First2");
 
         HttpEntity<Publisher> requestpublisher1 = new HttpEntity<>(publisher1);
         ResponseEntity<Publisher> responsepublisher1 = restTemplate.postForEntity(publisherUrl, requestpublisher1, Publisher.class);
