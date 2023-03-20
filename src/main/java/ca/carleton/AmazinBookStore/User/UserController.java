@@ -1,5 +1,7 @@
 package ca.carleton.AmazinBookStore.User;
 
+import ca.carleton.AmazinBookStore.Book.Book;
+import ca.carleton.AmazinBookStore.User.BookRecommendation.BookRecommendationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -13,10 +15,12 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
+    private BookRecommendationService bookRecommendationService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, BookRecommendationService bookRecommendationService) {
         this.userService = userService;
+        this.bookRecommendationService= bookRecommendationService;
     }
 
     @PostMapping("")
@@ -34,6 +38,17 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/{id}/recommendations")
+    public ResponseEntity<List<Book>> getBookRecommendationById(@PathVariable Long id) {
+        List<Book> recommendations;
+        try {
+            recommendations = bookRecommendationService.getRecommendationById(id);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(recommendations);
     }
 
     /*

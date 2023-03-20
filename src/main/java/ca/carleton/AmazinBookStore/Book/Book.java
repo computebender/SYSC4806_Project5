@@ -16,7 +16,7 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int isbn;
+    private String isbn;
     private String picture;
     private String description;
     @ManyToOne
@@ -30,11 +30,11 @@ public class Book {
     private List<Genre> genres;
     private String title;
 
-    public int getIsbn() {
+    public String getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(int isbn) {
+    public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 
@@ -92,5 +92,25 @@ public class Book {
 
     public void setGenres(List<Genre> genres) {
         this.genres = genres;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        // If the object is compared with itself then return true
+        if (o == this) {
+            return true;
+        }
+
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof Book)) {
+            return false;
+        }
+
+        // typecast o to Complex so that we can compare data members
+        Book book = (Book) o;
+
+        // Compare the data members and return accordingly
+        return this.isbn == book.getIsbn();
     }
 }
