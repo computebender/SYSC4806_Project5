@@ -2,6 +2,7 @@ package ca.carleton.AmazinBookStore.Publisher;
 
 import ca.carleton.AmazinBookStore.Author.Author;
 import ca.carleton.AmazinBookStore.Book.Book;
+
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +15,12 @@ public class PublisherService {
 
     private final PublisherRepository publisherRepository;
 
-    public Publisher createPublisher(Publisher publisher){
-        return this.publisherRepository.save(publisher);
-    }
-
     public PublisherService(PublisherRepository publisherRepository) {
         this.publisherRepository = publisherRepository;
+    }
+
+    public Publisher createPublisher(Publisher publisher){
+        return this.publisherRepository.save(publisher);
     }
 
     public List<Publisher> findAll(){

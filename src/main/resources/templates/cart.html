@@ -8,7 +8,53 @@
 <div th:replace="fragments/navbar :: navbar">
 </div>
 <div class="container">
-  <h1>Cart</h1>
+  <h1>Shopping Cart</h1>
+  <table>
+    <thead>
+    <tr>
+      <th>Title</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+<!--    <tr th:each="item : ${cart.items}">-->
+<!--      <td th:text="${item.title}"></td>-->
+<!--      <td th:text="${item.price}"></td>-->
+<!--      <td>-->
+<!--        <input type="number" th:value="${item.quantity}" th:field="*{quantity}"/>-->
+<!--        <input type="hidden" th:field="*{bookId}" th:value="${item.bookId}"/>-->
+      </td>
+      <td>
+        <form method="post" th:action="@{/cart/update-item}">
+          <button type="submit">Update</button>
+        </form>
+        <form method="post" th:action="@{/cart/remove-item}">
+<!--          <input type="hidden" th:field="*{bookId}" th:value="${item.bookId}"/>-->
+          <button type="submit">Remove</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <form method="post" th:action="@{/cart/add-item}">
+    <label for="bookId">Book ID:</label>
+    <input type="text" id="bookId" name="bookId"/>
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title"/>
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price"/>
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" name="quantity"/>
+    <button type="submit">Add to Cart</button>
+  </form>
+  <form method="post" th:action="@{/cart/clear}">
+    <button type="submit">Clear Cart</button>
+  </form>
+  <form method="post" th:action="@{/cart/checkout}">
+    <button type="submit">Checkout</button>
+  </form>
 </div>
 <div th:replace="fragments/footer :: footer"> </div>
 </body>
