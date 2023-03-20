@@ -1,6 +1,11 @@
 package ca.carleton.AmazinBookStore.User;
 
+import ca.carleton.AmazinBookStore.Book.Book;
+import ca.carleton.AmazinBookStore.Listing.Listing;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "`USER`")
@@ -18,6 +23,9 @@ public class User {
     private String firstName;
 
     private String lastName;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Listing.class)
+    private List<Listing> purchaseHistory;
 
     public Long getId() {
         return id;
@@ -57,6 +65,14 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public List<Listing> getPurchaseHistory() {
+        return purchaseHistory;
+    }
+
+    public void setPurchaseHistory(List<Listing> purchaseHistory) {
+        this.purchaseHistory = purchaseHistory;
     }
 
     @Override

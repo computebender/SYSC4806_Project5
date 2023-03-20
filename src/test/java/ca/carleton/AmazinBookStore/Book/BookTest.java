@@ -12,7 +12,7 @@ public class BookTest {
     public void setUp() {
         book = new Book();
         book.setTitle("Test Book");
-        book.setIsbn(12345);
+        book.setIsbn("12345");
     }
 
     @Test
@@ -33,7 +33,7 @@ public class BookTest {
 
     @Test
     public void testSetIsbn() {
-        book.setIsbn(67890);
-        Assertions.assertEquals(67890, book.getIsbn());
+        book.setIsbn("67890");
+        Assertions.assertEquals("67890", book.getIsbn());
     }
 }
