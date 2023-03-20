@@ -28,10 +28,7 @@
                 var password = $('#login-password').val();
 
                 authenticationService.authenticate(email, password, function (token) {
-                    localStorage.setItem('token', token);
-                    userService.getUserByEmail(email, function (user) {
-                        window.location.href = '/';
-                    });
+                    window.location.href = "/";
                 }, function () {
                     notificationService.addErrorNotification('Username or password is incorrect.');
                 });

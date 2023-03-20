@@ -41,8 +41,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             } catch (Exception e) {
                 logger.error("Unable to get JWT Token", e);
             }
-        } else {
-            logger.warn("JWT Token does not begin with Bearer String");
         }
 
         // Validate token
