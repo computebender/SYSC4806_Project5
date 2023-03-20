@@ -1,5 +1,6 @@
 package ca.carleton.AmazinBookStore.Author;
 
+import ca.carleton.AmazinBookStore.Book.Book;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,16 @@ public class AuthorService {
         }
 
         return author.get();
+    }
+
+    public List<Book> getAuthorBooksById(Long id){
+        Optional<Author> author = this.authorRepository.findById(id);
+
+        if(author.isEmpty()){
+            throw new ResourceNotFoundException("Author with ID " + id + " not found.");
+        }
+
+        return author.get().getBooks();
     }
 
     public Author createAuthor(Author author){
