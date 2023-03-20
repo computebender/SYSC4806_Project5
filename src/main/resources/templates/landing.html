@@ -1,12 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <!--jQuery-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!--Bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
             crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!--Services-->
+    <script src="/js/authorService.js"></script>
+    <script src="/js/bookService.js"></script>
+    <script src="/js/bookstoreService.js"></script>
+    <script src="/js/genreService.js"></script>
+    <script src="/js/notificationService.js"></script>
+    <script src="/js/publisherService.js"></script>
+    <script src="/js/userService.js"></script>
+    <script src="/js/authService.js"></script>
 </head>
 <body>
 <div th:replace="fragments/navbar :: navbar">
