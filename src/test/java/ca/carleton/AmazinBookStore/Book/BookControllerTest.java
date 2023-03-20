@@ -1,6 +1,7 @@
 package ca.carleton.AmazinBookStore.Book;
 
 import ca.carleton.AmazinBookStore.Author.Author;
+import ca.carleton.AmazinBookStore.Genre.Genre;
 import ca.carleton.AmazinBookStore.Publisher.Publisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,12 +35,14 @@ public class BookControllerTest {
     private String baseUrl;
     private String authorUrl;
     private String publisherUrl;
+    private String genreUrl;
 
     @BeforeEach
     public void setUp() {
         baseUrl = "http://localhost:" + port + "/api/books";
         authorUrl = "http://localhost:" + port + "/api/authors";
         publisherUrl = "http://localhost:" + port + "/api/publishers";
+        genreUrl = "http://localhost:" + port + "/api/genres";;
     }
 
     @Test
@@ -51,16 +55,34 @@ public class BookControllerTest {
         Author savedAuthor1 = responseauthor1.getBody();
 
         Publisher publisher1 = new Publisher();
-        publisher1.setName("First2");
+        publisher1.setFirstName("First2");
+        publisher1.setLastName("Last2");
 
         HttpEntity<Publisher> requestpublisher1 = new HttpEntity<>(publisher1);
         ResponseEntity<Publisher> responsepublisher1 = restTemplate.postForEntity(publisherUrl, requestpublisher1, Publisher.class);
         Publisher savedPublisher1 = responsepublisher1.getBody();
 
+        Genre genre1 = new Genre();
+        genre1.setName("Fiction");
+        HttpEntity<Genre> requestgenre1 = new HttpEntity<>(genre1);
+        ResponseEntity<Genre> responsegenre1 = restTemplate.postForEntity(genreUrl, requestgenre1, Genre.class);
+        Genre savedGenre1 = responsegenre1.getBody();
+
+        Genre genre2 = new Genre();
+        genre1.setName("Non-Fiction");
+        HttpEntity<Genre> requestgenre2 = new HttpEntity<>(genre2);
+        ResponseEntity<Genre> responsegenre2 = restTemplate.postForEntity(genreUrl, requestgenre2, Genre.class);
+        Genre savedGenre2 = responsegenre2.getBody();
+
+        List<Genre> genres = new ArrayList<>();
+        genres.add(savedGenre1);
+        genres.add(savedGenre2);
+
         // Create two Books
         Book book1 = new Book();
         book1.setAuthor(savedAuthor1);
         book1.setPublisher(savedPublisher1);
+        book1.setGenres(genres);
         book1.setDescription("This is the Description");
         book1.setIsbn(123556);
         book1.setPicture("picture/url");
@@ -73,6 +95,7 @@ public class BookControllerTest {
         Book book2 = new Book();
         book2.setAuthor(savedAuthor1);
         book2.setPublisher(savedPublisher1);
+        book2.setGenres(genres);
         book2.setDescription("This is the Description");
         book2.setIsbn(654321);
         book2.setPicture("picture/url");
@@ -103,16 +126,34 @@ public class BookControllerTest {
         Author savedAuthor1 = responseauthor1.getBody();
 
         Publisher publisher1 = new Publisher();
-        publisher1.setName("First2");
+        publisher1.setFirstName("First2");
+        publisher1.setLastName("Last2");
 
         HttpEntity<Publisher> requestpublisher1 = new HttpEntity<>(publisher1);
         ResponseEntity<Publisher> responsepublisher1 = restTemplate.postForEntity(publisherUrl, requestpublisher1, Publisher.class);
         Publisher savedPublisher1 = responsepublisher1.getBody();
 
+        Genre genre1 = new Genre();
+        genre1.setName("Fiction");
+        HttpEntity<Genre> requestgenre1 = new HttpEntity<>(genre1);
+        ResponseEntity<Genre> responsegenre1 = restTemplate.postForEntity(genreUrl, requestgenre1, Genre.class);
+        Genre savedGenre1 = responsegenre1.getBody();
+
+        Genre genre2 = new Genre();
+        genre1.setName("Non-Fiction");
+        HttpEntity<Genre> requestgenre2 = new HttpEntity<>(genre2);
+        ResponseEntity<Genre> responsegenre2 = restTemplate.postForEntity(genreUrl, requestgenre2, Genre.class);
+        Genre savedGenre2 = responsegenre2.getBody();
+
+        List<Genre> genres = new ArrayList<>();
+        genres.add(savedGenre1);
+        genres.add(savedGenre2);
+
         // Create two Books
         Book book = new Book();
         book.setAuthor(savedAuthor1);
         book.setPublisher(savedPublisher1);
+        book.setGenres(genres);
         book.setDescription("This is the Description");
         book.setIsbn(123556);
         book.setPicture("picture/url");
@@ -137,16 +178,34 @@ public class BookControllerTest {
         Author savedAuthor1 = responseauthor1.getBody();
 
         Publisher publisher1 = new Publisher();
-        publisher1.setName("First2");
+        publisher1.setFirstName("First2");
+        publisher1.setLastName("Last2");
 
         HttpEntity<Publisher> requestpublisher1 = new HttpEntity<>(publisher1);
         ResponseEntity<Publisher> responsepublisher1 = restTemplate.postForEntity(publisherUrl, requestpublisher1, Publisher.class);
         Publisher savedPublisher1 = responsepublisher1.getBody();
 
+        Genre genre1 = new Genre();
+        genre1.setName("Fiction");
+        HttpEntity<Genre> requestgenre1 = new HttpEntity<>(genre1);
+        ResponseEntity<Genre> responsegenre1 = restTemplate.postForEntity(genreUrl, requestgenre1, Genre.class);
+        Genre savedGenre1 = responsegenre1.getBody();
+
+        Genre genre2 = new Genre();
+        genre1.setName("Non-Fiction");
+        HttpEntity<Genre> requestgenre2 = new HttpEntity<>(genre2);
+        ResponseEntity<Genre> responsegenre2 = restTemplate.postForEntity(genreUrl, requestgenre2, Genre.class);
+        Genre savedGenre2 = responsegenre2.getBody();
+
+        List<Genre> genres = new ArrayList<>();
+        genres.add(savedGenre1);
+        genres.add(savedGenre2);
+
         // Create two Books
         Book book1 = new Book();
         book1.setAuthor(savedAuthor1);
         book1.setPublisher(savedPublisher1);
+        book1.setGenres(genres);
         book1.setDescription("This is the Description");
         book1.setIsbn(123556);
         book1.setPicture("picture/url");
@@ -174,16 +233,35 @@ public class BookControllerTest {
         Author savedAuthor1 = responseauthor1.getBody();
 
         Publisher publisher1 = new Publisher();
-        publisher1.setName("First2");
+        publisher1.setFirstName("First2");
+        publisher1.setLastName("Last2");
 
         HttpEntity<Publisher> requestpublisher1 = new HttpEntity<>(publisher1);
         ResponseEntity<Publisher> responsepublisher1 = restTemplate.postForEntity(publisherUrl, requestpublisher1, Publisher.class);
         Publisher savedPublisher1 = responsepublisher1.getBody();
 
+        Genre genre1 = new Genre();
+        genre1.setName("Fiction");
+        HttpEntity<Genre> requestgenre1 = new HttpEntity<>(genre1);
+        ResponseEntity<Genre> responsegenre1 = restTemplate.postForEntity(genreUrl, requestgenre1, Genre.class);
+        Genre savedGenre1 = responsegenre1.getBody();
+
+        Genre genre2 = new Genre();
+        genre1.setName("Non-Fiction");
+        HttpEntity<Genre> requestgenre2 = new HttpEntity<>(genre2);
+        ResponseEntity<Genre> responsegenre2 = restTemplate.postForEntity(genreUrl, requestgenre2, Genre.class);
+        Genre savedGenre2 = responsegenre2.getBody();
+
+        List<Genre> genres = new ArrayList<>();
+        genres.add(savedGenre1);
+        genres.add(savedGenre2);
+
+
         // Create two Books
         Book book1 = new Book();
         book1.setAuthor(savedAuthor1);
         book1.setPublisher(savedPublisher1);
+        book1.setGenres(genres);
         book1.setDescription("This is the Description");
         book1.setIsbn(123556);
         book1.setPicture("picture/url");
@@ -198,6 +276,7 @@ public class BookControllerTest {
         Book partialBook = new Book();
         partialBook.setAuthor(savedAuthor1);
         partialBook.setPublisher(savedPublisher1);
+        partialBook.setGenres(genres);
         partialBook.setDescription("This is the Description");
         partialBook.setIsbn(123556);
         partialBook.setPicture("picture/url");

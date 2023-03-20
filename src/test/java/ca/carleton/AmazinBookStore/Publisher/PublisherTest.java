@@ -20,9 +20,15 @@ public class PublisherTest {
         assertEquals(3L, publisher.getId().longValue());
     }
     @Test
-    public void testName() {
-        publisher.setName("First");
-        assertEquals("First", publisher.getName());
+    public void testFirstName() {
+        publisher.setFirstName("First");
+        assertEquals("First", publisher.getFirstName());
+    }
+
+    @Test
+    public void testLastName() {
+        publisher.setLastName("Last");
+        assertEquals("Last", publisher.getLastName());
     }
 
     @Test
