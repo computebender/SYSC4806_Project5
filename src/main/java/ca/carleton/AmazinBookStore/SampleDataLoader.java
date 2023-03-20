@@ -57,19 +57,19 @@ public class SampleDataLoader implements CommandLineRunner {
 
         // create publishers
         Publisher publisher1 = new Publisher();
-        publisher1.setFirstName("HarperCollins");
+        publisher1.setName("HarperCollins");
         publisherRepository.save(publisher1);
 
         Publisher publisher2 = new Publisher();
-        publisher2.setFirstName("Scholastic");
+        publisher2.setName("Scholastic");
         publisherRepository.save(publisher2);
 
         Publisher publisher3 = new Publisher();
-        publisher3.setFirstName("Penguin Random House");
+        publisher3.setName("Penguin Random House");
         publisherRepository.save(publisher3);
 
         Publisher publisher4 = new Publisher();
-        publisher4.setFirstName("Simon & Schuster");
+        publisher4.setName("Simon & Schuster");
         publisherRepository.save(publisher4);
 
         // create books and associate with authors and publishers
