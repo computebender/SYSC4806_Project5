@@ -53,10 +53,13 @@ public class PublisherService {
         }
         Publisher publisher = oldPublisher.get();
 
-        if(Objects.nonNull(updatedPublisher.getName())){
-            publisher.setName(updatedPublisher.getName());
+        if(Objects.nonNull(updatedPublisher.getFirstName())){
+            publisher.setFirstName(updatedPublisher.getFirstName());
         }
 
+        if(Objects.nonNull(updatedPublisher.getLastName())){
+            publisher.setLastName(updatedPublisher.getLastName());
+        }
         this.publisherRepository.save(publisher);
 
         return publisher;
