@@ -83,7 +83,7 @@ public class BookControllerTest {
         book1.setPublisher(savedPublisher1);
         book1.setGenres(genres);
         book1.setDescription("This is the Description");
-        book1.setIsbn(123556);
+        book1.setIsbn("123556");
         book1.setPicture("picture/url");
         book1.setTitle("Lord of the Rings");
         book1.setDescription("Adventure story of a hobbit");
@@ -96,7 +96,7 @@ public class BookControllerTest {
         book2.setPublisher(savedPublisher1);
         book2.setGenres(genres);
         book2.setDescription("This is the Description");
-        book2.setIsbn(654321);
+        book2.setIsbn("654321");
         book2.setPicture("picture/url");
         book2.setTitle("Star Wars");
         book2.setDescription("Adventure story of a Jedi");
@@ -153,7 +153,7 @@ public class BookControllerTest {
         book.setPublisher(savedPublisher1);
         book.setGenres(genres);
         book.setDescription("This is the Description");
-        book.setIsbn(123556);
+        book.setIsbn("123556");
         book.setPicture("picture/url");
         book.setTitle("Lord of the Rings");
         book.setDescription("Adventure story of a hobbit");
@@ -203,7 +203,7 @@ public class BookControllerTest {
         book1.setPublisher(savedPublisher1);
         book1.setGenres(genres);
         book1.setDescription("This is the Description");
-        book1.setIsbn(123556);
+        book1.setIsbn("123556");
         book1.setPicture("picture/url");
         book1.setTitle("Lord of the Rings");
         book1.setDescription("Adventure story of a hobbit");
@@ -258,7 +258,7 @@ public class BookControllerTest {
         book1.setPublisher(savedPublisher1);
         book1.setGenres(genres);
         book1.setDescription("This is the Description");
-        book1.setIsbn(123556);
+        book1.setIsbn("123556");
         book1.setPicture("picture/url");
         book1.setTitle("Lord of the Rings");
         book1.setDescription("Adventure story of a hobbit");
@@ -273,7 +273,7 @@ public class BookControllerTest {
         partialBook.setPublisher(savedPublisher1);
         partialBook.setGenres(genres);
         partialBook.setDescription("This is the Description");
-        partialBook.setIsbn(123556);
+        partialBook.setIsbn("123556");
         partialBook.setPicture("picture/url");
         partialBook.setDescription("Adventure story of a hobbit");
         HttpHeaders headers = new HttpHeaders();

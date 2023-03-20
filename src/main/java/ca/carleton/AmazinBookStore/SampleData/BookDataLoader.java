@@ -1,8 +1,9 @@
 package ca.carleton.AmazinBookStore.SampleData;
 
 import ca.carleton.AmazinBookStore.Author.Author;
-import ca.carleton.AmazinBookStore.Author.AuthorRepository;
 import ca.carleton.AmazinBookStore.Book.Book;
+import ca.carleton.AmazinBookStore.Publisher.Publisher;
+import ca.carleton.AmazinBookStore.Author.AuthorRepository;
 import ca.carleton.AmazinBookStore.Book.BookRepository;
 import ca.carleton.AmazinBookStore.Genre.Genre;
 import ca.carleton.AmazinBookStore.Genre.GenreRepository;

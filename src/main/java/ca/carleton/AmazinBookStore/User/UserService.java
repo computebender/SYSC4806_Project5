@@ -70,6 +70,10 @@ public class UserService {
             user.setLastName(partialUser.getLastName());
         }
 
+        if(Objects.nonNull(partialUser.getPurchaseHistory())){
+            user.setPurchaseHistory(partialUser.getPurchaseHistory());
+        }
+
         userRepository.save(user);
 
         return user;
