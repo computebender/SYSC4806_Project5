@@ -26,7 +26,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
-    @GetMapping()
+    @GetMapping("")
     @RolesAllowed("ROLE_USER")
     public ResponseEntity<User> getUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
