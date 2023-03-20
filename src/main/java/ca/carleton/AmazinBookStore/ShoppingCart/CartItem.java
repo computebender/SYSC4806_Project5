@@ -15,8 +15,14 @@ public class CartItem {
 
     private double price;
 
-    public CartItem(){
-        // Default constructor
+    public CartItem(Listing bookListing){
+        this.bookListing = bookListing;
+        this.quantity = Integer.parseInt(bookListing.getCopies());
+        this.price = Double.parseDouble(bookListing.getPrice());
+    }
+
+    public CartItem() {
+
     }
 
     public Long getId() {

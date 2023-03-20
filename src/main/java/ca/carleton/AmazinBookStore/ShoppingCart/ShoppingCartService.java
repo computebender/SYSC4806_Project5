@@ -74,4 +74,10 @@ public class ShoppingCartService {
         return shoppingCart;
     }
 
+    public double checkoutShoppingCart(String userId){
+        ShoppingCart shoppingCart = this.findShoppingCartByUserId(userId);
+        double price = shoppingCart.checkout();
+        this.cartRepository.save(shoppingCart);
+        return price;
+    }
 }

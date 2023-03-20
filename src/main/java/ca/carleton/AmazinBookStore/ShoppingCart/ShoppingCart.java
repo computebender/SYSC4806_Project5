@@ -57,4 +57,13 @@ public class ShoppingCart {
     public void clearItems() {
         this.items.clear();
     }
+
+    public double checkout() {
+        double total_price = 0;
+        for(CartItem item : items){
+            total_price += item.getPrice();
+        }
+        this.items.clear();
+        return total_price;
+    }
 }
