@@ -20,6 +20,14 @@
     <script src="/js/publisherService.js"></script>
     <script src="/js/userService.js"></script>
     <script src="/js/authService.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            userService.getCurrentUser(function (user) {
+                console.log(user)
+            });
+        });
+    </script>
 </head>
 <body>
 <div th:replace="fragments/navbar :: navbar">
