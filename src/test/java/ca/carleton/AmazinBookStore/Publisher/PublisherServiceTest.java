@@ -1,8 +1,6 @@
 package ca.carleton.AmazinBookStore.Publisher;
 
 import ca.carleton.AmazinBookStore.AmazinBookStoreApplication;
-import ca.carleton.AmazinBookStore.Book.Book;
-import ca.carleton.AmazinBookStore.Genre.Genre;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +11,6 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,45 +42,25 @@ public class PublisherServiceTest {
     @Test
     public void testCreatePublisher() {
         Publisher publisher = new Publisher();
-        publisher.setFirstName("First");
-        publisher.setLastName("Last");
+        publisher.setName("First");
 
         publisher = publisherService.createPublisher(publisher);
 
         Optional<Publisher> optionalPublisher = publisherRepository.findById(publisher.getId());
         assertThat(optionalPublisher).isNotEmpty();
-        assertEquals(publisher.getFirstName(), optionalPublisher.get().getFirstName());
-        assertEquals(publisher.getLastName(), optionalPublisher.get().getLastName());
+        assertEquals(publisher.getName(), optionalPublisher.get().getName());
     }
 
     @Test
     public void testGetPublisherById() {
         Publisher publisher = new Publisher();
-        publisher.setFirstName("First");
-        publisher.setLastName("Last");
+        publisher.setName("First");
         publisher = publisherRepository.save(publisher);
 
         Publisher retrievedPublisher = publisherService.findPublisherById(publisher.getId());
 
         assertEquals(publisher.getId(), retrievedPublisher.getId());
-        assertEquals(publisher.getFirstName(), retrievedPublisher.getFirstName());
-        assertEquals(publisher.getLastName(), retrievedPublisher.getLastName());
-    }
-
-    @Test
-    public void testGetPublisherBooksById(){
-        Publisher publisher = new Publisher();
-        publisher.setFirstName("First");
-        publisher.setLastName("Last");
-        List<Book> books = new ArrayList<>();
-        Book b1 = new Book();
-        b1.setTitle("Test");
-        books.add(b1);
-        publisher.setBooks(books);
-        publisher = publisherRepository.save(publisher);
-
-        List<Book> genreBooks = publisherService.getPublisherBookById(publisher.getId());
-        assertEquals(b1.getTitle(), genreBooks.get(0).getTitle());
+        assertEquals(publisher.getName(), retrievedPublisher.getName());
     }
 
     @Test
@@ -94,26 +71,23 @@ public class PublisherServiceTest {
     @Test
     public void testUpdatePublisher() {
         Publisher publisher = new Publisher();
-        publisher.setFirstName("First");
-        publisher.setLastName("Last");
+        publisher.setName("First");
         publisher = publisherRepository.save(publisher);
 
         Publisher partialPublisher = new Publisher();
-        partialPublisher.setFirstName("Changed");
+        partialPublisher.setName("Changed");
 
         Publisher updatedPublisher = publisherService.updatePublisher(publisher.getId(), partialPublisher);
 
         Optional<Publisher> optionalPublisher = publisherRepository.findById(publisher.getId());
         assertThat(optionalPublisher).isNotEmpty();
-        assertEquals(updatedPublisher.getFirstName(), optionalPublisher.get().getFirstName());
-        assertEquals(publisher.getLastName(), optionalPublisher.get().getLastName());
+        assertEquals(updatedPublisher.getName(), optionalPublisher.get().getName());
     }
 
     @Test
     public void testDeletePublisher() {
         Publisher publisher = new Publisher();
-        publisher.setFirstName("John");
-        publisher.setLastName("Doe");
+        publisher.setName("John");
         publisher = publisherRepository.save(publisher);
 
         publisherService.deletePublisher(publisher.getId());
