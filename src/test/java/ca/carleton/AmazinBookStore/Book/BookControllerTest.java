@@ -158,7 +158,6 @@ public class BookControllerTest {
         book.setTitle("Lord of the Rings");
         book.setDescription("Adventure story of a hobbit");
         HttpEntity<Book> request = new HttpEntity<>(book);
-        System.out.println(request);
         ResponseEntity<Book> response = restTemplate.postForEntity(baseUrl, request, Book.class);
         Book savedBook = response.getBody();
         assertEquals(HttpStatus.CREATED, response.getStatusCode());

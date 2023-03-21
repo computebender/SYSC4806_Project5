@@ -17,8 +17,8 @@ public class CartItem {
 
     public CartItem(Listing bookListing){
         this.bookListing = bookListing;
-        this.quantity = Integer.parseInt(bookListing.getCopies());
-        this.price = Double.parseDouble(bookListing.getPrice());
+        this.quantity = bookListing.getCopies();
+        this.price = bookListing.getPrice();
     }
 
     public CartItem() {

@@ -7,10 +7,23 @@ import java.util.List;
 import java.util.Optional;
 
 import ca.carleton.AmazinBookStore.AmazinBookStoreApplication;
+import ca.carleton.AmazinBookStore.Author.Author;
+import ca.carleton.AmazinBookStore.Author.AuthorRepository;
+import ca.carleton.AmazinBookStore.Author.AuthorService;
+import ca.carleton.AmazinBookStore.Book.Book;
+import ca.carleton.AmazinBookStore.Book.BookRepository;
+import ca.carleton.AmazinBookStore.Book.BookService;
 import ca.carleton.AmazinBookStore.Bookstore.Bookstore;
 import ca.carleton.AmazinBookStore.Bookstore.BookstoreRepository;
 import ca.carleton.AmazinBookStore.Bookstore.BookstoreService;
+import ca.carleton.AmazinBookStore.Genre.Genre;
+import ca.carleton.AmazinBookStore.Genre.GenreRepository;
+import ca.carleton.AmazinBookStore.Genre.GenreService;
 import ca.carleton.AmazinBookStore.Listing.ListingRepository;
+import ca.carleton.AmazinBookStore.Listing.ListingService;
+import ca.carleton.AmazinBookStore.Publisher.Publisher;
+import ca.carleton.AmazinBookStore.Publisher.PublisherRepository;
+import ca.carleton.AmazinBookStore.Publisher.PublisherService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,12 +52,34 @@ class ShoppingCartServiceTest {
     private ListingRepository listingRepository;
     @Autowired
     private BookstoreRepository bookstoreRepository;
+    @Autowired
+    private BookRepository bookRepository;
+    @Autowired
+    private AuthorRepository authorRepository;
+    @Autowired
+    private PublisherRepository publisherRepository;
+    @Autowired
+    private GenreRepository genreRepository;
     private BookstoreService bookstoreService;
+
+    private ListingService listingService;
+    private BookService bookService;
+
+    private AuthorService authorService;
+
+    private PublisherService publisherService;
+
+    private GenreService genreService;
 
     @BeforeEach
     void setUp() {
         this.shoppingCartService = new ShoppingCartService(cartRepository, itemRepository);
         this.bookstoreService = new BookstoreService(bookstoreRepository,listingRepository);
+        this.listingService = new ListingService(listingRepository);
+        this.bookService = new BookService(bookRepository);
+        this.authorService = new AuthorService(authorRepository);
+        this.publisherService = new PublisherService(publisherRepository);
+        this.genreService = new GenreService(genreRepository);
     }
 
     @Test
@@ -107,6 +142,47 @@ class ShoppingCartServiceTest {
     @Test
     @Transactional
     void testAddShoppingCartItem() {
+        //Create Author
+        Author author = new Author();
+        author.setFirstName("First");
+        author.setLastName("Last");
+        Author savedAuthor = this.authorService.createAuthor(author);
+
+        //Create Publisher
+        Publisher publisher = new Publisher();
+        publisher.setName("Company");
+        publisher.setId(1L);
+        Publisher savedPublisher = this.publisherService.createPublisher(publisher);
+
+        //Create Genre
+        Genre genre = new Genre();
+        genre.setName("Horror");
+        Genre savedGenre = this.genreService.createGenre(genre);
+        List<Genre> genres = new ArrayList<>();
+        genres.add(savedGenre);
+
+        //Create Book
+        Book book = new Book();
+        book.setIsbn(12345);
+        book.setDescription("Description");
+        book.setPicture("Picture");
+        book.setAuthor(savedAuthor);
+        book.setPublisher(savedPublisher);
+        book.setGenres(genres);
+        book.setTitle("Title");
+
+        Book book2 = new Book();
+        book2.setIsbn(12345);
+        book2.setDescription("Description");
+        book2.setPicture("Picture");
+        book2.setAuthor(savedAuthor);
+        book2.setPublisher(savedPublisher);
+        book2.setGenres(genres);
+        book2.setTitle("Title");
+
+        Book savedBook = this.bookService.createBook(book);
+        Book savedBook2 = this.bookService.createBook(book2);
+
         //Create bookstore
         Bookstore bookstore = new Bookstore();
         Long bookstoreId = 1L;
@@ -117,11 +193,12 @@ class ShoppingCartServiceTest {
         // Create listing
         Listing listing = new Listing();
         listing.setId(1L);
-        listing.setCopies("2");
-        listing.setPrice("10.0");
-        listing.setTitle("Book Title");
+        listing.setCopies(2);
+        listing.setPrice(10.0);
+        listing.setBook(book);
+        listing.setLocation(savedBookstore);
 
-        bookstore = this.bookstoreService.createListing(bookstoreId, listing);
+        Listing savedListing = this.listingService.createListing(listing);
 
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setUserId("user1");
@@ -137,10 +214,11 @@ class ShoppingCartServiceTest {
         CartItem addedCartItem = updatedShoppingCart.getItems().get(0);
         assertNotNull(addedCartItem.getId());
         assertEquals(listing.getId(), addedCartItem.getBookListingById());
-        assertEquals(Integer.parseInt(listing.getCopies()), addedCartItem.getQuantity());
-        assertEquals(Double.parseDouble(listing.getPrice()) * addedCartItem.getQuantity(), addedCartItem.getPrice());
+        assertEquals(listing.getCopies(), addedCartItem.getQuantity());
+        assertEquals(listing.getPrice() * addedCartItem.getQuantity(), addedCartItem.getPrice());
 
     }
+
     @Test
     @Transactional
     public void testFindShoppingCartByUserIdNotFound() {
@@ -176,6 +254,47 @@ class ShoppingCartServiceTest {
     @Test
     @Transactional
     public void testClearShoppingCart(){
+        //Create Author
+        Author author = new Author();
+        author.setFirstName("First");
+        author.setLastName("Last");
+        Author savedAuthor = this.authorService.createAuthor(author);
+
+        //Create Publisher
+        Publisher publisher = new Publisher();
+        publisher.setName("Company");
+        publisher.setId(1L);
+        Publisher savedPublisher = this.publisherService.createPublisher(publisher);
+
+        //Create Genre
+        Genre genre = new Genre();
+        genre.setName("Horror");
+        Genre savedGenre = this.genreService.createGenre(genre);
+        List<Genre> genres = new ArrayList<>();
+        genres.add(savedGenre);
+
+        //Create Book
+        Book book = new Book();
+        book.setIsbn(12345);
+        book.setDescription("Description");
+        book.setPicture("Picture");
+        book.setAuthor(savedAuthor);
+        book.setPublisher(savedPublisher);
+        book.setGenres(genres);
+        book.setTitle("Title");
+
+        Book book2 = new Book();
+        book2.setIsbn(12345);
+        book2.setDescription("Description");
+        book2.setPicture("Picture");
+        book2.setAuthor(savedAuthor);
+        book2.setPublisher(savedPublisher);
+        book2.setGenres(genres);
+        book2.setTitle("Title");
+
+        Book savedBook = this.bookService.createBook(book);
+        Book savedBook2 = this.bookService.createBook(book2);
+
         //Create bookstore
         Bookstore bookstore = new Bookstore();
         Long bookstoreId = 1L;
@@ -186,18 +305,21 @@ class ShoppingCartServiceTest {
         // Create listing
         Listing listing = new Listing();
         listing.setId(1L);
-        listing.setCopies("2");
-        listing.setPrice("10.0");
-        listing.setTitle("Book Title");
+        listing.setCopies(2);
+        listing.setPrice(10.0);
+        listing.setBook(book);
+        listing.setLocation(savedBookstore);
+
         //Create 2nd listing
         Listing listing2 = new Listing();
         listing2.setId(2L);
-        listing2.setCopies("3");
-        listing2.setPrice("15.0");
-        listing2.setTitle("Book Title 2");
+        listing2.setCopies(3);
+        listing2.setPrice(15.0);
+        listing2.setBook(book2);
+        listing2.setLocation(savedBookstore);
 
-        bookstore = this.bookstoreService.createListing(bookstoreId, listing);
-        bookstore = this.bookstoreService.createListing(bookstoreId, listing2);
+        Listing new_listing1 = this.listingService.createListing(listing);
+        Listing new_listing2 = this.listingService.createListing(listing2);
 
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setUserId("user1");
@@ -214,8 +336,8 @@ class ShoppingCartServiceTest {
         CartItem addedCartItem = updatedShoppingCart.getItems().get(0);
         assertNotNull(addedCartItem.getId());
         assertEquals(listing.getId(), addedCartItem.getBookListingById());
-        assertEquals(Integer.parseInt(listing.getCopies()), addedCartItem.getQuantity());
-        assertEquals(Double.parseDouble(listing.getPrice()) * addedCartItem.getQuantity(), addedCartItem.getPrice());
+        assertEquals(listing.getCopies(), addedCartItem.getQuantity());
+        assertEquals(listing.getPrice() * addedCartItem.getQuantity(), addedCartItem.getPrice());
         //clear shopping cart and check to see 0 items remain
         this.shoppingCartService.clearShoppingCart("user1");
         ShoppingCart shoppingCart1 = this.shoppingCartService.findShoppingCartByUserId("user1");
@@ -226,6 +348,47 @@ class ShoppingCartServiceTest {
     @Test
     @Transactional
     public void testCheckoutShoppingCart(){
+        //Create Author
+        Author author = new Author();
+        author.setFirstName("First");
+        author.setLastName("Last");
+        Author savedAuthor = this.authorService.createAuthor(author);
+
+        //Create Publisher
+        Publisher publisher = new Publisher();
+        publisher.setName("Company");
+        publisher.setId(1L);
+        Publisher savedPublisher = this.publisherService.createPublisher(publisher);
+
+        //Create Genre
+        Genre genre = new Genre();
+        genre.setName("Horror");
+        Genre savedGenre = this.genreService.createGenre(genre);
+        List<Genre> genres = new ArrayList<>();
+        genres.add(savedGenre);
+
+        //Create Book
+        Book book = new Book();
+        book.setIsbn(12345);
+        book.setDescription("Description");
+        book.setPicture("Picture");
+        book.setAuthor(savedAuthor);
+        book.setPublisher(savedPublisher);
+        book.setGenres(genres);
+        book.setTitle("Title");
+
+        Book book2 = new Book();
+        book2.setIsbn(12345);
+        book2.setDescription("Description");
+        book2.setPicture("Picture");
+        book2.setAuthor(savedAuthor);
+        book2.setPublisher(savedPublisher);
+        book2.setGenres(genres);
+        book2.setTitle("Title");
+
+        Book savedBook = this.bookService.createBook(book);
+        Book savedBook2 = this.bookService.createBook(book2);
+
         //Create bookstore
         Bookstore bookstore = new Bookstore();
         Long bookstoreId = 1L;
@@ -236,18 +399,21 @@ class ShoppingCartServiceTest {
         // Create listing
         Listing listing = new Listing();
         listing.setId(1L);
-        listing.setCopies("2");
-        listing.setPrice("10.0");
-        listing.setTitle("Book Title");
+        listing.setCopies(2);
+        listing.setPrice(10.0);
+        listing.setBook(book);
+        listing.setLocation(savedBookstore);
+
         //Create 2nd listing
         Listing listing2 = new Listing();
         listing2.setId(2L);
-        listing2.setCopies("3");
-        listing2.setPrice("15.0");
-        listing2.setTitle("Book Title 2");
+        listing2.setCopies(3);
+        listing2.setPrice(15.0);
+        listing2.setBook(book2);
+        listing2.setLocation(savedBookstore);
 
-        bookstore = this.bookstoreService.createListing(bookstoreId, listing);
-        bookstore = this.bookstoreService.createListing(bookstoreId, listing2);
+        Listing newListing1 = this.listingService.createListing(listing);
+        Listing newListing2 = this.listingService.createListing(listing2);
 
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setUserId("user1");
@@ -264,8 +430,8 @@ class ShoppingCartServiceTest {
         CartItem addedCartItem = updatedShoppingCart.getItems().get(0);
         assertNotNull(addedCartItem.getId());
         assertEquals(listing.getId(), addedCartItem.getBookListingById());
-        assertEquals(Integer.parseInt(listing.getCopies()), addedCartItem.getQuantity());
-        assertEquals(Double.parseDouble(listing.getPrice()) * addedCartItem.getQuantity(), addedCartItem.getPrice());
+        assertEquals(listing.getCopies(), addedCartItem.getQuantity());
+        assertEquals(listing.getPrice() * addedCartItem.getQuantity(), addedCartItem.getPrice());
         //clear shopping cart and check to see 0 items remain
         this.shoppingCartService.checkoutShoppingCart("user1");
         ShoppingCart shoppingCart1 = this.shoppingCartService.findShoppingCartByUserId("user1");

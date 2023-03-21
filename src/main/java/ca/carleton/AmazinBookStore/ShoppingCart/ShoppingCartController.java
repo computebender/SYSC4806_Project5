@@ -70,7 +70,7 @@
             return ResponseEntity.status(HttpStatus.CREATED).body(cart);
         }
 
-        @PostMapping("/{userId}/clear/")
+        @PostMapping("/{userId}/clear")
         public ResponseEntity<ShoppingCart> clearCart(@PathVariable String userId) {
             ShoppingCart cart = this.shoppingCartService.clearShoppingCart(userId);
             return ResponseEntity.status(HttpStatus.CREATED).body(cart);
