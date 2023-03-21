@@ -172,4 +172,104 @@ class ShoppingCartServiceTest {
         ShoppingCart result = shoppingCartService.removeShoppingCartItem(cartItemId, userId);
         assertTrue(result.getItems().isEmpty());
     }
+
+    @Test
+    @Transactional
+    public void testClearShoppingCart(){
+        //Create bookstore
+        Bookstore bookstore = new Bookstore();
+        Long bookstoreId = 1L;
+        bookstore.setbookstoreName("store");
+        bookstore.setId(1L);
+        bookstore.setListings(new ArrayList<Listing>());
+        Bookstore savedBookstore = this.bookstoreService.createBookstore(bookstore);
+        // Create listing
+        Listing listing = new Listing();
+        listing.setId(1L);
+        listing.setCopies("2");
+        listing.setPrice("10.0");
+        listing.setTitle("Book Title");
+        //Create 2nd listing
+        Listing listing2 = new Listing();
+        listing2.setId(2L);
+        listing2.setCopies("3");
+        listing2.setPrice("15.0");
+        listing2.setTitle("Book Title 2");
+
+        bookstore = this.bookstoreService.createListing(bookstoreId, listing);
+        bookstore = this.bookstoreService.createListing(bookstoreId, listing2);
+
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setUserId("user1");
+        shoppingCart.setItems(new ArrayList<CartItem>());
+        this.shoppingCartService.createShoppingCart(shoppingCart);
+
+        // Add listing to shopping cart
+        ShoppingCart updatedShoppingCart = this.shoppingCartService.addShoppingCartItem(listing, "user1");
+        updatedShoppingCart = this.shoppingCartService.addShoppingCartItem(listing2, "user1");
+
+        assertNotNull(updatedShoppingCart.getId());
+        assertEquals("user1", updatedShoppingCart.getUserId());
+        assertEquals(2, updatedShoppingCart.getItems().size());
+        CartItem addedCartItem = updatedShoppingCart.getItems().get(0);
+        assertNotNull(addedCartItem.getId());
+        assertEquals(listing.getId(), addedCartItem.getBookListingById());
+        assertEquals(Integer.parseInt(listing.getCopies()), addedCartItem.getQuantity());
+        assertEquals(Double.parseDouble(listing.getPrice()) * addedCartItem.getQuantity(), addedCartItem.getPrice());
+        //clear shopping cart and check to see 0 items remain
+        this.shoppingCartService.clearShoppingCart("user1");
+        ShoppingCart shoppingCart1 = this.shoppingCartService.findShoppingCartByUserId("user1");
+        assertEquals(0,shoppingCart1.getItems().size());
+
+    }
+
+    @Test
+    @Transactional
+    public void testCheckoutShoppingCart(){
+        //Create bookstore
+        Bookstore bookstore = new Bookstore();
+        Long bookstoreId = 1L;
+        bookstore.setbookstoreName("store");
+        bookstore.setId(1L);
+        bookstore.setListings(new ArrayList<Listing>());
+        Bookstore savedBookstore = this.bookstoreService.createBookstore(bookstore);
+        // Create listing
+        Listing listing = new Listing();
+        listing.setId(1L);
+        listing.setCopies("2");
+        listing.setPrice("10.0");
+        listing.setTitle("Book Title");
+        //Create 2nd listing
+        Listing listing2 = new Listing();
+        listing2.setId(2L);
+        listing2.setCopies("3");
+        listing2.setPrice("15.0");
+        listing2.setTitle("Book Title 2");
+
+        bookstore = this.bookstoreService.createListing(bookstoreId, listing);
+        bookstore = this.bookstoreService.createListing(bookstoreId, listing2);
+
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setUserId("user1");
+        shoppingCart.setItems(new ArrayList<CartItem>());
+        this.shoppingCartService.createShoppingCart(shoppingCart);
+
+        // Add listing to shopping cart
+        ShoppingCart updatedShoppingCart = this.shoppingCartService.addShoppingCartItem(listing, "user1");
+        updatedShoppingCart = this.shoppingCartService.addShoppingCartItem(listing2, "user1");
+
+        assertNotNull(updatedShoppingCart.getId());
+        assertEquals("user1", updatedShoppingCart.getUserId());
+        assertEquals(2, updatedShoppingCart.getItems().size());
+        CartItem addedCartItem = updatedShoppingCart.getItems().get(0);
+        assertNotNull(addedCartItem.getId());
+        assertEquals(listing.getId(), addedCartItem.getBookListingById());
+        assertEquals(Integer.parseInt(listing.getCopies()), addedCartItem.getQuantity());
+        assertEquals(Double.parseDouble(listing.getPrice()) * addedCartItem.getQuantity(), addedCartItem.getPrice());
+        //clear shopping cart and check to see 0 items remain
+        this.shoppingCartService.checkoutShoppingCart("user1");
+        ShoppingCart shoppingCart1 = this.shoppingCartService.findShoppingCartByUserId("user1");
+        assertEquals(0,shoppingCart1.getItems().size());
+    }
+
 }
