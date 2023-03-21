@@ -1,6 +1,8 @@
 package ca.carleton.AmazinBookStore.Bookstore;
 
+import ca.carleton.AmazinBookStore.Book.Book;
 import ca.carleton.AmazinBookStore.Listing.Listing;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -12,7 +14,8 @@ public class Bookstore {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany()
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Listing.class)
     private List<Listing> listings;
 
     private String bookstoreName;

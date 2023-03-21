@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import ca.carleton.AmazinBookStore.Author.Author;
+import ca.carleton.AmazinBookStore.Book.Book;
 import ca.carleton.AmazinBookStore.Listing.Listing;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,10 @@ public class BookstoreTest {
 
     @Test
     public void testaddListing() {
-        Listing listing = new Listing("1", "$15", "1", "Book 1");
+        Bookstore bookstore = new Bookstore();
+        bookstore.setbookstoreName("John's Bookstore");
+        Book book = new Book();
+        Listing listing = new Listing(bookstore, 15d, 1, book);
 
         bookstore.addListing(listing);
         List<Listing> listings = new ArrayList<Listing>();
@@ -48,10 +52,14 @@ public class BookstoreTest {
 
     @Test
     public void testremoveListing() {
-        Listing listing = new Listing("1", "$15", "1", "Book 1");
+        Bookstore bookstore = new Bookstore();
+        bookstore.setbookstoreName("John's Bookstore");
+        Book book1 = new Book();
+        Listing listing = new Listing(bookstore, 15d, 1, book1);
         listing.setId(1L);
 
-        Listing listing2 = new Listing("1", "$20", "1", "Book 2");
+        Book book2 = new Book();
+        Listing listing2 = new Listing(bookstore, 20d, 1, book2);
         listing2.setId(2L);
 
 
