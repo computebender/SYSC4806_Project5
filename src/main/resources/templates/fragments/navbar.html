@@ -46,11 +46,9 @@
         $(document).ready(function () {
             function updateNavbar() {
                 if (authenticationService.isTokenValid()) {
-                    console.log('Token is valid, showing logged-in items');
                     $('.logged-in').removeClass("d-none");
                     $('.logged-out').addClass("d-none");
                 } else {
-                    console.log('Token is not valid, showing logged-out items');
                     $('.logged-out').removeClass("d-none");
                     $('.logged-in').addClass("d-none");
                 }
