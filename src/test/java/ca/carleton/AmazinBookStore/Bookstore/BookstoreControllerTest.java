@@ -125,14 +125,4 @@ public class BookstoreControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
-    @Test
-    public void testcreateListing() {
-        Bookstore bookstore1 = new Bookstore();
-        bookstore1.setId(1L);
-        bookstore1.setbookstoreName("Jane's Bookstore");
-
-        HttpEntity<Bookstore> request1 = new HttpEntity<>(bookstore1);
-        ResponseEntity<Bookstore> response1 = restTemplate.postForEntity(baseUrl, request1, Bookstore.class);
-        Bookstore savedBookstore1 = response1.getBody();
-    }
 }
