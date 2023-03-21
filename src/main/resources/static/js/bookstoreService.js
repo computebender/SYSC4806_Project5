@@ -1,67 +1,59 @@
-const publisherService = (function() {
+const bookstoreService = (function () {
 
     function handleAjaxError(jqXHR, textStatus, errorThrown) {
         console.log("AJAX error: " + textStatus, errorThrown);
     }
 
     return {
-        getAllPublishers: function(successCallback) {
+        getAllBookstores: function(successCallback) {
             $.ajax({
-                url: "/api/publishers",
+                url: "/api/bookstores",
                 type: "GET",
                 success: successCallback,
                 error: handleAjaxError
             });
         },
 
-        createPublisher: function(publisher, successCallback) {
+        createBookstore: function(bookstore, successCallback) {
             $.ajax({
-                url: "/api/publishers",
+                url: "/api/bookstores",
                 type: "POST",
-                data: JSON.stringify(publisher),
+                data: JSON.stringify(bookstore),
                 contentType: "application/json",
                 success: successCallback,
                 error: handleAjaxError
             });
         },
 
-        getPublisherById: function(publisherId, successCallback) {
+        getBookstoreById: function(bookstoreId, successCallback) {
             $.ajax({
-                url: "/api/publishers/" + publisherId,
+                url: "/api/bookstores/" + bookstoreId,
                 type: "GET",
                 success: successCallback,
                 error: handleAjaxError
             });
         },
 
-        getPublisherBooksById: function(publisherId, successCallback) {
+        updateBookstoreById: function(bookstoreId, partialBookstore, successCallback) {
             $.ajax({
-                url: "/api/publishers/" + publisherId +"/books",
-                type: "GET",
-                success: successCallback,
-                error: handleAjaxError
-            });
-        },
-
-        updatePublisherById: function(publisherId, partialPublisher, successCallback) {
-            $.ajax({
-                url: "/api/publishers/" + publisherId,
+                url: "/api/bookstores/" + bookstoreId,
                 type: "PUT",
-                data: JSON.stringify(partialPublisher),
+                data: JSON.stringify(partialBookstore),
                 contentType: "application/json",
                 success: successCallback,
                 error: handleAjaxError
             });
         },
 
-        deletePublisherById: function(publisherId, successCallback) {
+        deleteBookstoreById: function(bookstoreId, successCallback) {
             $.ajax({
-                url: "/api/publishers/" + publisherId,
+                url: "/api/bookstores/" + bookstoreId,
                 type: "DELETE",
                 success: successCallback,
                 error: handleAjaxError
             });
         }
+
     };
 
-})();
+})

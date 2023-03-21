@@ -1,67 +1,68 @@
-const publisherService = (function() {
+const genreService = (function() {
 
     function handleAjaxError(jqXHR, textStatus, errorThrown) {
         console.log("AJAX error: " + textStatus, errorThrown);
     }
 
     return {
-        getAllPublishers: function(successCallback) {
+        getAllGenres: function(successCallback) {
             $.ajax({
-                url: "/api/publishers",
+                url: "/api/genres",
                 type: "GET",
                 success: successCallback,
                 error: handleAjaxError
             });
         },
 
-        createPublisher: function(publisher, successCallback) {
+        createGenre: function(genre, successCallback) {
             $.ajax({
-                url: "/api/publishers",
+                url: "/api/genres",
                 type: "POST",
-                data: JSON.stringify(publisher),
+                data: JSON.stringify(genre),
                 contentType: "application/json",
                 success: successCallback,
                 error: handleAjaxError
             });
         },
 
-        getPublisherById: function(publisherId, successCallback) {
+        getGenreById: function(genreId, successCallback) {
             $.ajax({
-                url: "/api/publishers/" + publisherId,
+                url: "/api/genres/" + genreId,
                 type: "GET",
                 success: successCallback,
                 error: handleAjaxError
             });
         },
 
-        getPublisherBooksById: function(publisherId, successCallback) {
+        getGenreBooksById: function(genreId, successCallback) {
             $.ajax({
-                url: "/api/publishers/" + publisherId +"/books",
+                url: "/api/genres/" + genreId +"/books",
                 type: "GET",
                 success: successCallback,
                 error: handleAjaxError
             });
         },
 
-        updatePublisherById: function(publisherId, partialPublisher, successCallback) {
+        updateGenreById: function(genreId, partialGenre, successCallback) {
             $.ajax({
-                url: "/api/publishers/" + publisherId,
+                url: "/api/genres/" + genreId,
                 type: "PUT",
-                data: JSON.stringify(partialPublisher),
+                data: JSON.stringify(partialGenre),
                 contentType: "application/json",
                 success: successCallback,
                 error: handleAjaxError
             });
         },
 
-        deletePublisherById: function(publisherId, successCallback) {
+        deleteGenreById: function(genreId, successCallback) {
             $.ajax({
-                url: "/api/publishers/" + publisherId,
+                url: "/api/genres/" + genreId,
                 type: "DELETE",
                 success: successCallback,
                 error: handleAjaxError
             });
         }
+
     };
 
 })();
