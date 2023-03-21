@@ -1,9 +1,8 @@
 package ca.carleton.AmazinBookStore.Listing;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import ca.carleton.AmazinBookStore.Book.Book;
+import ca.carleton.AmazinBookStore.Bookstore.Bookstore;
+import jakarta.persistence.*;
 
 @Entity
 public class Listing {
@@ -11,16 +10,21 @@ public class Listing {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String location;
-    private String price;
-    private String copies;
-    private String title; //placeholder for book object
+    @ManyToOne
+    @JoinColumn(name = "bookstore_id")
+    private Bookstore location;
+    private Double price;
+    private Integer copies;
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book book; //placeholder for book object
 
-    public Listing(String location, String price, String copies, String title){
+
+    public Listing(Bookstore location, Double price, Integer copies, Book book){
         this.location = location;
         this.price = price;
         this.copies = copies;
-        this.title = title;
+        this.book = book;
     }
 
     public Listing() {}
@@ -33,35 +37,35 @@ public class Listing {
         this.id = id;
     }
 
-    public String getLocation() {
+    public Bookstore getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(Bookstore location) {
         this.location = location;
     }
 
-    public String getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public String getCopies() {
+    public Integer getCopies() {
         return copies;
     }
 
-    public void setCopies(String copies) {
+    public void setCopies(Integer copies) {
         this.copies = copies;
     }
 
-    public String getTitle() {
-        return title;
+    public Book getBook() {
+        return book;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setBook(Book book) {
+        this.book = book;
     }
 }
