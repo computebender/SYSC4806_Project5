@@ -1,11 +1,9 @@
 package ca.carleton.AmazinBookStore.Bookstore;
 
-import ca.carleton.AmazinBookStore.Author.Author;
 import ca.carleton.AmazinBookStore.Listing.Listing;
 import ca.carleton.AmazinBookStore.Listing.ListingRepository;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import java.util.List;
 import java.util.Objects;
@@ -60,7 +58,7 @@ public class BookstoreService {
         }
         this.bookstoreRepository.deleteById(optionalBookstore.get().getId());
     }
-
+/*
     public Bookstore createListing(Long id, Listing listing){
         Optional<Bookstore> optionalBookstore = this.bookstoreRepository.findById(id);
         if(optionalBookstore.isEmpty()){
@@ -101,8 +99,8 @@ public class BookstoreService {
         if(Objects.nonNull(partialListing.getCopies())){
             listing.setCopies(partialListing.getCopies());
         }
-        if(Objects.nonNull(partialListing.getTitle())){
-            listing.setTitle(partialListing.getTitle());
+        if(Objects.nonNull(partialListing.getBook())){
+            listing.setBook(partialListing.getBook());
         }
         Bookstore updatedBookstore = createListing(id, listing);
         this.bookstoreRepository.save(updatedBookstore);
@@ -115,5 +113,5 @@ public class BookstoreService {
         this.bookstoreRepository.save(bookstore);
         this.listingRepository.deleteById(id);
     }
-
+*/
 }
