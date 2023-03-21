@@ -62,7 +62,7 @@ public class BookstoreController {
         return ResponseEntity.noContent().build();
 
     }
-
+/*
     @PostMapping("/{bookstoreId}/listings")
     public ResponseEntity<Bookstore> createListing(@PathVariable long bookstoreId, @RequestBody Listing listing) {
         Bookstore bookstore;
@@ -137,5 +137,5 @@ public class BookstoreController {
         String str = "Hello";
         return ResponseEntity.noContent().build();
     }
-
+*/
 }
