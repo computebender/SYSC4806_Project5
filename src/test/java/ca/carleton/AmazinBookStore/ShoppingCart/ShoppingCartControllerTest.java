@@ -1,5 +1,6 @@
 package ca.carleton.AmazinBookStore.ShoppingCart;
 
+import ca.carleton.AmazinBookStore.Author.Author;
 import ca.carleton.AmazinBookStore.Book.Book;
 import ca.carleton.AmazinBookStore.Bookstore.Bookstore;
 import ca.carleton.AmazinBookStore.Listing.Listing;
@@ -89,7 +90,11 @@ public class ShoppingCartControllerTest {
     @Test
     public void addItem(){
         //Create Author
+        Author author = new Author();
+        author.setFirstName("First");
+        author.setLastName("Last");
         //Create Publisher
+
         //Create Genre
         //Create Book
         //Create Bookstore
