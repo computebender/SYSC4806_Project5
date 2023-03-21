@@ -49,6 +49,7 @@ public class ShoppingCartService {
         cartItem.setBookListing(listing);
         cartItem.setQuantity(Integer.parseInt(listing.getCopies()));
         cartItem.setPrice(Double.parseDouble(listing.getPrice()));
+        cartItem.setId(listing.getId());
         this.itemRepository.save(cartItem);
         shoppingCart.addItem(cartItem);
         this.cartRepository.save(shoppingCart);
