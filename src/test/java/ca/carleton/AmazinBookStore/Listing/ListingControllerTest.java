@@ -101,7 +101,6 @@ public class ListingControllerTest {
 
 
         Listing listing = new Listing(savedBookstore1, 25d, 3, savedBook);
-        System.out.println(listing.getBook());
         HttpEntity<Listing> request = new HttpEntity<>(listing);
         ResponseEntity<Listing> response = restTemplate.postForEntity(baseUrl, request, Listing.class);
         Listing savedListing = response.getBody();
@@ -218,7 +217,6 @@ public class ListingControllerTest {
         book.setTitle("Lord of the Rings");
         book.setDescription("Adventure story of a hobbit");
         HttpEntity<Book> requestBook = new HttpEntity<>(book);
-        System.out.println(requestBook);
         ResponseEntity<Book> responseBookRequest = restTemplate.postForEntity(bookUrl, requestBook, Book.class);
         Book savedBook = responseBookRequest.getBody();
         return savedBook;

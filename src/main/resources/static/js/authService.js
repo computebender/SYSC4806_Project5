@@ -9,13 +9,13 @@ const authenticationService = (function () {
         return !!token;
     }
 
-    function logout() {
-        localStorage.removeItem('token');
-    }
-
     function addAuthHeader(xhr) {
         const token = localStorage.getItem('token')
         xhr.setRequestHeader('Authorization', 'Bearer ' + token)
+    }
+
+    function logout() {
+        localStorage.removeItem('token');
     }
 
     return {
@@ -26,7 +26,6 @@ const authenticationService = (function () {
                 data: JSON.stringify({username, password}),
                 contentType: "application/json",
                 success: function (data) {
-                    console.log(data.token);
                     localStorage.setItem('token', data.token);
                     successCallback(data);
                 },

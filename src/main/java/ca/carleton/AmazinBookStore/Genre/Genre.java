@@ -19,7 +19,9 @@ public class Genre {
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Book.class)
     @JsonIgnore
     private List<Book> books;
-
+    public Genre(){
+        //default constructor
+    }
     public Long getId() {
         return id;
     }

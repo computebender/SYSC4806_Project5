@@ -25,11 +25,15 @@ $.fn.bookCard = function(title, author, price, coverUrl) {
     const authorEl = $('<p>').addClass('card-text').text(author);
     const priceEl = $('<p>').addClass('card-text').text('$' + price);
     const buttonEl = $('<a>').addClass('btn btn-primary').text('View Listing');
+    const tmpbuttonEl = $('<a>').addClass('btn btn-primary btn-sm').text('Tmp Create Listing');
+    const addCartButton= $('<a>').addClass('btn btn-primary btn-sm').text('Add to Cart').attr('id', 'add-cart-btn');
 
     body.append(titleEl);
     body.append(authorEl);
     body.append(priceEl);
     body.append(buttonEl);
+    body.append(tmpbuttonEl);
+    body.append(addCartButton);
     imageContainer.append(image);
     card.append(imageContainer);
     card.append(body);

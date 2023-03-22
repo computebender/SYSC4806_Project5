@@ -14,12 +14,12 @@ public class PublisherService {
 
     private final PublisherRepository publisherRepository;
 
-    public Publisher createPublisher(Publisher publisher){
-        return this.publisherRepository.save(publisher);
-    }
-
     public PublisherService(PublisherRepository publisherRepository) {
         this.publisherRepository = publisherRepository;
+    }
+
+    public Publisher createPublisher(Publisher publisher){
+        return this.publisherRepository.save(publisher);
     }
 
     public List<Publisher> findAll(){

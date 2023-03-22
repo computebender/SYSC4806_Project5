@@ -1,5 +1,6 @@
 package ca.carleton.AmazinBookStore.User;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,6 +13,7 @@ public class User {
 
     @Column(unique = true)
     private String email;
+
 
     private String password;
 
@@ -35,6 +37,7 @@ public class User {
         this.email = email;
     }
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getPassword() {
         return password;
     }

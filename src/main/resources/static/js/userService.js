@@ -1,20 +1,21 @@
-const userService = (function() {
+const userService = (function () {
 
     function handleAjaxError(jqXHR, textStatus, errorThrown) {
         console.log("AJAX error: " + textStatus, errorThrown);
     }
 
     return {
-        getAllUsers: function(successCallback) {
+        getCurrentUser: function (successCallback) {
             $.ajax({
                 url: "/api/users",
                 type: "GET",
                 success: successCallback,
+                beforeSend: authenticationService.addAuthHeader,
                 error: handleAjaxError
             });
         },
 
-        createUser: function(user, successCallback) {
+        createUser: function (user, successCallback) {
             $.ajax({
                 url: "/api/users",
                 type: "POST",
@@ -25,7 +26,7 @@ const userService = (function() {
             });
         },
 
-        getUserById: function(userId, successCallback) {
+        getUserById: function (userId, successCallback) {
             $.ajax({
                 url: "/api/users/" + userId,
                 type: "GET",
@@ -34,16 +35,7 @@ const userService = (function() {
             });
         },
 
-        getUserByEmail: function(email, successCallback) {
-            $.ajax({
-                url: "/api/users/email/" + email,
-                type: "GET",
-                success: successCallback,
-                error: handleAjaxError
-            });
-        },
-
-        updateUserById: function(userId, partialUser, successCallback) {
+        updateUserById: function (userId, partialUser, successCallback) {
             $.ajax({
                 url: "/api/users/" + userId,
                 type: "PUT",
@@ -54,7 +46,7 @@ const userService = (function() {
             });
         },
 
-        deleteUserById: function(userId, successCallback) {
+        deleteUserById: function (userId, successCallback) {
             $.ajax({
                 url: "/api/users/" + userId,
                 type: "DELETE",

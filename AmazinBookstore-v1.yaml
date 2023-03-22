@@ -470,18 +470,18 @@ paths:
 
   /books:
     get:
-        summary: Get all books
-        tags:
+      summary: Get all books
+      tags:
         - Book
-        responses:
-          '200':
-            description: List of all books
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: List of all books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
     
     post:
       summary: Create a new book
@@ -664,7 +664,7 @@ paths:
           description: User not authorized to access the resource
         '404':
           description: Bookstore not found
-    
+
   /bookstores/{bookstoreId}/listings:
     post:
       summary: Add a listing to a bookstore
@@ -1033,5 +1033,125 @@ paths:
           description: User not authorized to access the resource
         '404':
           description: Publisher not found
-
-
+  /api/cart:
+    get:
+      summary: Get the user's shopping cart
+      operationId: getCart
+      parameters:
+        - name: userId
+          in: query
+          description: ID of the user's shopping cart to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingCart'
+        '404':
+          description: Not Found
+      tags:
+        - shopping cart
+    post:
+      summary: Add an item to the user's shopping cart
+      operationId: addItem
+      requestBody:
+        description: The item to add to the shopping cart
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItem'
+      parameters:
+        - name: userId
+          in: query
+          description: ID of the user's shopping cart to add the item to
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+      tags:
+        - shopping cart
+    delete:
+      summary: Remove an item from the user's shopping cart
+      operationId: removeItem
+      parameters:
+        - name: userId
+          in: query
+          description: ID of the user's shopping cart to remove the item from
+          required: true
+          schema:
+            type: string
+        - name: bookId
+          in: query
+          description: ID of the book to remove from the shopping cart
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+      tags:
+        - shopping cart
+  /api/cart/update-item:
+    post:
+      summary: Update an item in the user's shopping cart
+      operationId: updateItem
+      requestBody:
+        description: The updated item to replace the existing item in the shopping cart
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CartItem'
+      parameters:
+        - name: userId
+          in: query
+          description: ID of the user's shopping cart to update the item in
+          required: true
+          schema:
+            type: string
+        - name: bookId
+          in: query
+          description: ID of the book to update in the shopping cart
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+      tags:
+        - shopping cart
+  /api/cart/clear:
+    post:
+      summary: Clear the user's shopping cart
+      operationId: clearCart
+      parameters:
+        - name: userId
+          in: query
+          description: ID of the user's shopping cart to clear
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+      tags:
+        - shopping cart
+  /api/cart/checkout:
+    get:
+      summary: Get the user's shopping cart for checkout
+      operationId: getCartForCheckout
+      parameters:
+        - name: userId
+          in: query
+          description: ID of the user's shopping cart
