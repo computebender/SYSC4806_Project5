@@ -1,8 +1,10 @@
 package ca.carleton.AmazinBookStore.Listing;
 
+import ca.carleton.AmazinBookStore.Genre.Genre;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -61,4 +63,40 @@ public class ListingService {
         }
         this.listingRepository.deleteById(optionalListing.get().getId());
     }
+
+    public List<Listing> searchListings(Long bookstoreId, Long authorId, Long genreId, Long bookId) {
+        List<Listing> listings = this.listingRepository.findAll();
+        List<Listing> listingsMatch = this.listingRepository.findAll();
+
+        for (Listing listing : listings) {
+            if (!Objects.equals(listing.getLocation().getId(), bookstoreId) && bookstoreId != 0L) {
+                listingsMatch.remove(listing);
+                continue;
+            }
+            if (!Objects.equals(listing.getBook().getAuthor().getId(), authorId) && authorId != 0L) {
+                listingsMatch.remove(listing);
+                continue;
+            }
+            if (!Objects.equals(listing.getBook().getId(), bookId) && bookId != 0L) {
+                listingsMatch.remove(listing);
+                continue;
+            }
+            List<Genre> tempGenre = listing.getBook().getGenres();
+            boolean genreMatch = false;
+            for (Genre genre : tempGenre) {
+                if (Objects.equals(genre.getId(), genreId)) {
+                    genreMatch = true;
+                }
+            }
+            if (!genreMatch && genreId != 0) {
+                listingsMatch.remove(listing);
+                continue;
+            }
+        }
+        if(listings.isEmpty()){
+            throw new ResourceNotFoundException("No Listings with matching parameters.");
+        }
+        return listingsMatch;
+    }
+
 }
