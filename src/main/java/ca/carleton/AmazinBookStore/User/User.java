@@ -23,7 +23,7 @@ public class User {
 
     private String lastName;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Listing.class)
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, targetEntity = Listing.class)
     private List<Listing> purchaseHistory;
 
     public Long getId() {

@@ -53,6 +53,15 @@ const userService = (function () {
                 success: successCallback,
                 error: handleAjaxError
             });
+        },
+
+        getUserRecommendation: function (userId, successCallback) {
+            $.ajax({
+                url: "/api/users/" + userId+"/recommendations",
+                type: "DELETE",
+                success: successCallback,
+                error: handleAjaxError
+            });
         }
 
     };
