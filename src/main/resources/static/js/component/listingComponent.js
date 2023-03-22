@@ -16,6 +16,12 @@ $.fn.bookCard = function (title, author, price, coverUrl, listingId) {
         'min-height': '100%',
         'object-fit': 'cover',
     }
+    const buttonContainerStyle = {
+        'display': 'flex',
+        'flex-direction': 'column',
+        'justify-content': 'space-between',
+        'gap': '5px'
+    }
 
     const card = $('<div>').addClass('card').css(cardStyle);
     const imageContainer = $('<div>').addClass('image-container').css(imageContainerStyle);
@@ -24,16 +30,17 @@ $.fn.bookCard = function (title, author, price, coverUrl, listingId) {
     const titleEl = $('<h5>').addClass('card-title').text(title);
     const authorEl = $('<p>').addClass('card-text').text(author);
     const priceEl = $('<p>').addClass('card-text').text('$' + price);
+    const buttonContainer = $('<div>').addClass('button-container').css(buttonContainerStyle);
     const buttonEl = $('<a>').addClass('btn btn-primary').text('View Listing').attr('href', '/listing?listing=' + listingId);
-    const tmpbuttonEl = $('<a>').addClass('btn btn-primary btn-sm').text('Tmp Create Listing');
-    const addCartButton = $('<a>').addClass('btn btn-primary btn-sm').text('Add to Cart').attr('id', 'add-cart-btn');
+    const addCartButton = $('<a>').addClass('btn btn-primary').text('Add to Cart').attr('id', 'add-cart-btn');
+
 
     body.append(titleEl);
     body.append(authorEl);
     body.append(priceEl);
-    body.append(buttonEl);
-    body.append(tmpbuttonEl);
-    body.append(addCartButton);
+    buttonContainer.append(buttonEl);
+    buttonContainer.append(addCartButton);
+    body.append(buttonContainer);
     imageContainer.append(image);
     card.append(imageContainer);
     card.append(body);
