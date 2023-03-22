@@ -1,5 +1,6 @@
 package ca.carleton.AmazinBookStore.User;
 
+import ca.carleton.AmazinBookStore.ShoppingCart.ShoppingCart;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -20,6 +21,9 @@ public class User {
     private String firstName;
 
     private String lastName;
+
+    @OneToOne(fetch=FetchType.EAGER, targetEntity = ShoppingCart.class)
+    private ShoppingCart shoppingCart;
 
     public Long getId() {
         return id;
@@ -62,6 +66,13 @@ public class User {
         this.lastName = lastName;
     }
 
+    public ShoppingCart getShoppingCart() {
+        return shoppingCart;
+    }
+
+    public void setShoppingCart(ShoppingCart shoppingCart) {
+        this.shoppingCart = shoppingCart;
+    }
     @Override
     public String toString() {
         return "User [id=" + id + ", email=" + email + ", password=" + password
