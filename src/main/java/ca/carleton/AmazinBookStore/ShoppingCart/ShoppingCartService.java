@@ -47,9 +47,8 @@ public class ShoppingCartService {
         ShoppingCart shoppingCart = this.findShoppingCartById(id);
         CartItem cartItem = new CartItem();
         cartItem.setBookListing(listing);
-        cartItem.setQuantity(listing.getCopies());
+        cartItem.setQuantity(1);
         cartItem.setPrice(listing.getPrice());
-        cartItem.setId(listing.getId());
         this.itemRepository.save(cartItem);
         shoppingCart.addItem(cartItem);
         this.cartRepository.save(shoppingCart);
@@ -66,7 +65,7 @@ public class ShoppingCartService {
     public ShoppingCart updateShoppingCart(Long id, Long bookId, CartItem updatedCartItem){
         ShoppingCart shoppingCart = this.findShoppingCartById(id);
         for (CartItem item : shoppingCart.getItems()) {
-            if (item.getBookListingById().equals(bookId)) {
+            if (item.getId().equals(bookId)) {
                 item.setQuantity(updatedCartItem.getQuantity());
                 item.setPrice(updatedCartItem.getPrice());
                 break;
@@ -74,6 +73,18 @@ public class ShoppingCartService {
         }
         this.cartRepository.save(shoppingCart);
         return shoppingCart;
+    }
+
+    public CartItem getShoppingCartItemById(Long id, Long cartId){
+        ShoppingCart shoppingCart = this.findShoppingCartById(id);
+        CartItem updatedCartItem = new CartItem();
+        for (CartItem item : shoppingCart.getItems()) {
+            if (item.getId().equals(cartId)) {
+                updatedCartItem = item;
+                return updatedCartItem;
+            }
+        }
+        return updatedCartItem;
     }
 
     public ShoppingCart clearShoppingCart(Long id){

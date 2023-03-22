@@ -47,6 +47,16 @@
             }
             return ResponseEntity.ok(shoppingCart);
         }
+        @GetMapping("/{id}/{cartId}")
+        public ResponseEntity<CartItem> getShoppingCartItemById(@PathVariable Long id, @PathVariable Long cartId) {
+            CartItem cartItem;
+            try{
+                cartItem = this.shoppingCartService.getShoppingCartItemById(id, cartId);
+            }catch (ResourceNotFoundException e){
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(cartItem);
+        }
 
         @PostMapping("/{id}/add-item")
         public ResponseEntity<ShoppingCart> addItem(@PathVariable Long id, @RequestBody Listing listing) {
@@ -64,9 +74,9 @@
             return ResponseEntity.noContent().build();
         }
 
-        @PostMapping("/{id}/update-item/{bookId}")
-        public ResponseEntity<ShoppingCart> updateItem(@PathVariable Long id, @PathVariable Long bookId, @RequestBody CartItem updatedItem) {
-            ShoppingCart cart = this.shoppingCartService.updateShoppingCart(id, bookId, updatedItem);
+        @PutMapping("/{id}/update-item/{cartId}")
+        public ResponseEntity<ShoppingCart> updateItem(@PathVariable Long id, @PathVariable Long cartId, @RequestBody CartItem updatedItem) {
+            ShoppingCart cart = this.shoppingCartService.updateShoppingCart(id, cartId, updatedItem);
             return ResponseEntity.status(HttpStatus.CREATED).body(cart);
         }
 

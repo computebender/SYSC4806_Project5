@@ -35,6 +35,17 @@ const cartService = (function() {
                 error: handleAjaxError
             });
         },
+        // Define the function to send an AJAX request to remove an item from a shopping cart
+        updateItem: function(id, cartId,cartItem,successCallback) {
+            $.ajax({
+                url: "/api/carts/" +id + "/update-item/" + cartId,
+                method: 'PUT',
+                data: JSON.stringify(cartItem),
+                contentType: 'application/json',
+                success: successCallback,
+                error: handleAjaxError
+            });
+        },
         // Define the function to send an AJAX request to get all shopping carts
         getAllShoppingCarts: function(successCallback) {
         $.ajax({
@@ -52,6 +63,15 @@ const cartService = (function() {
                 success: successCallback,
                 error: handleAjaxError
         });
+        },
+        // Define the function to send an AJAX request to get a specific shopping cart by user ID
+        getShoppingCartItemById: function(id,cartId,successCallback) {
+            $.ajax({
+                method: "GET",
+                url: "/api/carts/" + id + "/" + cartId,
+                success: successCallback,
+                error: handleAjaxError
+            });
         },
         // Define the function to send an AJAX request to clear a shopping cart
         clearShoppingCart: function(id,successCallback) {

@@ -17,7 +17,7 @@ public class CartItem {
 
     public CartItem(Listing bookListing){
         this.bookListing = bookListing;
-        this.quantity = bookListing.getCopies();
+        this.quantity = 1;
         this.price = bookListing.getPrice();
     }
 
@@ -58,7 +58,6 @@ public class CartItem {
     }
 
     public double getPrice() {
-        price = quantity * price;
         return price;
     }
 

@@ -27,35 +27,124 @@
     <script src="/js/listingService.js"></script>
 
   <script>
-    const books=[{title:"The Great Gatsby",author:"F. Scott Fitzgerald",price:10.99,image:"http://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781471173936/the-great-gatsby-9781471173936_hr.jpg"},{title:"To Kill a Mockingbird",author:"Harper Lee",price:9.99,image:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/To_Kill_a_Mockingbird_%28first_edition_cover%29.jpg/1200px-To_Kill_a_Mockingbird_%28first_edition_cover%29.jpg"},{title:"1984",author:"George Orwell",price:8.99,image:"https://m0vie.files.wordpress.com/2011/04/1984b.jpg"},{title:"Pride and Prejudice",author:"Jane Austen",price:7.99,image:""},{title:"The Catcher in the Rye",author:"J.D. Salinger",price:6.99,image:""},{title:"Brave New World",author:"Aldous Huxley",price:11.99,image:""},{title:"Animal Farm",author:"George Orwell",price:5.99,image:""},{title:"Lord of the Flies",author:"William Golding",price:7.99,image:""},{title:"The Hobbit",author:"J.R.R. Tolkien",price:12.99,image:""},{title:"Frankenstein",author:"Mary Shelley",price:6.99,image:""}];
-
     $(document).ready(function() {
         userService.getCurrentUser(function (user) {
             console.log(user)
         });
-      var listingsContainer = $('#listingsContainer');
-
-      for (var i = 0; i < books.length; i++) {
-        var book = books[i];
-        var bookCard = listingsContainer.bookCard(book.title, book.author, book.price, book.image);
-        listingsContainer.append(bookCard);
-      }
+        getAllListings();
     });
+    function getAllListings() {
+        userService.getCurrentUser(function (user) {
+            console.log(user.shoppingCart.id)
+            cartService.getShoppingCartById(user.shoppingCart.id, function (shoppingCart){
+                console.log("Test Shopping Cart:")
+                console.log(shoppingCart)
+                console.log(shoppingCart.items)
+                var shoppingCartTable = $("#shopping-cart-table");
+                shoppingCartTable.empty();
+                var row = '<tr><th>Book Title</th><th>Book Price</th><th>Quantity</th><th>Remove Item</th><</tr>';
+                shoppingCartTable.append(row)
+                var totalPrice = 0;
+                var totalQuantity = 0;
+                $.each(shoppingCart.items, function(index,cartitem){
+                    totalPrice += shoppingCart.items[index].price;
+                    totalQuantity += shoppingCart.items[index].quantity;
+                    var row = "<tr>";
+                    row += "<td>" + shoppingCart.items[index].bookListing.book.title + "</td>";
+                    row += "<td>" +"$"+ shoppingCart.items[index].price + "</td>";
+                    row += "<td>"
+                       + "<button class='btn btn-light' onclick=decreaseQuantity("+shoppingCart.items[index].id+")>-</button>"
+                        + " " + shoppingCart.items[index].quantity + " "
+                        + "<button class='btn btn-light' onclick=increaseQuantity("+shoppingCart.items[index].id+")>+</button>" +"</td>";
 
+                    row += "</td>";
+                    row += "<td><button class='btn btn-danger' onclick='removeItem("+shoppingCart.items[index].id+")'>Remove Item</button></td>";
+                    row += "</tr>";
+                    shoppingCartTable.append(row);
+                })
+                var row = `<tr><th>Totals</th><th>$ ${totalPrice}</th><th>${totalQuantity}</th><th></th></tr>`;
+                shoppingCartTable.append(row);
+            });
+        });
+    }
+    function removeItem(itemId){
+        userService.getCurrentUser(function (user) {
+            console.log("remove item")
+            cartService.removeItem(user.id, itemId, function (){
+                notificationService.addSuccessNotification("Item removed from Shopping Cart.");
+                getAllListings();
+            });
+        });
+    }
+
+    function increaseQuantity(itemId){
+        userService.getCurrentUser(function (user) {
+            cartService.getShoppingCartItemById(user.id, itemId, function (cartItem){
+                console.log("Testing retrieving cart item by id:")
+                console.log(cartItem)
+                var maxListings = cartItem.bookListing.copies;
+                var currentCopies = cartItem.quantity;
+                if(currentCopies+1<=maxListings){
+                    var updatedCartItem = {
+                        "id" : cartItem.id,
+                        "bookListing" : cartItem.bookListing,
+                        "bookListingById" : cartItem.bookListingById,
+                        "price" : cartItem.bookListing.price * (currentCopies + 1),
+                        "quantity" : cartItem.quantity + 1
+                    };
+                }else{
+                    console.log("Quantity Listing limit reached.")
+                }
+                console.log("Updated Cart Item:")
+                console.log(updatedCartItem)
+
+                cartService.updateItem(user.id,itemId,updatedCartItem, function (){
+                    getAllListings();
+                });
+            });
+        });
+    }
+    function decreaseQuantity(itemId){
+        userService.getCurrentUser(function (user) {
+            cartService.getShoppingCartItemById(user.id, itemId, function (cartItem){
+                console.log("Testing retrieving cart item by id:")
+                console.log(cartItem)
+                var min = 1;
+                var currentCopies = cartItem.quantity;
+                if(currentCopies-1>=min){
+                    var updatedCartItem = {
+                        "id" : cartItem.id,
+                        "bookListing" : cartItem.bookListing,
+                        "bookListingById" : cartItem.bookListingById,
+                        "price" : cartItem.bookListing.price * (currentCopies - 1),
+                        "quantity" : cartItem.quantity - 1
+                    };
+                }else{
+                    console.log("Cannot purchase less than 1 book.")
+                }
+                console.log("Updated Cart Item:")
+                console.log(updatedCartItem)
+                cartService.updateItem(user.id,itemId,updatedCartItem, function (){
+                    getAllListings();
+                });
+            });
+        });
+    }
     function clearCart(){
         userService.getCurrentUser(function (user) {
-            console.log(user);
-            console.log("Test clear shopping");
-            cartService.clearShoppingCart(user.id);
+            cartService.clearShoppingCart(user.id, function (){
+                notificationService.addSuccessNotification("All items removed from Shopping Cart.");
+                getAllListings();
+            });
         });
     }
 
     function checkoutCart(){
-      const userId = "test";
         userService.getCurrentUser(function (user) {
-        console.log(user);
-        console.log("Test checkout shopping");
-        cartService.checkoutShoppingCart(user.id);
+        cartService.checkoutShoppingCart(user.id, function (){
+            notificationService.addSuccessNotification("Checkout successful.");
+            getAllListings();
+        });
         });
     }
 
@@ -118,11 +207,7 @@
   .btn-form {
     display: flex;
     justify-content: center;
-  }
-  .add-form {
-    display: flex;
-    justify-content: center;
-    margin-top: 40px;
+      margin-top: 40px;
   }
   .btn-sub {
     margin-right: 10px;
@@ -133,7 +218,7 @@
 </div>
 <div class="container">
   <h1>Shopping Cart Checkout</h1>
-  <table>
+  <table id="shopping-cart-table">
     <thead>
     <tr>
       <th>Title</th>
