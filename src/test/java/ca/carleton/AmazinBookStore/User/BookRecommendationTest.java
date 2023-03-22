@@ -7,6 +7,11 @@ import ca.carleton.AmazinBookStore.Genre.Genre;
 import ca.carleton.AmazinBookStore.Listing.Listing;
 import ca.carleton.AmazinBookStore.Publisher.Publisher;
 import ca.carleton.AmazinBookStore.User.BookRecommendation.BookRecommendation;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,15 +83,26 @@ public class BookRecommendationTest {
 
         createBooks();
 
-        HttpEntity<User> requestUser1 = new HttpEntity<>(testUser1, headers);
-        ResponseEntity<User> responseUser1 = restTemplate.exchange(
-                userUrl, HttpMethod.POST, requestUser1, User.class);
-        testUser1 = responseUser1.getBody();
+        TestObjectMapper objectMapper = new TestObjectMapper();
+        try {
+            String newUser1Json = objectMapper.writeValueAsString(testUser1);
+            HttpEntity<String> requestUser1 = new HttpEntity<>(newUser1Json, headers);
+            ResponseEntity<User> responseUser1 = restTemplate.exchange(
+                    userUrl, HttpMethod.POST, requestUser1, User.class);
+            testUser1 = responseUser1.getBody();
+        } catch (JsonProcessingException e) {
+            System.out.println("Failed to serialize user object: " + e.getMessage());
+        }
 
-        HttpEntity<User> requestUser2 = new HttpEntity<>(testUser2, headers);
-        ResponseEntity<User> responseUser2 = restTemplate.exchange(
-                userUrl, HttpMethod.POST, requestUser2, User.class);
-        testUser2 = responseUser2.getBody();
+        try {
+            String newUser2Json = objectMapper.writeValueAsString(testUser2);
+            HttpEntity<String> requestUser2 = new HttpEntity<>(newUser2Json, headers);
+            ResponseEntity<User> responseUser2 = restTemplate.exchange(
+                    userUrl, HttpMethod.POST, requestUser2, User.class);
+            testUser2 = responseUser2.getBody();
+        } catch (JsonProcessingException e) {
+            System.out.println("Failed to serialize user object: " + e.getMessage());
+        }
 
     }
 
@@ -193,6 +209,21 @@ public class BookRecommendationTest {
 
         testUser2.setPurchaseHistory(purchaseHistory2);
 
+    }
+
+    public class TestObjectMapper extends ObjectMapper {
+        public TestObjectMapper() {
+            super();
+            this.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
+            this.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+            this.addMixIn(User.class, UserControllerTest.TestObjectMapper.UserMixin.class);
+        }
+
+        @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE)
+        abstract class UserMixin {
+            @JsonProperty
+            abstract String getPassword();
+        }
     }
 
 }

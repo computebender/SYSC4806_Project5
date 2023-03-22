@@ -36,9 +36,11 @@ public class UserController {
     @PostMapping("")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         List<Listing> purchaseHistory = new ArrayList<>();
-        for (Listing l: user.getPurchaseHistory()) {
-            Listing listing = listingService.getListingById(l.getId());
-            purchaseHistory.add(listing);
+        if(user.getPurchaseHistory() != null) {
+            for (Listing l : user.getPurchaseHistory()) {
+                Listing listing = listingService.getListingById(l.getId());
+                purchaseHistory.add(listing);
+            }
         }
 
         user.setPurchaseHistory(purchaseHistory);

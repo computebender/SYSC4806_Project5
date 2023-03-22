@@ -40,7 +40,8 @@
                     firstName: $("#register-first-name").val(),
                     lastName: $("#register-last-name").val(),
                     email: $("#register-email").val(),
-                    password: $("#register-password").val()
+                    password: $("#register-password").val(),
+
                 };
                 userService.createUser(user, function (createdUser) {
                     notificationService.addSuccessNotification('Account created! Login to continue.');
