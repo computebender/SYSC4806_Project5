@@ -23,14 +23,17 @@
     <script src="/js/userService.js"></script>
     <script src="/js/authService.js"></script>
     <script src="/js/listingService.js"></script>
+    <script src="/js/cartService.js"></script>
+
 
     <script th:inline="javascript">
-        function getBookIdFromUrl() {
+        function getListingIdFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('bookId');
+            return urlParams.get('listing');
         }
 
-        function displayBookDetails(book) {
+        function displayBookDetails(listing) {
+            const book = listing.book;
             const genres = book.genres.map(genre => genre.name).join(', ');
 
             $("#book-img").attr("src", book.picture).attr("alt", book.title);
@@ -40,12 +43,26 @@
             $("#book-isbn").text(book.isbn);
             $("#book-genres").text(genres);
             $("#book-description").text(book.description);
+            $("#book-price").text("$" + listing.price);
+        }
+
+        function addToCart(listing) { // Change: Accept listing as an argument
+            userService.getCurrentUser(function (user) {
+                console.log(user)
+                cartService.addItem(user.shoppingCart.id, listing, function () {
+                    notificationService.addSuccessNotification('Added to cart.');
+                });
+            });
         }
 
         $(document).ready(function () {
-            const bookId = getBookIdFromUrl();
-            console.log(bookId)
-            bookService.getBookById(bookId, displayBookDetails);
+            const listingId = getListingIdFromUrl();
+            listingService.getListingById(listingId, function (listing) {
+                displayBookDetails(listing);
+                $("#add-to-cart").on("click", function () {
+                    addToCart(listing);
+                });
+            });
         });
     </script>
 </head>
@@ -68,9 +85,13 @@
                             <p><strong>Publisher:</strong> <span id="book-publisher"></span></p>
                             <p><strong>ISBN:</strong> <span id="book-isbn"></span></p>
                             <p><strong>Genres:</strong> <span id="book-genres"></span></p>
+                            <p><strong>Price:</strong> <span id="book-price"></span></p>
                         </div>
                         <div>
                             <p id="book-description"></p>
+                        </div>
+                        <div>
+                            <button id="add-to-cart" class="btn btn-primary">Add to Cart</button>
                         </div>
                     </div>
                 </div>
