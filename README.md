@@ -83,6 +83,8 @@ This group project is a web application that provides an online platform for sel
 - Additonal authenticaton/authorization on endpoints.
 - Persistent database configuration.
 - User book, bookstore, listing configuration user interface
+- View interface for search
+- Logic to add bought books to purchase history
 
 ## Environment Configurations
 Java Version: Java 17
