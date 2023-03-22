@@ -19,21 +19,29 @@ This group project is a web application that provides an online platform for sel
 ## UML Class Diagram
 ![alt text](https://github.com/computebender/SYSC4806_Project5/blob/main/documentation/AmazinBookStore_UML_Class_Diagram.png?raw=true)
 
-## Milestone 1 Project Kanban Status
+## Milestone 2 Project Kanban Status
 | Todo        | In Progress | Done          |
 | :---        |    :----:   |          ---: |
 | Issue https://github.com/computebender/SYSC4806_Project5/issues/5   |        | Issue https://github.com/computebender/SYSC4806_Project5/issues/11   |
-| Issue https://github.com/computebender/SYSC4806_Project5/issues/13   |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/2      |
-| Issue https://github.com/computebender/SYSC4806_Project5/issues/12   |        | Issue https://github.com/computebender/SYSC4806_Project5/issues/1   |
-| Issue https://github.com/computebender/SYSC4806_Project5/issues/26   |        | Issue https://github.com/computebender/SYSC4806_Project5/issues/16     |
-| Issue https://github.com/computebender/SYSC4806_Project5/issues/32    |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/14|
-| Issue https://github.com/computebender/SYSC4806_Project5/issues/29    |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/10|
-| Issue https://github.com/computebender/SYSC4806_Project5/issues/34    |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/7|
-| Issue https://github.com/computebender/SYSC4806_Project5/issues/33    |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/21|
+| Issue https://github.com/computebender/SYSC4806_Project5/issues/12   |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/2      |
+| Issue https://github.com/computebender/SYSC4806_Project5/issues/76   |        | Issue https://github.com/computebender/SYSC4806_Project5/issues/1   |
+|    |        | Issue https://github.com/computebender/SYSC4806_Project5/issues/16     |
+|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/14|
+|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/10|
+|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/7|
+|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/21|
 |     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/27|
 |     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/3|
 |     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/4|
 |     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/19|
+|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/5|
+|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/26|
+|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/26|
+|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/26|
+|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/32|
+|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/29|
+|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/34|
+|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/33|
 
 
 ## Milestone 1 Features
@@ -48,5 +56,19 @@ This group project is a web application that provides an online platform for sel
 - User can select and add or remove books from a shopping cart and proceed to checkout/purchase the book if inventory is not exceeded.
 - User can view book recommendations based on user past purchase history and similar purchases from other users.
 - Persistent database configuration.
+
+## Milestone 2 Features
+- Users can register and login to application.
+- Users are authenticated during login process.
+- System can create bookstores, listings, books, authors, publishers, genres, and shopping carts.
+- User can browse a collecton of books and view the book description.
+- User can add a listing to their shopping cart. User can remove items, clear cart or checkout cart.
+- User book recommendaton feature implemented using jaccard similarity calculations.
+## Milestone 3 RoadMap
+- Shopping Cart logic to grey out/prohibit quantity counter buttons when total listings reached.
+- Once a user purchases a book, the associated listing quantity needs to be decreased.
+- Shopping cart logic to display appropriate banner message if shopping cart is empty.
+- Additonal authenticaton/authorization on endpoints.
+
 ## Environment Configurations
 Java Version: Java 17
