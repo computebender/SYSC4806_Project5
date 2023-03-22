@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -49,7 +48,8 @@ public class ListingControllerTest {
         bookstoreUrl = "http://localhost:" + port + "/api/bookstores";
         authorUrl = "http://localhost:" + port + "/api/authors";
         publisherUrl = "http://localhost:" + port + "/api/publishers";
-        genreUrl = "http://localhost:" + port + "/api/genres";;
+        genreUrl = "http://localhost:" + port + "/api/genres";
+        ;
     }
 
     @Test
@@ -185,8 +185,7 @@ public class ListingControllerTest {
         Author savedAuthor1 = responseauthor1.getBody();
 
         Publisher publisher1 = new Publisher();
-        publisher1.setFirstName("First2");
-        publisher1.setLastName("Last2");
+        publisher1.setName("First2");
 
         HttpEntity<Publisher> requestpublisher1 = new HttpEntity<>(publisher1);
         ResponseEntity<Publisher> responsepublisher1 = restTemplate.postForEntity(publisherUrl, requestpublisher1, Publisher.class);
