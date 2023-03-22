@@ -21,8 +21,8 @@ public class CartItem {
         this.price = bookListing.getPrice();
     }
 
-    public CartItem() {
-
+    public CartItem(){
+        // Default constructor
     }
 
     public Long getId() {
