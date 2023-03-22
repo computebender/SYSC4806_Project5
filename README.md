@@ -26,9 +26,9 @@ This group project is a web application that provides an online platform for sel
 | Issue https://github.com/computebender/SYSC4806_Project5/issues/5   |        | Issue https://github.com/computebender/SYSC4806_Project5/issues/11 |
 | Issue https://github.com/computebender/SYSC4806_Project5/issues/12   |      |  Issue https://github.com/computebender/SYSC4806_Project5/issues/2 |
 | Issue https://github.com/computebender/SYSC4806_Project5/issues/76   |        |  Issue https://github.com/computebender/SYSC4806_Project5/issues/1 |
-|    |        | Issue https://github.com/computebender/SYSC4806_Project5/issues/16 |
-|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/14 |
-|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/10 |
+| Issue https://github.com/computebender/SYSC4806_Project5/issues/84  |        | Issue https://github.com/computebender/SYSC4806_Project5/issues/16 |
+| Issue https://github.com/computebender/SYSC4806_Project5/issues/85     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/14 |
+| Issue https://github.com/computebender/SYSC4806_Project5/issues/89    |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/10 |
 |     |      |  Issue https://github.com/computebender/SYSC4806_Project5/issues/7 |
 |     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/21 |
 |     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/27 |
