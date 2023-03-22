@@ -23,10 +23,10 @@ public class BookRecommendationService {
         this.userService = userService;
     }
 
-    public List<Book> getRecommendationById(Long id){
+    public BookRecommendation getRecommendationById(Long id){
         User user = userService.getUserById(id);
         List<User> users = userService.getAllUsers();
         BookRecommendation recommendation = new BookRecommendation();
-        return recommendation.getRecommendation(user, users);
+        return recommendation.getRecommendationOfUser(user, users);
     }
 }

@@ -61,7 +61,6 @@ public class BookController {
         author.getBooks().add(book);
         authorService.updateAuthor(author.getId(), author);
 
-        System.out.println(genres);
         int length = genres.size();
         for (int i = 0; i < length; i++) {
             genres.get(i).getBooks().add(book);

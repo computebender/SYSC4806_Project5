@@ -10,6 +10,16 @@ import java.util.List;
 
 public class BookRecommendation {
 
+    public List<Book> getRecommendations() {
+        return recommendations;
+    }
+
+    public void setRecommendations(List<Book> recommendations) {
+        this.recommendations = recommendations;
+    }
+
+    private List<Book> recommendations;
+
     private double calculateJaccardIndex(User userOriginal, User userComparing) {
         List<Book> list1 = getPurchasedBooks(userOriginal);
 
@@ -35,7 +45,7 @@ public class BookRecommendation {
     private List<Book> getPurchasedBooks(User user){
         List<Book> list = new ArrayList<>();
         for (Listing listing: user.getPurchaseHistory()) {
-            //list.add(listing.getBook());
+            list.add(listing.getBook());
         }
         return list;
     }
@@ -61,7 +71,7 @@ public class BookRecommendation {
         return diff;
     }
 
-    public List<Book> getRecommendation(User userOriginal, List<User> users){
+    public BookRecommendation getRecommendationOfUser(User userOriginal, List<User> users){
         double highestValue = 0.0;
         List<Book> recommendation = new ArrayList<>();
         for (User userComparing: users) {
@@ -69,6 +79,7 @@ public class BookRecommendation {
                 recommendation = difference(userOriginal, userComparing);
             }
         }
-        return recommendation;
+        recommendations = recommendation;
+        return this;
     }
 }
