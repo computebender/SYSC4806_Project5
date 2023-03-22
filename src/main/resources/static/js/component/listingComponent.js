@@ -1,4 +1,13 @@
-$.fn.bookCard = function (title, author, price, coverUrl, listingId, bookstore) {
+$.fn.bookCard = function (title, author, price, coverUrl, listing, bookstore) {
+    function addToCart(listing) { // Change: Accept listing as an argument
+        userService.getCurrentUser(function (user) {
+            console.log(user)
+            cartService.addItem(user.shoppingCart.id, listing, function () {
+                notificationService.addSuccessNotification('Added to cart.');
+            });
+        });
+    }
+
     const defaultCover = 'https://blog.springshare.com/wp-content/uploads/2010/02/nc-md.gif';
     const cardStyle = {
         'width': '14rem'
@@ -32,8 +41,10 @@ $.fn.bookCard = function (title, author, price, coverUrl, listingId, bookstore) 
     const priceEl = $('<p>').addClass('card-text').text('$' + price);
     const soldByEl = $('<p>').addClass('card-text').text('Sold by: ' + bookstore.bookstoreName);
     const buttonContainer = $('<div>').addClass('button-container').css(buttonContainerStyle);
-    const buttonEl = $('<a>').addClass('btn btn-primary').text('View Listing').attr('href', '/listing?listing=' + listingId);
-    const addCartButton = $('<a>').addClass('btn btn-primary').text('Add to Cart').attr('id', 'add-cart-btn');
+    const buttonEl = $('<a>').addClass('btn btn-primary').text('View Listing').attr('href', '/listing?listing=' + listing.id);
+    const addCartButton = $('<button>').addClass('btn btn-primary').text('Add to Cart').attr('id', 'add-cart-btn').click(function() {
+        addToCart(listing);
+    });
 
 
     body.append(titleEl);
