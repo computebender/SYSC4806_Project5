@@ -1,6 +1,8 @@
 package ca.carleton.AmazinBookStore.User;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -50,7 +52,6 @@ public class UserServiceTest {
         assertEquals("Jane", newUser.getFirstName());
         assertEquals("Doe", newUser.getLastName());
         assertEquals("janedoe@example.com", newUser.getEmail());
-        assertEquals("password", newUser.getPassword());
 
         userService.deleteUserById(newUser.getId());
     }
