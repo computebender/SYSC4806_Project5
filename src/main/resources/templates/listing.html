@@ -60,6 +60,7 @@
       listingService.getAllListings(function(data) {
         var listingsTable = $("#listings-table tbody");
         listingsTable.empty();
+        var userId = "test"
         $.each(data, function(index, listing) {
           console.log(listing);
           var row = "<tr>";
@@ -70,6 +71,8 @@
 
           row += "</td>";
           row += "<td><button class='btn btn-danger' onclick='deleteListing(" + listing.id + ")'>Delete</button></td>";
+          row += "</td>";
+          row += "<td><button class='btn btn-success' onclick='addToCart(userId,listing)'>Add to Cart</button></td>";
           row += "</tr>";
           listingsTable.append(row);
         });
@@ -92,8 +95,12 @@
         $("#copies").val("");
       });
 
-
-
+    }
+    // Temporary
+    function addToCart(userId, listing) {
+      shoppingCartService.addItem(userId, listing, function() {
+        getAllListings();
+      });
     }
 
     function deleteListing(listingId) {
@@ -119,6 +126,7 @@
     <th>Price</th>
     <th>Copies</th>
     <th></th>
+    <th>Add to Cart</th>
   </tr>
   </thead>
   <tbody>
