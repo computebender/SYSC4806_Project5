@@ -17,7 +17,7 @@ This group project is a web application that provides an online platform for sel
 ![public](https://user-images.githubusercontent.com/8071151/227010944-665be21f-faf9-4e8e-b113-da653b605334.png)
 
 ## UML Class Diagram
-![alt text](https://github.com/computebender/SYSC4806_Project5/blob/main/documentation/AmazinBookStore_UML_Class_Diagram.png?raw=true)
+![alt text](https://github.com/computebender/SYSC4806_Project5/blob/main/documentation/AmazinBookStore_UML_Class_Diagram_m2.png?raw=true)
 
 ## Milestone 2 Project Kanban Status
 | Todo        | In Progress | Done          |
