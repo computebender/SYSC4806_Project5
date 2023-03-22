@@ -130,7 +130,8 @@
         description: $("#description").val(),
         author: {id: $("#authors-select").val()},
         publisher: {id: $("#publishers-select").val()},
-        genres: getGenres()
+        genres: getGenres(),
+        picture: ""
       };
       console.log(book);
       bookService.createBook(book, function() {
