@@ -1,13 +1,12 @@
-const shoppingCartService = (function() {
+const cartService = (function() {
     function handleAjaxError(jqXHR, textStatus, errorThrown) {
         console.log("AJAX error: " + textStatus, errorThrown);
     }
 
     return {
-        // Define the function to send an AJAX request to create a new shopping cart
-        createCart: function(userId, successCallback) {
+        createCart: function(id, successCallback) {
             $.ajax({
-                url: `/api/carts/${userId}`,
+                url: `/api/carts/${id}`,
                 method: 'POST',
                 success: successCallback,
                 error: handleAjaxError
@@ -15,9 +14,9 @@ const shoppingCartService = (function() {
         },
 
         // Define the function to send an AJAX request to add an item to a shopping cart
-        addItem: function(userId, listing, successCallback) {
+        addItem: function(id, listing, successCallback) {
             $.ajax({
-                url: `/api/carts/${userId}/add-item`,
+                url: "/api/carts/"+ id +"/add-item",
                 method: 'POST',
                 data: JSON.stringify(listing),
                 contentType: 'application/json',
@@ -26,9 +25,9 @@ const shoppingCartService = (function() {
             });
         },
         // Define the function to send an AJAX request to remove an item from a shopping cart
-        removeItem: function(userId, cartItemId,successCallback) {
+        removeItem: function(id, cartItemId,successCallback) {
         $.ajax({
-                url: `/api/carts/${userId}/remove-item`,
+                url: `/api/carts/${id}/remove-item`,
                 method: 'DELETE',
                 data: JSON.stringify(cartItemId),
                 contentType: 'application/json',
@@ -46,32 +45,34 @@ const shoppingCartService = (function() {
             });
         },
         // Define the function to send an AJAX request to get a specific shopping cart by user ID
-        getShoppingCartById: function(userId,successCallback) {
+        getShoppingCartById: function(id,successCallback) {
         $.ajax({
                 method: "GET",
-                url: "/api/carts/" + userId,
-            });
+                url: "/api/carts/" + id,
+                success: successCallback,
+                error: handleAjaxError
+        });
         },
         // Define the function to send an AJAX request to clear a shopping cart
-        clearShoppingCart: function(userId,successCallback) {
+        clearShoppingCart: function(id,successCallback) {
             $.ajax({
                 method: "POST",
-                url: `/api/carts/${userId}/clear`,
-                data: JSON.stringify(userId),
+                url: `/api/carts/${id}/clear`,
+                data: JSON.stringify(id),
                 success: successCallback,
                 error: handleAjaxError
             });
         },
         // Define the function to send an AJAX request to check out shopping cart
-        checkoutShoppingCart: function(userId,successCallback) {
+        checkoutShoppingCart: function(id,successCallback) {
             $.ajax({
             method: "POST",
-            url: `/api/carts/${userId}/checkout`,
-            data: JSON.stringify(userId),
+            url: `/api/carts/${id}/checkout`,
+            data: JSON.stringify(id),
             success: successCallback,
             error: handleAjaxError
         });
     }
 
     }
-})
+})();

@@ -11,30 +11,18 @@ public class ShoppingCart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id")
-    private String userId;
-
     @OneToMany
     private List<CartItem> items;
 
     public ShoppingCart() {
     }
 
-    public ShoppingCart(String userId, List<CartItem> items) {
-        this.userId = userId;
+    public ShoppingCart(List<CartItem> items) {
         this.items = items;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public List<CartItem> getItems() {

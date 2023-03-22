@@ -10,6 +10,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
             crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 
     <!--Services-->
     <script src="/js/authorService.js"></script>
@@ -20,18 +22,17 @@
     <script src="/js/publisherService.js"></script>
     <script src="/js/userService.js"></script>
     <script src="/js/authService.js"></script>
+    <script src="/js/component/listingComponent.js"></script>
+    <script src="/js/cartService.js"></script>
+    <script src="/js/listingService.js"></script>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-<!--  WIP - Reusable listing component-->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="/js/component/listingComponent.js"></script>
-  <script src="/js/cartService.js"></script>
-  <script src="/js/listingService.js"></script>
   <script>
     const books=[{title:"The Great Gatsby",author:"F. Scott Fitzgerald",price:10.99,image:"http://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781471173936/the-great-gatsby-9781471173936_hr.jpg"},{title:"To Kill a Mockingbird",author:"Harper Lee",price:9.99,image:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/To_Kill_a_Mockingbird_%28first_edition_cover%29.jpg/1200px-To_Kill_a_Mockingbird_%28first_edition_cover%29.jpg"},{title:"1984",author:"George Orwell",price:8.99,image:"https://m0vie.files.wordpress.com/2011/04/1984b.jpg"},{title:"Pride and Prejudice",author:"Jane Austen",price:7.99,image:""},{title:"The Catcher in the Rye",author:"J.D. Salinger",price:6.99,image:""},{title:"Brave New World",author:"Aldous Huxley",price:11.99,image:""},{title:"Animal Farm",author:"George Orwell",price:5.99,image:""},{title:"Lord of the Flies",author:"William Golding",price:7.99,image:""},{title:"The Hobbit",author:"J.R.R. Tolkien",price:12.99,image:""},{title:"Frankenstein",author:"Mary Shelley",price:6.99,image:""}];
 
     $(document).ready(function() {
+        userService.getCurrentUser(function (user) {
+            console.log(user)
+        });
       var listingsContainer = $('#listingsContainer');
 
       for (var i = 0; i < books.length; i++) {
@@ -41,25 +42,21 @@
       }
     });
 
-    $(document).ready(function() {
-      $('#add-cart-btn').click(function() {
-        console.log("Test");
-        const userId = "test";
-        var listing = listingService.getListingById(1);
-        shoppingCartService.addItem(userId,listing);
-      });
-    });
-
     function clearCart(){
-      const userId = "test";
-      console.log("Test clear shopping")
-      shoppingCartService.clearShoppingCart(userId);
+        userService.getCurrentUser(function (user) {
+            console.log(user);
+            console.log("Test clear shopping");
+            cartService.clearShoppingCart(user.id);
+        });
     }
 
     function checkoutCart(){
       const userId = "test";
-      console.log("Test checkout shopping")
-      shoppingCartService.checkoutShoppingCart(userId);
+        userService.getCurrentUser(function (user) {
+        console.log(user);
+        console.log("Test checkout shopping");
+        cartService.checkoutShoppingCart(user.id);
+        });
     }
 
   </script>

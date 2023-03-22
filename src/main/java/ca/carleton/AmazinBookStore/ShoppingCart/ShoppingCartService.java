@@ -22,8 +22,8 @@ public class ShoppingCartService {
     public ShoppingCart createShoppingCart(ShoppingCart shoppingCart) {
         List<ShoppingCart> shoppingCarts = this.findAll();
         for(ShoppingCart shoppingCart1 : shoppingCarts){
-            if(shoppingCart1.getUserId().equals(shoppingCart.getUserId())){
-                throw new DuplicateKeyException("ShoppingCart with user ID " + shoppingCart.getUserId() + " already exists.");
+            if(shoppingCart1.getId().equals(shoppingCart.getId())){
+                throw new DuplicateKeyException("ShoppingCart with user ID " + shoppingCart.getId() + " already exists.");
             }
         }
 
@@ -34,17 +34,17 @@ public class ShoppingCartService {
         return this.cartRepository.findAll();
     }
 
-    public ShoppingCart findShoppingCartByUserId(String userId){
-        Optional<ShoppingCart> shoppingCart = this.cartRepository.findByUserId(userId);
+    public ShoppingCart findShoppingCartById(Long id){
+        Optional<ShoppingCart> shoppingCart = this.cartRepository.findById(id);
         if(shoppingCart.isEmpty()){
-            throw new ResourceNotFoundException("ShoppingCart with user ID " + userId + " not found.");
+            throw new ResourceNotFoundException("ShoppingCart with user ID " + id + " not found.");
         }
 
         return shoppingCart.get();
     }
 
-    public ShoppingCart addShoppingCartItem(Listing listing, String userId){
-        ShoppingCart shoppingCart = this.findShoppingCartByUserId(userId);
+    public ShoppingCart addShoppingCartItem(Listing listing, Long id){
+        ShoppingCart shoppingCart = this.findShoppingCartById(id);
         CartItem cartItem = new CartItem();
         cartItem.setBookListing(listing);
         cartItem.setQuantity(listing.getCopies());
@@ -56,15 +56,15 @@ public class ShoppingCartService {
         return shoppingCart;
     }
 
-    public ShoppingCart removeShoppingCartItem(Long cartItemId, String userId){
-        ShoppingCart shoppingCart = this.findShoppingCartByUserId(userId);
+    public ShoppingCart removeShoppingCartItem(Long cartItemId, Long id){
+        ShoppingCart shoppingCart = this.findShoppingCartById(id);
         shoppingCart.removeItemById(cartItemId);
         this.cartRepository.save(shoppingCart);
         return shoppingCart;
     }
 
-    public ShoppingCart updateShoppingCart(String userId, Long bookId, CartItem updatedCartItem){
-        ShoppingCart shoppingCart = this.findShoppingCartByUserId(userId);
+    public ShoppingCart updateShoppingCart(Long id, Long bookId, CartItem updatedCartItem){
+        ShoppingCart shoppingCart = this.findShoppingCartById(id);
         for (CartItem item : shoppingCart.getItems()) {
             if (item.getBookListingById().equals(bookId)) {
                 item.setQuantity(updatedCartItem.getQuantity());
@@ -76,15 +76,15 @@ public class ShoppingCartService {
         return shoppingCart;
     }
 
-    public ShoppingCart clearShoppingCart(String userId){
-        ShoppingCart shoppingCart = this.findShoppingCartByUserId(userId);
+    public ShoppingCart clearShoppingCart(Long id){
+        ShoppingCart shoppingCart = this.findShoppingCartById(id);
         shoppingCart.clearItems();
         this.cartRepository.save(shoppingCart);
         return shoppingCart;
     }
 
-    public double checkoutShoppingCart(String userId){
-        ShoppingCart shoppingCart = this.findShoppingCartByUserId(userId);
+    public double checkoutShoppingCart(Long id){
+        ShoppingCart shoppingCart = this.findShoppingCartById(id);
         double price = shoppingCart.checkout();
         this.cartRepository.save(shoppingCart);
         return price;

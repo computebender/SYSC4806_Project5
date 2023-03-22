@@ -20,6 +20,9 @@
     <script src="/js/publisherService.js"></script>
     <script src="/js/userService.js"></script>
     <script src="/js/authService.js"></script>
+    <script src="/js/component/listingComponent.js"></script>
+    <script src="/js/cartService.js"></script>
+    <script src="/js/listingService.js"></script>
     <script>
         $(document).ready(function () {
             $('#user-login-form').submit(function (event) {
@@ -40,7 +43,8 @@
                     firstName: $("#register-first-name").val(),
                     lastName: $("#register-last-name").val(),
                     email: $("#register-email").val(),
-                    password: $("#register-password").val()
+                    password: $("#register-password").val(),
+                    shoppingCart: null
                 };
                 userService.createUser(user, function (createdUser) {
                     notificationService.addSuccessNotification('Account created! Login to continue.');

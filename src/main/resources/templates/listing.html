@@ -4,9 +4,18 @@
   <meta charset="UTF-8">
   <title>Listings</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="/js/listingService.js"></script>
+  <!--Services-->
+  <script src="/js/authorService.js"></script>
   <script src="/js/bookService.js"></script>
   <script src="/js/bookstoreService.js"></script>
+  <script src="/js/genreService.js"></script>
+  <script src="/js/notificationService.js"></script>
+  <script src="/js/publisherService.js"></script>
+  <script src="/js/userService.js"></script>
+  <script src="/js/authService.js"></script>
+  <script src="/js/component/listingComponent.js"></script>
+  <script src="/js/cartService.js"></script>
+  <script src="/js/listingService.js"></script>
   <script th:inline="javascript">
     function getAllBooks() {
       bookService.getAllBooks(function(books) {
@@ -63,6 +72,7 @@
         var userId = "test"
         $.each(data, function(index, listing) {
           console.log(listing);
+          var listing_obj = listing;
           var row = "<tr>";
           row += "<td>" + listing.book.title + "</td>";
           row += "<td>" + listing.location.bookstoreName + "</td>";
@@ -72,7 +82,7 @@
           row += "</td>";
           row += "<td><button class='btn btn-danger' onclick='deleteListing(" + listing.id + ")'>Delete</button></td>";
           row += "</td>";
-          row += "<td><button class='btn btn-success' onclick='addToCart(userId,listing)'>Add to Cart</button></td>";
+          row += "<td><button class='btn btn-success' onclick='addToCart(" + listing.id + ")'>Add to Cart</button></td>";
           row += "</tr>";
           listingsTable.append(row);
         });
@@ -97,9 +107,19 @@
 
     }
     // Temporary
-    function addToCart(userId, listing) {
-      shoppingCartService.addItem(userId, listing, function() {
-        getAllListings();
+    function addToCart(listingId) {
+      userService.getCurrentUser(function (user) {
+        console.log(user.shoppingCart.id)
+        console.log(listingId)
+        listingService.getListingById(listingId, function (listing){
+          console.log("Test Listing:")
+          console.log(listing)
+          cartService.addItem(user.shoppingCart.id, listing, function() {
+            console.log("Test add item:")
+            console.log(listing)
+            notificationService.addSuccessNotification('Added to cart.');
+          });
+        });
       });
     }
 

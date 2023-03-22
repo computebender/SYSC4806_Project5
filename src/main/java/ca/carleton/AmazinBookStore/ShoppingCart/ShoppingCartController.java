@@ -23,10 +23,10 @@
         public ShoppingCartController(ShoppingCartService shoppingCartService){
             this.shoppingCartService = shoppingCartService;
         }
-        @PostMapping("/{userId}")
-        public ResponseEntity<ShoppingCart> createCart(@PathVariable String userId) {
+        @PostMapping("/{id}")
+        public ResponseEntity<ShoppingCart> createCart(@PathVariable Long id) {
             List<CartItem> items = new ArrayList<>();
-            ShoppingCart shoppingCart = new ShoppingCart(userId, items);
+            ShoppingCart shoppingCart = new ShoppingCart();
             ShoppingCart shoppingCart1 = this.shoppingCartService.createShoppingCart(shoppingCart);
             return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCart1);
         }
@@ -37,50 +37,50 @@
             return ResponseEntity.ok(shoppingCarts);
         }
 
-        @GetMapping("/{userId}")
-        public ResponseEntity<ShoppingCart> getShoppingCartById(@PathVariable String userId) {
+        @GetMapping("/{id}")
+        public ResponseEntity<ShoppingCart> getShoppingCartById(@PathVariable Long id) {
             ShoppingCart shoppingCart;
             try{
-                shoppingCart = this.shoppingCartService.findShoppingCartByUserId(userId);
+                shoppingCart = this.shoppingCartService.findShoppingCartById(id);
             }catch (ResourceNotFoundException e){
                 return ResponseEntity.notFound().build();
             }
             return ResponseEntity.ok(shoppingCart);
         }
 
-        @PostMapping("/{userId}/add-item")
-        public ResponseEntity<ShoppingCart> addItem(@PathVariable String userId, @RequestBody Listing listing) {
-            ShoppingCart cart = this.shoppingCartService.addShoppingCartItem(listing,userId);
+        @PostMapping("/{id}/add-item")
+        public ResponseEntity<ShoppingCart> addItem(@PathVariable Long id, @RequestBody Listing listing) {
+            ShoppingCart cart = this.shoppingCartService.addShoppingCartItem(listing,id);
             return ResponseEntity.status(HttpStatus.CREATED).body(cart);
         }
 
-        @DeleteMapping("/{userId}/remove-item")
-        public ResponseEntity<Void> removeItem(@PathVariable String userId, @RequestBody Long cartItemId) {
+        @DeleteMapping("/{id}/remove-item")
+        public ResponseEntity<Void> removeItem(@PathVariable Long id, @RequestBody Long cartItemId) {
            try {
-               this.shoppingCartService.removeShoppingCartItem(cartItemId, userId);
+               this.shoppingCartService.removeShoppingCartItem(cartItemId, id);
            }catch(ResourceNotFoundException e){
                return ResponseEntity.notFound().build();
            }
             return ResponseEntity.noContent().build();
         }
 
-        @PostMapping("/{userId}/update-item/{bookId}")
-        public ResponseEntity<ShoppingCart> updateItem(@PathVariable String userId, @PathVariable Long bookId, @RequestBody CartItem updatedItem) {
-            ShoppingCart cart = this.shoppingCartService.updateShoppingCart(userId, bookId, updatedItem);
+        @PostMapping("/{id}/update-item/{bookId}")
+        public ResponseEntity<ShoppingCart> updateItem(@PathVariable Long id, @PathVariable Long bookId, @RequestBody CartItem updatedItem) {
+            ShoppingCart cart = this.shoppingCartService.updateShoppingCart(id, bookId, updatedItem);
             return ResponseEntity.status(HttpStatus.CREATED).body(cart);
         }
 
-        @PostMapping("/{userId}/clear")
-        public ResponseEntity<ShoppingCart> clearCart(@PathVariable String userId) {
-            ShoppingCart cart = this.shoppingCartService.clearShoppingCart(userId);
+        @PostMapping("/{id}/clear")
+        public ResponseEntity<ShoppingCart> clearCart(@PathVariable Long id) {
+            ShoppingCart cart = this.shoppingCartService.clearShoppingCart(id);
             return ResponseEntity.status(HttpStatus.CREATED).body(cart);
         }
 
-        @PostMapping("/{userId}/checkout")
-        public ResponseEntity<Double> checkout(@PathVariable String userId) {
+        @PostMapping("/{id}/checkout")
+        public ResponseEntity<Double> checkout(@PathVariable Long id) {
             double price;
             try {
-                price = this.shoppingCartService.checkoutShoppingCart(userId);
+                price = this.shoppingCartService.checkoutShoppingCart(id);
             }catch (Exception e){
                 return ResponseEntity.notFound().build();
             }
