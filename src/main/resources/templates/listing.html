@@ -1,175 +1,84 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Listings</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!--Services-->
-  <script src="/js/authorService.js"></script>
-  <script src="/js/bookService.js"></script>
-  <script src="/js/bookstoreService.js"></script>
-  <script src="/js/genreService.js"></script>
-  <script src="/js/notificationService.js"></script>
-  <script src="/js/publisherService.js"></script>
-  <script src="/js/userService.js"></script>
-  <script src="/js/authService.js"></script>
-  <script src="/js/component/listingComponent.js"></script>
-  <script src="/js/cartService.js"></script>
-  <script src="/js/listingService.js"></script>
-  <script th:inline="javascript">
-    function getAllBooks() {
-      bookService.getAllBooks(function(books) {
-        var dropdown = document.getElementById("books-select");
-        dropdown.innerHTML = "";
+    <meta charset="UTF-8">
+    <title>Listings</title>
+    <!--jQuery-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        var option = document.createElement("option");
-        option.value = null;
-        option.text = "Select Book";
-        option.hidden = true;
-        option.selected = true;
-        option.disabled = true;
-        dropdown.appendChild(option);
+    <!--Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+            crossorigin="anonymous"></script>
 
-        books.forEach(function(book) {
-          var option = document.createElement("option");
-          option.disabled = false;
-          option.value = book.id;
-          option.text = book.title + " : " + book.author.firstName + " " + book.author.lastName;
-          dropdown.appendChild(option);
+    <!--Services-->
+    <script src="/js/authorService.js"></script>
+    <script src="/js/bookService.js"></script>
+    <script src="/js/bookstoreService.js"></script>
+    <script src="/js/genreService.js"></script>
+    <script src="/js/notificationService.js"></script>
+    <script src="/js/publisherService.js"></script>
+    <script src="/js/userService.js"></script>
+    <script src="/js/authService.js"></script>
+    <script src="/js/listingService.js"></script>
+
+    <script th:inline="javascript">
+        function getBookIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('bookId');
+        }
+
+        function displayBookDetails(book) {
+            const genres = book.genres.map(genre => genre.name).join(', ');
+
+            $("#book-img").attr("src", book.picture).attr("alt", book.title);
+            $("#book-title").text(book.title);
+            $("#book-author").text(book.author.firstName + " " + book.author.lastName);
+            $("#book-publisher").text(book.publisher.name);
+            $("#book-isbn").text(book.isbn);
+            $("#book-genres").text(genres);
+            $("#book-description").text(book.description);
+        }
+
+        $(document).ready(function () {
+            const bookId = getBookIdFromUrl();
+            console.log(bookId)
+            bookService.getBookById(bookId, displayBookDetails);
         });
-      });
-    }
-
-    function getAllBookstores() {
-      bookstoreService().getAllBookstores(function(bookstores) {
-        var dropdown = document.getElementById("bookstores-select");
-        dropdown.innerHTML = "";
-
-        var option = document.createElement("option");
-        option.value = null;
-        option.text = "Select Bookstore";
-        option.hidden = true;
-        option.selected = true;
-        option.disabled = true;
-        dropdown.appendChild(option);
-
-
-        bookstores.forEach(function(bookstore) {
-          var option = document.createElement("option");
-          option.disabled = false;
-          option.value = bookstore.id;
-          option.text = bookstore.bookstoreName;
-          dropdown.appendChild(option);
-        });
-      });
-    }
-
-
-    function getAllListings() {
-      listingService.getAllListings(function(data) {
-        var listingsTable = $("#listings-table tbody");
-        listingsTable.empty();
-        var userId = "test"
-        $.each(data, function(index, listing) {
-          console.log(listing);
-          var listing_obj = listing;
-          var row = "<tr>";
-          row += "<td>" + listing.book.title + "</td>";
-          row += "<td>" + listing.location.bookstoreName + "</td>";
-          row += "<td>" + "$" +listing.price + "</td>";
-          row += "<td>" + listing.copies + "</td>";
-
-          row += "</td>";
-          row += "<td><button class='btn btn-danger' onclick='deleteListing(" + listing.id + ")'>Delete</button></td>";
-          row += "</td>";
-          row += "<td><button class='btn btn-success' onclick='addToCart(" + listing.id + ")'>Add to Cart</button></td>";
-          row += "</tr>";
-          listingsTable.append(row);
-        });
-      });
-    }
-
-    function createListing() {
-      var listing = {
-        book: {id: $("#books-select").val()},
-        location: {id: $("#bookstores-select").val()},
-        price: $("#price").val(),
-        copies: $("#copies").val(),
-      };
-      console.log(listing);
-      listingService.createListing(listing, function() {
-        getAllListings();
-        $("#books-select").val("");
-        $("#bookstores-select").val("");
-        $("#price").val("");
-        $("#copies").val("");
-      });
-
-    }
-    // Temporary
-    function addToCart(listingId) {
-      userService.getCurrentUser(function (user) {
-        console.log(user.shoppingCart.id)
-        console.log(listingId)
-        listingService.getListingById(listingId, function (listing){
-          console.log("Test Listing:")
-          console.log(listing)
-          cartService.addItem(user.shoppingCart.id, listing, function() {
-            console.log("Test add item:")
-            console.log(listing)
-            notificationService.addSuccessNotification('Added to cart.');
-          });
-        });
-      });
-    }
-
-    function deleteListing(listingId) {
-      listingService.deleteListingById(listingId, function() {
-        getAllListings();
-      });
-    }
-
-    $(function() {
-      getAllListings();
-      getAllBooks();
-      getAllBookstores();
-    });
-  </script>
+    </script>
 </head>
 <body>
-<h1>Listings</h1>
-<table id="listings-table">
-  <thead>
-  <tr>
-    <th>Book</th>
-    <th>Location</th>
-    <th>Price</th>
-    <th>Copies</th>
-    <th></th>
-    <th>Add to Cart</th>
-  </tr>
-  </thead>
-  <tbody>
-  </tbody>
-</table>
-<form onsubmit="createListing(); return false;">
-  <div id="books-dropdown">
-    <label for="books-select">Book:</label>
-    <select id="books-select"></select>
-  </div>
-  <div id="bookstores-dropdown">
-    <label for="bookstores-select">Bookstore:</label>
-    <select id="bookstores-select"></select>
-  </div>
-  <div>
-    <label for="price">Price $:</label>
-    <input type="text" id="price" required>
-  </div>
-  <div>
-    <label for="copies">Copies:</label>
-    <input type="text" id="copies" required>
-  </div>
-  <button type="submit">Create Listing</button>
-</form>
+<div th:replace="fragments/navbar :: navbar"></div>
+<div class="container mt-5">
+    <h1 id="book-title"></h1>
+    <div id="book-details" class="row">
+        <div id="book-template" class="d-flex flex-row gap-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <img id="book-img" alt="book title" class="img-fluid" src="">
+                </div>
+            </div>
+            <div class="card flex-grow-1 h-100">
+                <div class="card-body">
+                    <div class="d-flex flex-column justify-content-between">
+                        <div>
+                            <p><strong>Author:</strong> <span id="book-author"></span></p>
+                            <p><strong>Publisher:</strong> <span id="book-publisher"></span></p>
+                            <p><strong>ISBN:</strong> <span id="book-isbn"></span></p>
+                            <p><strong>Genres:</strong> <span id="book-genres"></span></p>
+                        </div>
+                        <div>
+                            <p id="book-description"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>
