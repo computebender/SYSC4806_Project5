@@ -23,12 +23,13 @@
     <script src="/js/listingService.js"></script>
     <script src="/js/component/listingComponent.js"></script>
     <script th:inline="javascript">
-        $(document).ready(function() {
-            listingService.getAllListings(function(listings) {
+        $(document).ready(function () {
+            listingService.getAllListings(function (listings) {
                 var listingsContainer = $('#listingsContainer');
                 for (var i = 0; i < listings.length; i++) {
                     var book = listings[i].book;
-                    var bookCard = listingsContainer.bookCard(book.title, book.author.firstName + " " + book.author.lastName, listings[i].price, book.picture);
+                    const listingId = listings[i].id;
+                    var bookCard = listingsContainer.bookCard(book.title, book.author.firstName + " " + book.author.lastName, listings[i].price, book.picture, listingId);
                     listingsContainer.append(bookCard);
                 }
             });
