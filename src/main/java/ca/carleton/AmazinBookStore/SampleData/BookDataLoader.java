@@ -1,28 +1,40 @@
-package ca.carleton.AmazinBookStore;
+package ca.carleton.AmazinBookStore.SampleData;
 
 import ca.carleton.AmazinBookStore.Author.Author;
-import ca.carleton.AmazinBookStore.Book.Book;
-import ca.carleton.AmazinBookStore.Publisher.Publisher;
 import ca.carleton.AmazinBookStore.Author.AuthorRepository;
+import ca.carleton.AmazinBookStore.Book.Book;
 import ca.carleton.AmazinBookStore.Book.BookRepository;
+import ca.carleton.AmazinBookStore.Genre.Genre;
+import ca.carleton.AmazinBookStore.Genre.GenreRepository;
+import ca.carleton.AmazinBookStore.Publisher.Publisher;
 import ca.carleton.AmazinBookStore.Publisher.PublisherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Component
-public class SampleDataLoader implements CommandLineRunner {
+@Order(1)
+public class BookDataLoader implements CommandLineRunner {
     @Autowired
     private Environment environment;
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
     private final PublisherRepository publisherRepository;
+    private final GenreRepository genreRepository;
 
-    public SampleDataLoader(AuthorRepository authorRepository, BookRepository bookRepository, PublisherRepository publisherRepository) {
+    public BookDataLoader(AuthorRepository authorRepository,
+                          BookRepository bookRepository,
+                          PublisherRepository publisherRepository,
+                          GenreRepository genreRepository) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
         this.publisherRepository = publisherRepository;
+        this.genreRepository = genreRepository;
     }
 
     @Override
@@ -33,6 +45,7 @@ public class SampleDataLoader implements CommandLineRunner {
         }
     }
 
+    @Transactional
     void generateData() {
         // create authors
         Author author1 = new Author();
@@ -55,6 +68,12 @@ public class SampleDataLoader implements CommandLineRunner {
         author4.setLastName("Atwood");
         authorRepository.save(author4);
 
+        Author author5 = new Author();
+        author5.setFirstName("J.R.R.");
+        author5.setLastName("Tolkien");
+        authorRepository.save(author5);
+
+
         // create publishers
         Publisher publisher1 = new Publisher();
         publisher1.setName("HarperCollins");
@@ -72,6 +91,31 @@ public class SampleDataLoader implements CommandLineRunner {
         publisher4.setName("Simon & Schuster");
         publisherRepository.save(publisher4);
 
+        // create genres
+        Genre mystery = new Genre();
+        mystery.setName("Mystery");
+        genreRepository.save(mystery);
+
+        Genre fantasy = new Genre();
+        fantasy.setName("Fantasy");
+        genreRepository.save(fantasy);
+
+        Genre horror = new Genre();
+        horror.setName("Horror");
+        genreRepository.save(horror);
+
+        Genre dystopian = new Genre();
+        dystopian.setName("Dystopian");
+        genreRepository.save(dystopian);
+
+        Genre historical = new Genre();
+        historical.setName("Historical");
+        genreRepository.save(historical);
+
+        Genre scifi = new Genre();
+        scifi.setName("Science Fiction");
+        genreRepository.save(scifi);
+
         // create books and associate with authors and publishers
         Book book1 = new Book();
         book1.setTitle("Murder on the Orient Express");
@@ -80,6 +124,7 @@ public class SampleDataLoader implements CommandLineRunner {
         book1.setDescription("A Hercule Poirot Mystery");
         book1.setAuthor(author1);
         book1.setPublisher(publisher1);
+        book1.setGenres(List.of(mystery));
         bookRepository.save(book1);
 
         Book book2 = new Book();
@@ -89,6 +134,7 @@ public class SampleDataLoader implements CommandLineRunner {
         book2.setDescription("The first book in the Harry Potter series");
         book2.setAuthor(author2);
         book2.setPublisher(publisher2);
+        book2.setGenres(List.of(fantasy));
         bookRepository.save(book2);
 
         Book book3 = new Book();
@@ -98,6 +144,7 @@ public class SampleDataLoader implements CommandLineRunner {
         book3.setDescription("A horror novel by Stephen King");
         book3.setAuthor(author3);
         book3.setPublisher(publisher3);
+        book3.setGenres(List.of(horror));
         bookRepository.save(book3);
 
         Book book4 = new Book();
@@ -107,6 +154,7 @@ public class SampleDataLoader implements CommandLineRunner {
         book4.setDescription("A dystopian novel by Margaret Atwood");
         book4.setAuthor(author4);
         book4.setPublisher(publisher3);
+        book4.setGenres(List.of(dystopian));
         bookRepository.save(book4);
 
         Book book5 = new Book();
@@ -116,6 +164,7 @@ public class SampleDataLoader implements CommandLineRunner {
         book5.setDescription("A horror novel by Stephen King");
         book5.setAuthor(author3);
         book5.setPublisher(publisher4);
+        book5.setGenres(List.of(horror));
         bookRepository.save(book5);
 
         Book book6 = new Book();
@@ -125,6 +174,7 @@ public class SampleDataLoader implements CommandLineRunner {
         book6.setDescription("A post-apocalyptic horror novel by Stephen King");
         book6.setAuthor(author3);
         book6.setPublisher(publisher3);
+        book6.setGenres(List.of(horror, scifi));
         bookRepository.save(book6);
 
         Book book7 = new Book();
@@ -134,6 +184,7 @@ public class SampleDataLoader implements CommandLineRunner {
         book7.setDescription("A historical fiction novel by Margaret Atwood");
         book7.setAuthor(author4);
         book7.setPublisher(publisher3);
+        book7.setGenres(List.of(historical));
         bookRepository.save(book7);
 
         Book book8 = new Book();
@@ -143,6 +194,7 @@ public class SampleDataLoader implements CommandLineRunner {
         book8.setDescription("A dark fantasy novel by Stephen King");
         book8.setAuthor(author3);
         book8.setPublisher(publisher4);
+        book8.setGenres(List.of(fantasy));
         bookRepository.save(book8);
 
         Book book9 = new Book();
@@ -152,6 +204,7 @@ public class SampleDataLoader implements CommandLineRunner {
         book9.setDescription("A science fiction novel by Margaret Atwood");
         book9.setAuthor(author4);
         book9.setPublisher(publisher4);
+        book9.setGenres(List.of(scifi));
         bookRepository.save(book9);
 
         Book book10 = new Book();
@@ -159,8 +212,9 @@ public class SampleDataLoader implements CommandLineRunner {
         book10.setIsbn(9780261);
         book10.setPicture("");
         book10.setDescription("An epic high fantasy novel");
-        book10.setAuthor(author1);
+        book10.setAuthor(author5);
         book10.setPublisher(publisher1);
+        book10.setGenres(List.of(fantasy));
         bookRepository.save(book10);
     }
 }
