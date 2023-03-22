@@ -1,8 +1,11 @@
 package ca.carleton.AmazinBookStore.User;
 
+import ca.carleton.AmazinBookStore.Listing.Listing;
 import ca.carleton.AmazinBookStore.ShoppingCart.ShoppingCart;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "`USER`")
@@ -15,13 +18,15 @@ public class User {
     @Column(unique = true)
     private String email;
 
-
     private String password;
 
     private String firstName;
 
     private String lastName;
 
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, targetEntity = Listing.class)
+    private List<Listing> purchaseHistory;
+    
     @OneToOne(fetch=FetchType.EAGER, targetEntity = ShoppingCart.class)
     private ShoppingCart shoppingCart;
 
@@ -64,6 +69,14 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public List<Listing> getPurchaseHistory() {
+        return purchaseHistory;
+    }
+
+    public void setPurchaseHistory(List<Listing> purchaseHistory) {
+        this.purchaseHistory = purchaseHistory;
     }
 
     public ShoppingCart getShoppingCart() {

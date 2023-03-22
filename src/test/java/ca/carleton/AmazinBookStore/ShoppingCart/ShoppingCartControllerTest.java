@@ -128,7 +128,7 @@ public class ShoppingCartControllerTest {
 
         //Create Book
         Book book = new Book();
-        book.setIsbn(12345);
+        book.setIsbn("12345");
         book.setDescription("Description");
         book.setPicture("Picture");
         book.setAuthor(savedAuthor);
@@ -223,7 +223,7 @@ public class ShoppingCartControllerTest {
 
         //Create Book
         Book book = new Book();
-        book.setIsbn(12345);
+        book.setIsbn("12345");
         book.setDescription("Description");
         book.setPicture("Picture");
         book.setAuthor(savedAuthor);
@@ -236,7 +236,7 @@ public class ShoppingCartControllerTest {
         Book savedBook1 = response_book1.getBody();
 
         Book book2 = new Book();
-        book2.setIsbn(54321);
+        book2.setIsbn("54321");
         book2.setDescription("Description2");
         book2.setPicture("Picture2");
         book2.setAuthor(savedAuthor);
@@ -361,7 +361,7 @@ public class ShoppingCartControllerTest {
 
         //Create Book
         Book book = new Book();
-        book.setIsbn(12345);
+        book.setIsbn("12345");
         book.setDescription("Description");
         book.setPicture("Picture");
         book.setAuthor(savedAuthor);
@@ -374,7 +374,7 @@ public class ShoppingCartControllerTest {
         Book savedBook1 = response_book1.getBody();
 
         Book book2 = new Book();
-        book2.setIsbn(54321);
+        book2.setIsbn("54321");
         book2.setDescription("Description2");
         book2.setPicture("Picture2");
         book2.setAuthor(savedAuthor);
@@ -484,7 +484,7 @@ public class ShoppingCartControllerTest {
 
         //Create Book
         Book book = new Book();
-        book.setIsbn(12345);
+        book.setIsbn("12345");
         book.setDescription("Description");
         book.setPicture("Picture");
         book.setAuthor(savedAuthor);
@@ -497,7 +497,7 @@ public class ShoppingCartControllerTest {
         Book savedBook1 = response_book1.getBody();
 
         Book book2 = new Book();
-        book2.setIsbn(54321);
+        book2.setIsbn("54321");
         book2.setDescription("Description2");
         book2.setPicture("Picture2");
         book2.setAuthor(savedAuthor);

@@ -1,8 +1,9 @@
 package ca.carleton.AmazinBookStore.SampleData;
 
 import ca.carleton.AmazinBookStore.Author.Author;
-import ca.carleton.AmazinBookStore.Author.AuthorRepository;
 import ca.carleton.AmazinBookStore.Book.Book;
+import ca.carleton.AmazinBookStore.Publisher.Publisher;
+import ca.carleton.AmazinBookStore.Author.AuthorRepository;
 import ca.carleton.AmazinBookStore.Book.BookRepository;
 import ca.carleton.AmazinBookStore.Genre.Genre;
 import ca.carleton.AmazinBookStore.Genre.GenreRepository;
@@ -119,7 +120,7 @@ public class BookDataLoader implements CommandLineRunner {
         // create books and associate with authors and publishers
         Book book1 = new Book();
         book1.setTitle("Murder on the Orient Express");
-        book1.setIsbn(9780007);
+        book1.setIsbn("9780006170068");
         book1.setPicture("https://upload.wikimedia.org/wikipedia/en/c/c0/Murder_on_the_Orient_Express_First_Edition_Cover_1934.jpg");
         book1.setDescription("A Hercule Poirot Mystery");
         book1.setAuthor(author1);
@@ -129,7 +130,7 @@ public class BookDataLoader implements CommandLineRunner {
 
         Book book2 = new Book();
         book2.setTitle("Harry Potter and the Philosopher's Stone");
-        book2.setIsbn(978074);
+        book2.setIsbn("9780439362139");
         book2.setPicture("https://upload.wikimedia.org/wikipedia/en/6/6b/Harry_Potter_and_the_Philosopher%27s_Stone_Book_Cover.jpg");
         book2.setDescription("The first book in the Harry Potter series");
         book2.setAuthor(author2);
@@ -139,7 +140,7 @@ public class BookDataLoader implements CommandLineRunner {
 
         Book book3 = new Book();
         book3.setTitle("The Shining");
-        book3.setIsbn(978038);
+        book3.setIsbn("9780385121675");
         book3.setPicture("https://upload.wikimedia.org/wikipedia/en/4/4c/Shiningnovel.jpg");
         book3.setDescription("A horror novel by Stephen King");
         book3.setAuthor(author3);
@@ -149,7 +150,7 @@ public class BookDataLoader implements CommandLineRunner {
 
         Book book4 = new Book();
         book4.setTitle("The Handmaid's Tale");
-        book4.setIsbn(978038);
+        book4.setIsbn("9780385539241");
         book4.setPicture("https://upload.wikimedia.org/wikipedia/en/1/18/TheHandmaidsTale%281stEd%29.jpg");
         book4.setDescription("A dystopian novel by Margaret Atwood");
         book4.setAuthor(author4);
@@ -159,7 +160,7 @@ public class BookDataLoader implements CommandLineRunner {
 
         Book book5 = new Book();
         book5.setTitle("Carrie");
-        book5.setIsbn(9780307);
+        book5.setIsbn("9780307348074");
         book5.setPicture("https://upload.wikimedia.org/wikipedia/en/3/31/Carrienovel.jpg");
         book5.setDescription("A horror novel by Stephen King");
         book5.setAuthor(author3);
@@ -169,7 +170,7 @@ public class BookDataLoader implements CommandLineRunner {
 
         Book book6 = new Book();
         book6.setTitle("The Stand");
-        book6.setIsbn(978038);
+        book6.setIsbn("9780385121682");
         book6.setPicture("https://upload.wikimedia.org/wikipedia/en/9/96/The_Stand_cover.jpg");
         book6.setDescription("A post-apocalyptic horror novel by Stephen King");
         book6.setAuthor(author3);
@@ -179,7 +180,7 @@ public class BookDataLoader implements CommandLineRunner {
 
         Book book7 = new Book();
         book7.setTitle("Alias Grace");
-        book7.setIsbn(978038);
+        book7.setIsbn("9780385490443");
         book7.setPicture("https://upload.wikimedia.org/wikipedia/en/e/e1/AliasGrace.jpg");
         book7.setDescription("A historical fiction novel by Margaret Atwood");
         book7.setAuthor(author4);
@@ -189,7 +190,7 @@ public class BookDataLoader implements CommandLineRunner {
 
         Book book8 = new Book();
         book8.setTitle("The Dark Tower I: The Gunslinger");
-        book8.setIsbn(9780451);
+        book8.setIsbn("9780452279605");
         book8.setPicture("https://upload.wikimedia.org/wikipedia/en/d/db/The_Gunslinger.jpg");
         book8.setDescription("A dark fantasy novel by Stephen King");
         book8.setAuthor(author3);
@@ -199,7 +200,7 @@ public class BookDataLoader implements CommandLineRunner {
 
         Book book9 = new Book();
         book9.setTitle("Oryx and Crake");
-        book9.setIsbn(9780385);
+        book9.setIsbn("9780385503853");
         book9.setPicture("https://upload.wikimedia.org/wikipedia/en/c/cd/OryxAndCrake.jpg");
         book9.setDescription("A science fiction novel by Margaret Atwood");
         book9.setAuthor(author4);
@@ -209,7 +210,7 @@ public class BookDataLoader implements CommandLineRunner {
 
         Book book10 = new Book();
         book10.setTitle("The Lord of the Rings");
-        book10.setIsbn(9780261);
+        book10.setIsbn("9780261103689");
         book10.setPicture("https://upload.wikimedia.org/wikipedia/en/e/e9/First_Single_Volume_Edition_of_The_Lord_of_the_Rings.gif");
         book10.setDescription("An epic high fantasy novel");
         book10.setAuthor(author5);

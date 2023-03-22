@@ -73,7 +73,7 @@
           var option = document.createElement("option");
           option.disabled = false;
           option.value = publisher.id;
-          option.text = publisher.firstName + " " + publisher.lastName;
+          option.text = publisher.name;
           dropdown.appendChild(option);
         });
       });
@@ -91,7 +91,7 @@
           row += "<td>" + book.isbn + "</td>";
           row += "<td>" + book.description + "</td>";
           row += "<td>" + book.author.firstName + ' '+ book.author.lastName + "</td>";
-          row += "<td>" + book.publisher.firstName + ' '+ book.publisher.lastName + "</td>";
+          row += "<td>" + book.publisher.name+"</td>";
           row += "<td>";
           book.genres.forEach(function(genre){
             row += genre.name +",";

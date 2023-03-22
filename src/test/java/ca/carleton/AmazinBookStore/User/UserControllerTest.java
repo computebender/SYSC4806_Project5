@@ -15,6 +15,8 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -49,6 +51,7 @@ public class UserControllerTest {
         testUser.setLastName("Doe");
         testUser.setEmail("johndoe@example.com");
         testUser.setPassword("password");
+        testUser.setPurchaseHistory(new ArrayList<>());
         testUser = userRepository.save(testUser);
     }
 
@@ -64,6 +67,7 @@ public class UserControllerTest {
         newUser.setLastName("Doe");
         newUser.setEmail("janedoe@example.com");
         newUser.setPassword("password");
+        newUser.setPurchaseHistory(new ArrayList<>());
 
         TestObjectMapper objectMapper = new TestObjectMapper();
         try {
