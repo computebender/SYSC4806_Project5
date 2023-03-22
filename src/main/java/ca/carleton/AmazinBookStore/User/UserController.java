@@ -1,8 +1,5 @@
 package ca.carleton.AmazinBookStore.User;
 
-import ca.carleton.AmazinBookStore.Author.Author;
-import ca.carleton.AmazinBookStore.ShoppingCart.ShoppingCart;
-import ca.carleton.AmazinBookStore.ShoppingCart.ShoppingCartService;
 import jakarta.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -18,22 +15,13 @@ public class UserController {
 
     private UserService userService;
 
-    private ShoppingCartService shoppingCartService;
-
     @Autowired
-    public UserController(UserService userService, ShoppingCartService shoppingCartService) {
-        this.shoppingCartService = shoppingCartService;
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping("")
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        ShoppingCart shoppingCart = new ShoppingCart();
-        ShoppingCart shoppingCart1 = shoppingCartService.createShoppingCart(shoppingCart);
-
-        //set the author of the book to the one gathered
-        user.setShoppingCart(shoppingCart1);
-
         User createdUser = userService.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }

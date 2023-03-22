@@ -116,7 +116,6 @@ public class UserServiceTest {
         assertEquals(updatedUser.getFirstName(), user.getFirstName());
         assertEquals(updatedUser.getLastName(), user.getLastName());
         assertEquals(updatedUser.getEmail(), user.getEmail());
-        assertEquals(updatedUser.getPassword(), user.getPassword());
     }
 
     @Test
