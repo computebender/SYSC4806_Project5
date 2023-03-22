@@ -2,6 +2,10 @@ package ca.carleton.AmazinBookStore;
 
 import ca.carleton.AmazinBookStore.Author.Author;
 import ca.carleton.AmazinBookStore.Book.Book;
+import ca.carleton.AmazinBookStore.Bookstore.Bookstore;
+import ca.carleton.AmazinBookStore.Bookstore.BookstoreRepository;
+import ca.carleton.AmazinBookStore.Listing.Listing;
+import ca.carleton.AmazinBookStore.Listing.ListingRepository;
 import ca.carleton.AmazinBookStore.Publisher.Publisher;
 import ca.carleton.AmazinBookStore.Author.AuthorRepository;
 import ca.carleton.AmazinBookStore.Book.BookRepository;
@@ -11,6 +15,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class SampleDataLoader implements CommandLineRunner {
     @Autowired
@@ -18,11 +25,15 @@ public class SampleDataLoader implements CommandLineRunner {
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
     private final PublisherRepository publisherRepository;
+    private final BookstoreRepository bookstoreRepository;
+    private final ListingRepository listingRepository;
 
-    public SampleDataLoader(AuthorRepository authorRepository, BookRepository bookRepository, PublisherRepository publisherRepository) {
+    public SampleDataLoader(AuthorRepository authorRepository, BookRepository bookRepository, PublisherRepository publisherRepository, BookstoreRepository bookstoreRepository, ListingRepository listingRepository) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
         this.publisherRepository = publisherRepository;
+        this.bookstoreRepository = bookstoreRepository;
+        this.listingRepository = listingRepository;
     }
 
     @Override
@@ -57,19 +68,19 @@ public class SampleDataLoader implements CommandLineRunner {
 
         // create publishers
         Publisher publisher1 = new Publisher();
-        publisher1.setFirstName("HarperCollins");
+        publisher1.setName("HarperCollins");
         publisherRepository.save(publisher1);
 
         Publisher publisher2 = new Publisher();
-        publisher2.setFirstName("Scholastic");
+        publisher2.setName("Scholastic");
         publisherRepository.save(publisher2);
 
         Publisher publisher3 = new Publisher();
-        publisher3.setFirstName("Penguin Random House");
+        publisher3.setName("Penguin Random House");
         publisherRepository.save(publisher3);
 
         Publisher publisher4 = new Publisher();
-        publisher4.setFirstName("Simon & Schuster");
+        publisher4.setName("Simon & Schuster");
         publisherRepository.save(publisher4);
 
         // create books and associate with authors and publishers
@@ -162,5 +173,52 @@ public class SampleDataLoader implements CommandLineRunner {
         book10.setAuthor(author1);
         book10.setPublisher(publisher1);
         bookRepository.save(book10);
+
+        //Create bookstores
+        Bookstore bookstore = new Bookstore();
+        bookstore.setbookstoreName("Amazin");
+        bookstore.setListings(new ArrayList<Listing>());
+        Bookstore savedBookStored = bookstoreRepository.save(bookstore);
+
+        Bookstore bookstore2 = new Bookstore();
+        bookstore2.setbookstoreName("Penguin");
+        bookstore2.setListings(new ArrayList<Listing>());
+        Bookstore savedBookStored1 = bookstoreRepository.save(bookstore2);
+
+        //Create Listings
+        Listing listing = new Listing();
+        listing.setCopies(5);
+        listing.setPrice(25.0);
+        listing.setBook(book1);
+        listing.setLocation(savedBookStored);
+        listingRepository.save(listing);
+
+        Listing listing2 = new Listing();
+        listing2.setCopies(12);
+        listing2.setPrice(11.0);
+        listing2.setBook(book2);
+        listing2.setLocation(savedBookStored1);
+        listingRepository.save(listing2);
+
+        Listing listing3 = new Listing();
+        listing3.setCopies(31);
+        listing3.setPrice(12.0);
+        listing3.setBook(book3);
+        listing3.setLocation(savedBookStored);
+        listingRepository.save(listing3);
+
+        Listing listing4 = new Listing();
+        listing4.setCopies(23);
+        listing4.setPrice(15.0);
+        listing4.setBook(book4);
+        listing4.setLocation(savedBookStored1);
+        listingRepository.save(listing4);
+
+        Listing listing5 = new Listing();
+        listing5.setCopies(22);
+        listing5.setPrice(19.0);
+        listing5.setBook(book5);
+        listing5.setLocation(savedBookStored);
+        listingRepository.save(listing5);
     }
 }

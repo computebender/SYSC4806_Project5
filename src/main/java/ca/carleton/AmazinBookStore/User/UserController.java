@@ -1,12 +1,16 @@
 package ca.carleton.AmazinBookStore.User;
 
+import ca.carleton.AmazinBookStore.Author.Author;
+import ca.carleton.AmazinBookStore.ShoppingCart.ShoppingCart;
+import ca.carleton.AmazinBookStore.ShoppingCart.ShoppingCartService;
+import jakarta.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -14,15 +18,38 @@ public class UserController {
 
     private UserService userService;
 
+    private ShoppingCartService shoppingCartService;
+
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, ShoppingCartService shoppingCartService) {
+        this.shoppingCartService = shoppingCartService;
         this.userService = userService;
     }
 
     @PostMapping("")
     public ResponseEntity<User> createUser(@RequestBody User user) {
+        ShoppingCart shoppingCart = new ShoppingCart();
+        ShoppingCart shoppingCart1 = shoppingCartService.createShoppingCart(shoppingCart);
+
+        //set the author of the book to the one gathered
+        user.setShoppingCart(shoppingCart1);
+
         User createdUser = userService.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    }
+
+    @GetMapping("")
+    @RolesAllowed("ROLE_USER")
+    public ResponseEntity<User> getUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserEmail = auth.getName();
+        User user;
+        try {
+            user = userService.getUserByEmail(currentUserEmail);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/{id}")
@@ -34,28 +61,6 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(user);
-    }
-
-    /*
-    Temp endpoint to be used until login works
-    TODO: remove
-     */
-    @GetMapping("/email/{email}")
-    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
-        User user;
-        try {
-            user = userService.getUserByEmail(email);
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(user);
-    }
-
-
-    @GetMapping("")
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
     }
 
     @PutMapping("/{id}")

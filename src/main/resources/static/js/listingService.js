@@ -25,7 +25,7 @@ const listingService = (function() {
             });
         },
 
-        getListingById: function(listingId, successCallback) {
+        getListingById: function(listingId,successCallback) {
             $.ajax({
                 url: "/api/listings/" + listingId,
                 type: "GET",
