@@ -42,27 +42,28 @@
                 console.log(shoppingCart.items)
                 var shoppingCartTable = $("#shopping-cart-table");
                 shoppingCartTable.empty();
-                var row = '<tr><th>Book Title</th><th>Book Price</th><th>Quantity</th><th>Remove Item</th><</tr>';
+                var row = '<tr><th>Book Title</th><th>Price</th><th>Quantity</th><th>Total Price</th><th>Remove Item</th><</tr>';
                 shoppingCartTable.append(row)
                 var totalPrice = 0;
                 var totalQuantity = 0;
-                $.each(shoppingCart.items, function(index,cartitem){
+                $.each(shoppingCart.items, function(index){
                     totalPrice += shoppingCart.items[index].price;
                     totalQuantity += shoppingCart.items[index].quantity;
                     var row = "<tr>";
                     row += "<td>" + shoppingCart.items[index].bookListing.book.title + "</td>";
-                    row += "<td>" +"$"+ shoppingCart.items[index].price + "</td>";
+                    row += "<td>" +"$"+  shoppingCart.items[index].bookListing.price + "</td>";
                     row += "<td>"
                        + "<button class='btn btn-light' onclick=decreaseQuantity("+shoppingCart.items[index].id+")>-</button>"
                         + " " + shoppingCart.items[index].quantity + " "
                         + "<button class='btn btn-light' onclick=increaseQuantity("+shoppingCart.items[index].id+")>+</button>" +"</td>";
+                    row += "<td>" +"$"+ shoppingCart.items[index].price + "</td>";
 
                     row += "</td>";
                     row += "<td><button class='btn btn-danger' onclick='removeItem("+shoppingCart.items[index].id+")'>Remove Item</button></td>";
                     row += "</tr>";
                     shoppingCartTable.append(row);
                 })
-                var row = `<tr><th>Totals</th><th>$ ${totalPrice}</th><th>${totalQuantity}</th><th></th></tr>`;
+                var row = `<tr><th>Totals</th><th>$ ${totalPrice}</th><th>${totalQuantity}</th><th></th><th></th></tr>`;
                 shoppingCartTable.append(row);
             });
         });
@@ -224,7 +225,8 @@
       <th>Title</th>
       <th>Price</th>
       <th>Quantity</th>
-      <th>Remove Item</th>
+        <th>Total Price</th>
+        <th>Remove Item</th>
     </tr>
     </thead>
     <tbody>

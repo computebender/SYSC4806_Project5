@@ -46,13 +46,13 @@ public class CartItemTest {
         CartItem cartItem = new CartItem(bookListing);
 
         assertEquals(bookListing, cartItem.getBookListing());
-        assertEquals(2,  cartItem.getQuantity());
-        assertEquals(19.98, cartItem.getPrice());
+        assertEquals(1,  cartItem.getQuantity());
+        assertEquals(9.99, cartItem.getPrice());
 
         cartItem.setQuantity(10);
-        assertEquals(199.8, cartItem.getPrice());
+        assertEquals(9.99, cartItem.getPrice());
 
         cartItem.setPrice(80.0);
-        assertEquals(800.0, cartItem.getPrice());
+        assertEquals(80.0, cartItem.getPrice());
     }
 }

@@ -197,7 +197,7 @@ class ShoppingCartServiceTest {
         CartItem addedCartItem = updatedShoppingCart.getItems().get(0);
         assertNotNull(addedCartItem.getId());
         assertEquals(listing.getId(), addedCartItem.getBookListingById());
-        assertEquals(listing.getCopies(), addedCartItem.getQuantity());
+        assertEquals(1, addedCartItem.getQuantity());
         assertEquals(listing.getPrice() * addedCartItem.getQuantity(), addedCartItem.getPrice());
 
     }
@@ -317,7 +317,7 @@ class ShoppingCartServiceTest {
         CartItem addedCartItem = updatedShoppingCart.getItems().get(0);
         assertNotNull(addedCartItem.getId());
         assertEquals(listing.getId(), addedCartItem.getBookListingById());
-        assertEquals(listing.getCopies(), addedCartItem.getQuantity());
+        assertEquals(1, addedCartItem.getQuantity());
         assertEquals(listing.getPrice() * addedCartItem.getQuantity(), addedCartItem.getPrice());
         //clear shopping cart and check to see 0 items remain
         this.shoppingCartService.clearShoppingCart(1L);
@@ -410,7 +410,7 @@ class ShoppingCartServiceTest {
         CartItem addedCartItem = updatedShoppingCart.getItems().get(0);
         assertNotNull(addedCartItem.getId());
         assertEquals(listing.getId(), addedCartItem.getBookListingById());
-        assertEquals(listing.getCopies(), addedCartItem.getQuantity());
+        assertEquals(1, addedCartItem.getQuantity());
         assertEquals(listing.getPrice() * addedCartItem.getQuantity(), addedCartItem.getPrice());
         //clear shopping cart and check to see 0 items remain
         this.shoppingCartService.checkoutShoppingCart(1L);

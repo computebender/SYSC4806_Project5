@@ -27,6 +27,7 @@
         public ResponseEntity<ShoppingCart> createCart(@PathVariable Long id) {
             List<CartItem> items = new ArrayList<>();
             ShoppingCart shoppingCart = new ShoppingCart();
+            shoppingCart.setItems(items);
             ShoppingCart shoppingCart1 = this.shoppingCartService.createShoppingCart(shoppingCart);
             return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCart1);
         }

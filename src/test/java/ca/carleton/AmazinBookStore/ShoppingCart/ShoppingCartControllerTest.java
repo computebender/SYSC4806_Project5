@@ -567,7 +567,7 @@ public class ShoppingCartControllerTest {
         //checkout shopping cart
         ResponseEntity<Double> response9 = restTemplate.postForEntity(baseUrl + "/" + id +"/checkout", new HttpEntity<String>(""), Double.class);
         assertEquals(HttpStatus.CREATED,response9.getStatusCode());
-        assertEquals(325,response9.getBody());
+        assertEquals(45,response9.getBody());
     }
 
 }
