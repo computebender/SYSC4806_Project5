@@ -29,7 +29,8 @@
                 for (var i = 0; i < listings.length; i++) {
                     var book = listings[i].book;
                     const listingId = listings[i].id;
-                    var bookCard = listingsContainer.bookCard(book.title, book.author.firstName + " " + book.author.lastName, listings[i].price, book.picture, listingId);
+                    const bookstore = listings[i].location;
+                    var bookCard = listingsContainer.bookCard(book.title, book.author.firstName + " " + book.author.lastName, listings[i].price, book.picture, listingId, bookstore);
                     listingsContainer.append(bookCard);
                 }
             });
