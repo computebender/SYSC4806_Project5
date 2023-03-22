@@ -18,31 +18,42 @@ This group project is a web application that provides an online platform for sel
 
 
 ## UML Class Diagram
-![alt text](https://github.com/computebender/SYSC4806_Project5/blob/main/documentation/AmazinBookStore_UML_Class_Diagram_m2.png?raw=true)
+![alt text](https://github.com/computebender/SYSC4806_Project5/blob/main/documentation/AmazinBookStore_UML_Class_Diagram.png?raw=true)
 
 ## Milestone 2 Project Kanban Status
-| Todo        | In Progress | Done          |
-| :---        |    :----:   |          ---: |
-| Issue https://github.com/computebender/SYSC4806_Project5/issues/5   |        | Issue https://github.com/computebender/SYSC4806_Project5/issues/11   |
-| Issue https://github.com/computebender/SYSC4806_Project5/issues/12   |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/2      |
-| Issue https://github.com/computebender/SYSC4806_Project5/issues/76   |        | Issue https://github.com/computebender/SYSC4806_Project5/issues/1   |
-|    |        | Issue https://github.com/computebender/SYSC4806_Project5/issues/16     |
-|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/14|
-|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/10|
-|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/7|
-|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/21|
-|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/27|
-|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/3|
-|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/4|
-|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/19|
-|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/5|
-|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/26|
-|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/26|
-|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/26|
-|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/32|
-|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/29|
-|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/34|
-|     |      |          Issue https://github.com/computebender/SYSC4806_Project5/issues/33|
+| Todo        | In Progress |                                                               Done |
+| :---        |    :----:   |-------------------------------------------------------------------:|
+| Issue https://github.com/computebender/SYSC4806_Project5/issues/5   |        | Issue https://github.com/computebender/SYSC4806_Project5/issues/11 |
+| Issue https://github.com/computebender/SYSC4806_Project5/issues/12   |      |  Issue https://github.com/computebender/SYSC4806_Project5/issues/2 |
+| Issue https://github.com/computebender/SYSC4806_Project5/issues/76   |        |  Issue https://github.com/computebender/SYSC4806_Project5/issues/1 |
+|    |        | Issue https://github.com/computebender/SYSC4806_Project5/issues/16 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/14 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/10 |
+|     |      |  Issue https://github.com/computebender/SYSC4806_Project5/issues/7 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/21 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/27 |
+|     |      |  Issue https://github.com/computebender/SYSC4806_Project5/issues/3 |
+|     |      |  Issue https://github.com/computebender/SYSC4806_Project5/issues/4 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/19 |
+|     |      |  Issue https://github.com/computebender/SYSC4806_Project5/issues/5 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/26 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/26 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/32 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/29 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/34 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/33 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/29 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/36 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/44 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/42 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/43 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/13 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/74 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/55 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/58 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/60 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/69 |
+
 
 
 ## Milestone 1 Features
