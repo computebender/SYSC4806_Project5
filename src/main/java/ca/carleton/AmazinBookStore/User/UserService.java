@@ -58,7 +58,8 @@ public class UserService {
         }
 
         if (Objects.nonNull(partialUser.getPassword())) {
-            user.setPassword(partialUser.getPassword());
+            String hashedPassword = passwordEncoder.encode(partialUser.getPassword());
+            user.setPassword(hashedPassword);
         }
 
         if (Objects.nonNull(partialUser.getFirstName())) {

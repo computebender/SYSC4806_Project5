@@ -1,6 +1,5 @@
 package ca.carleton.AmazinBookStore.User;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -15,7 +14,7 @@ public class User {
     @Column(unique = true)
     private String email;
 
-    @JsonIgnore
+
     private String password;
 
     private String firstName;

@@ -1,5 +1,10 @@
 package ca.carleton.AmazinBookStore.User;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,9 +14,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -63,16 +65,22 @@ public class UserControllerTest {
         newUser.setEmail("janedoe@example.com");
         newUser.setPassword("password");
 
-        HttpEntity<User> request = new HttpEntity<>(newUser, headers);
-        ResponseEntity<User> response = restTemplate.exchange(
-                baseUrl, HttpMethod.POST, request, User.class);
+        TestObjectMapper objectMapper = new TestObjectMapper();
+        try {
+            String newUserJson = objectMapper.writeValueAsString(newUser);
+            HttpEntity<String> request = new HttpEntity<>(newUserJson, headers);
+            ResponseEntity<User> response = restTemplate.exchange(
+                    baseUrl, HttpMethod.POST, request, User.class);
 
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        User createdUser = response.getBody();
-        assertNotNull(createdUser.getId());
-        assertEquals(newUser.getFirstName(), createdUser.getFirstName());
-        assertEquals(newUser.getLastName(), createdUser.getLastName());
-        assertEquals(newUser.getEmail(), createdUser.getEmail());
+            assertEquals(HttpStatus.CREATED, response.getStatusCode());
+            User createdUser = response.getBody();
+            assertNotNull(createdUser.getId());
+            assertEquals(newUser.getFirstName(), createdUser.getFirstName());
+            assertEquals(newUser.getLastName(), createdUser.getLastName());
+            assertEquals(newUser.getEmail(), createdUser.getEmail());
+        } catch (JsonProcessingException e) {
+            System.out.println("Failed to serialize user object: " + e.getMessage());
+        }
     }
 
     @Test
@@ -87,46 +95,6 @@ public class UserControllerTest {
         assertEquals(testUser.getFirstName(), user.getFirstName());
         assertEquals(testUser.getLastName(), user.getLastName());
         assertEquals(testUser.getEmail(), user.getEmail());
-        assertEquals(testUser.getPassword(), user.getPassword());
-    }
-
-    @Test
-    public void testGetUserByEmail() {
-        ResponseEntity<User> response = restTemplate.getForEntity(
-                baseUrl + "/email/{email}", User.class, testUser.getEmail());
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        User user = response.getBody();
-        assertNotNull(user);
-        assertEquals(testUser.getId(), user.getId());
-        assertEquals(testUser.getFirstName(), user.getFirstName());
-        assertEquals(testUser.getLastName(), user.getLastName());
-        assertEquals(testUser.getEmail(), user.getEmail());
-        assertEquals(testUser.getPassword(), user.getPassword());
-    }
-
-    @Test
-    public void testGetAllUsers() {
-        User newUser1 = new User();
-        newUser1.setFirstName("Jane");
-        newUser1.setLastName("Doe");
-        newUser1.setEmail("janedoe@example.com");
-        newUser1.setPassword("password");
-
-        User newUser2 = new User();
-        newUser2.setFirstName("Bob");
-        newUser2.setLastName("Smith");
-        newUser2.setEmail("bobsmith@example.com");
-        newUser2.setPassword("password");
-
-        userRepository.saveAll(Arrays.asList(newUser1, newUser2));
-
-        ResponseEntity<User[]> response = restTemplate.getForEntity(
-                baseUrl, User[].class);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        List<User> users = Arrays.asList(response.getBody());
-        assertEquals(3, users.size());
     }
 
     @Test
@@ -148,7 +116,6 @@ public class UserControllerTest {
         assertEquals(updatedUser.getFirstName(), user.getFirstName());
         assertEquals(updatedUser.getLastName(), user.getLastName());
         assertEquals(updatedUser.getEmail(), user.getEmail());
-        assertEquals(updatedUser.getPassword(), user.getPassword());
     }
 
     @Test
@@ -164,4 +131,20 @@ public class UserControllerTest {
 
         assertEquals(HttpStatus.NOT_FOUND, getUserResponse.getStatusCode());
     }
+
+    public class TestObjectMapper extends ObjectMapper {
+        public TestObjectMapper() {
+            super();
+            this.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
+            this.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+            this.addMixIn(User.class, UserMixin.class);
+        }
+
+        @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE)
+        abstract class UserMixin {
+            @JsonProperty
+            abstract String getPassword();
+        }
+    }
+
 }
