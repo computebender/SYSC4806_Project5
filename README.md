@@ -69,6 +69,7 @@ This group project is a web application that provides an online platform for sel
 - Once a user purchases a book, the associated listing quantity needs to be decreased.
 - Shopping cart logic to display appropriate banner message if shopping cart is empty.
 - Additonal authenticaton/authorization on endpoints.
+- Persistent database configuration.
 
 ## Environment Configurations
 Java Version: Java 17
