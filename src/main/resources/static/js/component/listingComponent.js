@@ -1,4 +1,4 @@
-$.fn.bookCard = function (title, author, price, coverUrl, listingId) {
+$.fn.bookCard = function (title, author, price, coverUrl, listingId, bookstore) {
     const defaultCover = 'https://blog.springshare.com/wp-content/uploads/2010/02/nc-md.gif';
     const cardStyle = {
         'width': '14rem'
@@ -30,6 +30,7 @@ $.fn.bookCard = function (title, author, price, coverUrl, listingId) {
     const titleEl = $('<h5>').addClass('card-title').text(title);
     const authorEl = $('<p>').addClass('card-text').text(author);
     const priceEl = $('<p>').addClass('card-text').text('$' + price);
+    const soldByEl = $('<p>').addClass('card-text').text('Sold by: ' + bookstore.bookstoreName);
     const buttonContainer = $('<div>').addClass('button-container').css(buttonContainerStyle);
     const buttonEl = $('<a>').addClass('btn btn-primary').text('View Listing').attr('href', '/listing?listing=' + listingId);
     const addCartButton = $('<a>').addClass('btn btn-primary').text('Add to Cart').attr('id', 'add-cart-btn');
@@ -38,6 +39,7 @@ $.fn.bookCard = function (title, author, price, coverUrl, listingId) {
     body.append(titleEl);
     body.append(authorEl);
     body.append(priceEl);
+    body.append(soldByEl);
     buttonContainer.append(buttonEl);
     buttonContainer.append(addCartButton);
     body.append(buttonContainer);
