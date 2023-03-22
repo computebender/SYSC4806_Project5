@@ -6,6 +6,7 @@ import ca.carleton.AmazinBookStore.Bookstore.Bookstore;
 import ca.carleton.AmazinBookStore.Bookstore.BookstoreService;
 import ca.carleton.AmazinBookStore.Listing.Listing;
 import ca.carleton.AmazinBookStore.Listing.ListingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -78,5 +79,17 @@ public class ListingController {
         }
         return ResponseEntity.noContent().build();
 
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Listing>> searchListings(@Param("bookstoreId") Long bookstoreId, @Param("authorId") Long authorId,
+                                                        @Param("genreId") Long genreId, @Param("bookId") Long bookId) {
+        List<Listing> listings;
+        try {
+            listings = this.listingService.searchListings(bookstoreId, authorId, genreId, bookId);
+        }  catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(listings);
     }
 }

@@ -55,7 +55,6 @@ public class Bookstore {
         }
     }
 
-
     public void removeListing(Long id) {
         for (Listing listing : listings) {
             if (listing.getId().equals(id)) {

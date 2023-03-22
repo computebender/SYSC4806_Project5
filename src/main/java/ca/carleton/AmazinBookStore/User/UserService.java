@@ -1,5 +1,7 @@
 package ca.carleton.AmazinBookStore.User;
 
+import ca.carleton.AmazinBookStore.ShoppingCart.CartRepository;
+import ca.carleton.AmazinBookStore.ShoppingCart.ShoppingCart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,16 +15,21 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private BCryptPasswordEncoder passwordEncoder;
+    private final CartRepository cartRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, CartRepository cartRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.cartRepository = cartRepository;
     }
 
     public User createUser(User user) {
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
+        ShoppingCart shoppingCart = new ShoppingCart();
+        ShoppingCart savedShoppingCart = cartRepository.save(shoppingCart);
+        user.setShoppingCart(savedShoppingCart);
         return userRepository.save(user);
     }
 

@@ -62,11 +62,6 @@ public class ListingControllerTest {
         ResponseEntity<Bookstore> responsebookstore1 = restTemplate.postForEntity(bookstoreUrl, requestbookstore1, Bookstore.class);
         Bookstore savedBookstore1 = responsebookstore1.getBody();
 
-        Book book1 = new Book();
-        HttpEntity<Book> requestbook1 = new HttpEntity<>(book1);
-        ResponseEntity<Book> responsebook1 = restTemplate.postForEntity(baseUrl, requestbook1, Book.class);
-        Book savedBook1 = responsebook1.getBody();
-
         Listing listing1 = new Listing(savedBookstore1, 25d, 3, savedBook);
         Listing listing2 = new Listing(savedBookstore1, 30d, 2, savedBook);
 
@@ -173,6 +168,47 @@ public class ListingControllerTest {
         restTemplate.delete(baseUrl + "/" + listingId);
         ResponseEntity<Listing> response = restTemplate.getForEntity(baseUrl + "/" + listingId, Listing.class);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    public void testSearchListings() {
+        Book savedBook = createBook();
+
+        Bookstore bookstore1 = new Bookstore();
+        bookstore1.setbookstoreName("John's Bookstore");
+        bookstore1.setId(1L);
+        HttpEntity<Bookstore> requestbookstore1 = new HttpEntity<>(bookstore1);
+        ResponseEntity<Bookstore> responsebookstore1 = restTemplate.postForEntity(bookstoreUrl, requestbookstore1, Bookstore.class);
+        Bookstore savedBookstore1 = responsebookstore1.getBody();
+
+        Bookstore bookstore2 = new Bookstore();
+        bookstore2.setbookstoreName("John's Bookstore");
+        bookstore2.setId(2L);
+        HttpEntity<Bookstore> requestbookstore2 = new HttpEntity<>(bookstore2);
+        ResponseEntity<Bookstore> responsebookstore2 = restTemplate.postForEntity(bookstoreUrl, requestbookstore2, Bookstore.class);
+        Bookstore savedBookstore2 = responsebookstore2.getBody();
+
+        Listing listing1 = new Listing(savedBookstore1, 25d, 3, savedBook);
+        Listing listing2 = new Listing(savedBookstore2, 30d, 2, savedBook);
+
+        HttpEntity<Listing> request1 = new HttpEntity<>(listing1);
+        ResponseEntity<Listing> response1 = restTemplate.postForEntity(baseUrl, request1, Listing.class);
+        Listing savedListing1 = response1.getBody();
+
+        HttpEntity<Listing> request2 = new HttpEntity<>(listing2);
+        ResponseEntity<Listing> response2 = restTemplate.postForEntity(baseUrl, request2, Listing.class);
+        Listing savedListing2 = response2.getBody();
+
+        ResponseEntity<List<Listing>> response = restTemplate.exchange(
+                baseUrl + "/search?bookstoreId=2&authorId=0&genreId=0&bookId=0",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Listing>>() {
+                });
+        List<Listing> listings = response.getBody();
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(1, listings.size());
+        assertEquals(listings.get(0).getLocation().getId(), 2L);
     }
 
     public Book createBook() {
