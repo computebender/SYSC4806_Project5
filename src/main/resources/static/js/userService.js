@@ -58,7 +58,7 @@ const userService = (function () {
         getUserRecommendation: function (userId, successCallback) {
             $.ajax({
                 url: "/api/users/" + userId+"/recommendations",
-                type: "DELETE",
+                type: "GET",
                 success: successCallback,
                 error: handleAjaxError
             });

@@ -42,7 +42,7 @@ public class UserDataLoader implements CommandLineRunner {
         user1.setPassword("password1");
         List<Listing> history1 = new ArrayList<>();
         history1.add(listingService.getListingById(1L));
-        history1.add(listingService.getListingById(2L));
+        history1.add(listingService.getListingById(3L));
         user1.setPurchaseHistory(history1);
         userService.createUser(user1);
 
@@ -51,10 +51,9 @@ public class UserDataLoader implements CommandLineRunner {
         user2.setLastName("Smith");
         user2.setEmail("jane.smith@example.com");
         user2.setPassword("password2");
-        /*List<Listing> history2 = new ArrayList<>();
-        history2.add(listingService.getListingById(1L));
-        System.out.println(history2);
-        user2.setPurchaseHistory(history2);*/
+        List<Listing> history2 = new ArrayList<>();
+        history2.add(listingService.getListingById(2L));
+        user2.setPurchaseHistory(history2);
         userService.createUser(user2);
 
         User user3 = new User();

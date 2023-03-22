@@ -32,6 +32,21 @@
                     listingsContainer.append(bookCard);
                 }
             });
+
+            userService.getCurrentUser(function(user)
+            {
+                console.log(user);
+                userService.getUserRecommendation(user.id, function (data) {
+                    console.log(data.recommendations);
+                    var recommendationContainer = $('#recommendationContainer');
+                    for (var i = 0; i < data.recommendations.length; i++) {
+                        var recommendation = data.recommendations[i];
+                        console.log(recommendation);
+                        var recommendationCard = recommendationContainer.bookCard(recommendation.title, recommendation.author.firstName + " " + recommendation.author.lastName, 0, recommendation.picture);
+                        recommendationContainer.append(recommendationCard);
+                    }
+                });
+            });
         });
     </script>
 </head>
@@ -45,6 +60,12 @@
         Browse our vast collection of books and find your next favorite read.
         Happy reading!
     </p>
+</div>
+<div class="container">
+    <h1>Recommendations</h1>
+    <div id="recommendationContainer" class="d-flex flex-row flex-wrap justify-content-start gap-3">
+
+    </div>
 </div>
 <div class="container">
     <h1>Bookstore</h1>
