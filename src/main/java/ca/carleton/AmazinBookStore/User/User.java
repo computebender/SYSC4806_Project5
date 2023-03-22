@@ -3,6 +3,7 @@ package ca.carleton.AmazinBookStore.User;
 import ca.carleton.AmazinBookStore.Book.Book;
 import ca.carleton.AmazinBookStore.Listing.Listing;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -42,7 +43,7 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getPassword() {
         return password;
     }
