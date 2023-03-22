@@ -30,7 +30,7 @@ public class CartItemTest {
         genres.add(genre);
 
         Book book = new Book();
-        book.setIsbn(12345);
+        book.setIsbn("12345");
         book.setDescription("Description");
         book.setPicture("Picture");
         book.setAuthor(author);

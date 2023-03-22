@@ -1,5 +1,7 @@
 package ca.carleton.AmazinBookStore.User;
 
+import ca.carleton.AmazinBookStore.Listing.Listing;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.List;

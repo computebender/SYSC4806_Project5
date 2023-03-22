@@ -147,7 +147,7 @@ class ShoppingCartServiceTest {
 
         //Create Book
         Book book = new Book();
-        book.setIsbn(12345);
+        book.setIsbn("12345");
         book.setDescription("Description");
         book.setPicture("Picture");
         book.setAuthor(savedAuthor);
@@ -156,7 +156,7 @@ class ShoppingCartServiceTest {
         book.setTitle("Title");
 
         Book book2 = new Book();
-        book2.setIsbn(12345);
+        book2.setIsbn("12345");
         book2.setDescription("Description");
         book2.setPicture("Picture");
         book2.setAuthor(savedAuthor);
@@ -257,7 +257,7 @@ class ShoppingCartServiceTest {
 
         //Create Book
         Book book = new Book();
-        book.setIsbn(12345);
+        book.setIsbn("12345");
         book.setDescription("Description");
         book.setPicture("Picture");
         book.setAuthor(savedAuthor);
@@ -266,7 +266,7 @@ class ShoppingCartServiceTest {
         book.setTitle("Title");
 
         Book book2 = new Book();
-        book2.setIsbn(12345);
+        book2.setIsbn("12345");
         book2.setDescription("Description");
         book2.setPicture("Picture");
         book2.setAuthor(savedAuthor);
@@ -350,7 +350,7 @@ class ShoppingCartServiceTest {
 
         //Create Book
         Book book = new Book();
-        book.setIsbn(12345);
+        book.setIsbn("12345");
         book.setDescription("Description");
         book.setPicture("Picture");
         book.setAuthor(savedAuthor);
@@ -359,7 +359,7 @@ class ShoppingCartServiceTest {
         book.setTitle("Title");
 
         Book book2 = new Book();
-        book2.setIsbn(12345);
+        book2.setIsbn("12345");
         book2.setDescription("Description");
         book2.setPicture("Picture");
         book2.setAuthor(savedAuthor);

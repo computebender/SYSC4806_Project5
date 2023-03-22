@@ -212,7 +212,7 @@ public class ListingControllerTest {
         book.setPublisher(savedPublisher1);
         book.setGenres(genres);
         book.setDescription("This is the Description");
-        book.setIsbn(123556);
+        book.setIsbn("123556");
         book.setPicture("picture/url");
         book.setTitle("Lord of the Rings");
         book.setDescription("Adventure story of a hobbit");
