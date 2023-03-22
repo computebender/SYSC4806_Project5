@@ -1,8 +1,6 @@
 package ca.carleton.AmazinBookStore.User;
 
-import ca.carleton.AmazinBookStore.Book.Book;
 import ca.carleton.AmazinBookStore.Listing.Listing;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -25,7 +23,7 @@ public class User {
 
     private String lastName;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Listing.class)
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, targetEntity = Listing.class)
     private List<Listing> purchaseHistory;
 
     public Long getId() {
@@ -43,6 +41,7 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getPassword() {
         return password;

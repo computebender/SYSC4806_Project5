@@ -45,11 +45,16 @@ public class Bookstore {
         return listings;
     }
 
+    public void setListings(List<Listing> listings) {
+        this.listings = listings;
+    }
+
     public void addListing(Listing listing) {
         if (listing != null) {
             listings.add(listing);
         }
     }
+
 
     public void removeListing(Long id) {
         for (Listing listing : listings) {
@@ -58,5 +63,4 @@ public class Bookstore {
             }
         }
     }
-
 }

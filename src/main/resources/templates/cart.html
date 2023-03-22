@@ -10,6 +10,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
             crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 
     <!--Services-->
     <script src="/js/authorService.js"></script>
@@ -20,14 +22,242 @@
     <script src="/js/publisherService.js"></script>
     <script src="/js/userService.js"></script>
     <script src="/js/authService.js"></script>
+    <script src="/js/component/listingComponent.js"></script>
+    <script src="/js/cartService.js"></script>
+    <script src="/js/listingService.js"></script>
 
+  <script>
+    $(document).ready(function() {
+        userService.getCurrentUser(function (user) {
+            console.log(user)
+        });
+        getAllListings();
+    });
+    function getAllListings() {
+        userService.getCurrentUser(function (user) {
+            console.log(user.shoppingCart.id)
+            cartService.getShoppingCartById(user.shoppingCart.id, function (shoppingCart){
+                console.log("Test Shopping Cart:")
+                console.log(shoppingCart)
+                console.log(shoppingCart.items)
+                var shoppingCartTable = $("#shopping-cart-table");
+                shoppingCartTable.empty();
+                var row = '<tr><th>Book Title</th><th>Price</th><th>Quantity</th><th>Total Price</th><th>Remove Item</th><</tr>';
+                shoppingCartTable.append(row)
+                var totalPrice = 0;
+                var totalQuantity = 0;
+                $.each(shoppingCart.items, function(index){
+                    totalPrice += shoppingCart.items[index].price;
+                    totalQuantity += shoppingCart.items[index].quantity;
+                    var row = "<tr>";
+                    row += "<td>" + shoppingCart.items[index].bookListing.book.title + "</td>";
+                    row += "<td>" +"$"+  shoppingCart.items[index].bookListing.price + "</td>";
+                    row += "<td>"
+                       + "<button class='btn btn-light' onclick=decreaseQuantity("+shoppingCart.items[index].id+")>-</button>"
+                        + " " + shoppingCart.items[index].quantity + " "
+                        + "<button class='btn btn-light' onclick=increaseQuantity("+shoppingCart.items[index].id+")>+</button>" +"</td>";
+                    row += "<td>" +"$"+ shoppingCart.items[index].price + "</td>";
+
+                    row += "</td>";
+                    row += "<td><button class='btn btn-danger' onclick='removeItem("+shoppingCart.items[index].id+")'>Remove Item</button></td>";
+                    row += "</tr>";
+                    shoppingCartTable.append(row);
+                })
+                var row = `<tr><th>Totals</th><th>$ ${totalPrice}</th><th>${totalQuantity}</th><th></th><th></th></tr>`;
+                shoppingCartTable.append(row);
+            });
+        });
+    }
+    function removeItem(itemId){
+        userService.getCurrentUser(function (user) {
+            console.log("remove item")
+            cartService.removeItem(user.id, itemId, function (){
+                notificationService.addSuccessNotification("Item removed from Shopping Cart.");
+                getAllListings();
+            });
+        });
+    }
+
+    function increaseQuantity(itemId){
+        userService.getCurrentUser(function (user) {
+            cartService.getShoppingCartItemById(user.id, itemId, function (cartItem){
+                console.log("Testing retrieving cart item by id:")
+                console.log(cartItem)
+                var maxListings = cartItem.bookListing.copies;
+                var currentCopies = cartItem.quantity;
+                if(currentCopies+1<=maxListings){
+                    var updatedCartItem = {
+                        "id" : cartItem.id,
+                        "bookListing" : cartItem.bookListing,
+                        "bookListingById" : cartItem.bookListingById,
+                        "price" : cartItem.bookListing.price * (currentCopies + 1),
+                        "quantity" : cartItem.quantity + 1
+                    };
+                }else{
+                    console.log("Quantity Listing limit reached.")
+                }
+                console.log("Updated Cart Item:")
+                console.log(updatedCartItem)
+
+                cartService.updateItem(user.id,itemId,updatedCartItem, function (){
+                    getAllListings();
+                });
+            });
+        });
+    }
+    function decreaseQuantity(itemId){
+        userService.getCurrentUser(function (user) {
+            cartService.getShoppingCartItemById(user.id, itemId, function (cartItem){
+                console.log("Testing retrieving cart item by id:")
+                console.log(cartItem)
+                var min = 1;
+                var currentCopies = cartItem.quantity;
+                if(currentCopies-1>=min){
+                    var updatedCartItem = {
+                        "id" : cartItem.id,
+                        "bookListing" : cartItem.bookListing,
+                        "bookListingById" : cartItem.bookListingById,
+                        "price" : cartItem.bookListing.price * (currentCopies - 1),
+                        "quantity" : cartItem.quantity - 1
+                    };
+                }else{
+                    console.log("Cannot purchase less than 1 book.")
+                }
+                console.log("Updated Cart Item:")
+                console.log(updatedCartItem)
+                cartService.updateItem(user.id,itemId,updatedCartItem, function (){
+                    getAllListings();
+                });
+            });
+        });
+    }
+    function clearCart(){
+        userService.getCurrentUser(function (user) {
+            cartService.clearShoppingCart(user.id, function (){
+                notificationService.addSuccessNotification("All items removed from Shopping Cart.");
+                getAllListings();
+            });
+        });
+    }
+
+    function checkoutCart(){
+        userService.getCurrentUser(function (user) {
+        cartService.checkoutShoppingCart(user.id, function (){
+            notificationService.addSuccessNotification("Checkout successful.");
+            getAllListings();
+        });
+        });
+    }
+
+  </script>
+  <!--  WIP - Reusable listing component-->
 </head>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  h1 {
+    text-align: center;
+    margin: 30px 0;
+  }
+  table {
+    border-collapse: collapse;
+    width: 80%;
+    margin: 0 auto;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  th, td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  td:first-child {
+    font-weight: bold;
+  }
+  input[type="number"] {
+    width: 50px;
+    text-align: center;
+    font-size: 16px;
+  }
+  button[type="submit"] {
+    border: none;
+    background-color: #428bca;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  button[type="submit"]:hover {
+    background-color: #3071a9;
+  }
+  .actions {
+    text-align: center;
+    margin-top: 30px;
+  }
+  .actions button {
+    margin: 0 10px;
+  }
+  .btn-form {
+    display: flex;
+    justify-content: center;
+      margin-top: 40px;
+  }
+  .btn-sub {
+    margin-right: 10px;
+  }
+</style>
 <body>
 <div th:replace="fragments/navbar :: navbar">
 </div>
 <div class="container">
-    <h1>Cart</h1>
+  <h1>Shopping Cart Checkout</h1>
+  <table id="shopping-cart-table">
+    <thead>
+    <tr>
+      <th>Title</th>
+      <th>Price</th>
+      <th>Quantity</th>
+        <th>Total Price</th>
+        <th>Remove Item</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+<!--  <div class="add-form">-->
+<!--    <form method="post" th:action="@{/cart/add-item}">-->
+<!--      <label for="bookId">Book ID:</label>-->
+<!--      <input type="text" id="bookId" name="bookId"/>-->
+<!--      <label for="title">Title:</label>-->
+<!--      <input type="text" id="title" name="title"/>-->
+<!--      <label for="price">Price:</label>-->
+<!--      <input type="number" id="price" name="price"/>-->
+<!--      <label for="quantity">Quantity:</label>-->
+<!--      <input type="number" id="quantity" name="quantity"/>-->
+<!--      <button type="submit">Add to Cart</button>-->
+<!--    </form>-->
+<!--  </div>-->
+  <div class="btn-form">
+    <form id="clear-form" onsubmit="clearCart(); return false;">
+      <button class="btn-sub" type="submit">Clear Cart</button>
+    </form>
+    <form id="checkout-form" onsubmit="checkoutCart(); return false;">
+      <button type="submit">Checkout</button>
+    </form>
+  </div>
 </div>
-<div th:replace="fragments/footer :: footer"></div>
+
+<div id="listingsContainer" class="d-flex flex-row flex-wrap justify-content-center gap-3">
+
+</div>
+<div th:replace="fragments/footer :: footer"> </div>
 </body>
 </html>

@@ -1,7 +1,5 @@
 package ca.carleton.AmazinBookStore.User;
 
-import ca.carleton.AmazinBookStore.Book.Book;
-import ca.carleton.AmazinBookStore.Genre.Genre;
 import ca.carleton.AmazinBookStore.Listing.Listing;
 import ca.carleton.AmazinBookStore.Listing.ListingService;
 import ca.carleton.AmazinBookStore.User.BookRecommendation.BookRecommendation;
@@ -72,17 +70,6 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(recommendations);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        User user;
-        try {
-            user = userService.getUserById(id);
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(user);
     }
 
     @PutMapping("/{id}")
