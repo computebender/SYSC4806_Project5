@@ -22,7 +22,7 @@ public class BookTest {
 
     @Test
     public void testGetIsbn() {
-        Assertions.assertEquals(12345, book.getIsbn());
+        Assertions.assertEquals("12345", book.getIsbn());
     }
 
     @Test

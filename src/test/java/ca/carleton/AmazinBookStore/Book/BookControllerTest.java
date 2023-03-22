@@ -161,7 +161,7 @@ public class BookControllerTest {
         ResponseEntity<Book> response = restTemplate.postForEntity(baseUrl, request, Book.class);
         Book savedBook = response.getBody();
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(123556, savedBook.getIsbn());
+        assertEquals("123556", savedBook.getIsbn());
         assertEquals("Lord of the Rings", savedBook.getTitle());
     }
 
@@ -215,7 +215,7 @@ public class BookControllerTest {
         ResponseEntity<Book> response = restTemplate.getForEntity(baseUrl + "/" + book1.getId(), Book.class);
         Book book = response.getBody();
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(123556, book.getIsbn());
+        assertEquals("123556", book.getIsbn());
         assertEquals("Lord of the Rings", book.getTitle());
     }
 
@@ -286,7 +286,7 @@ public class BookControllerTest {
                 Book.class);
         Book updatedBook = response.getBody();
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(123556, updatedBook.getIsbn());
+        assertEquals("123556", updatedBook.getIsbn());
         assertEquals("Lord of the Rings", updatedBook.getTitle());
     }
 
