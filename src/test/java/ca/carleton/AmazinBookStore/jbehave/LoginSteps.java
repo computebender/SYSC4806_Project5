@@ -2,17 +2,19 @@ package ca.carleton.AmazinBookStore.jbehave;
 
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
+import org.jbehave.core.annotations.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.web.client.RestTemplate;
 
 import static org.junit.Assert.assertEquals;
 
 public class LoginSteps {
 
+
     @Given("I am on the login page")
     public void goToLoginPage() {
-//        System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
-//        driver = new ChromeDriver();
-//        driver.get("https://example.com/login");
+        System.out.println("Going to login page?");
     }
 
     @When("I enter valid credentials")
