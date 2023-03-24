@@ -4,11 +4,12 @@ import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
 import static org.junit.Assert.assertEquals;
-
+@SpringBootApplication
 public class LoginSteps {
 
 
@@ -45,6 +46,7 @@ public class LoginSteps {
 //        String actualMessage = welcomeMessage.getText();
 //        assertEquals("Welcome, myusername!", actualMessage);
 //        driver.quit();
+        System.out.println("Welcome msg");
     }
 
     @Then("I should see an error message on the login page")
