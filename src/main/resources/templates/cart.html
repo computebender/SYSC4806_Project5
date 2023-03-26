@@ -49,7 +49,7 @@
                 $.each(shoppingCart.items, function(index){
                     totalPrice += shoppingCart.items[index].price;
                     totalQuantity += shoppingCart.items[index].quantity;
-                    var row = "<tr>";
+                    var row = "<tr id='index'>";
                     row += "<td>" + shoppingCart.items[index].bookListing.book.title + "</td>";
                     row += "<td>" +"$"+  shoppingCart.items[index].bookListing.price.toFixed(2) + "</td>";
                     row += "<td>"
