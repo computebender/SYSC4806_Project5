@@ -24,6 +24,8 @@ import ca.carleton.AmazinBookStore.Listing.ListingService;
 import ca.carleton.AmazinBookStore.Publisher.Publisher;
 import ca.carleton.AmazinBookStore.Publisher.PublisherRepository;
 import ca.carleton.AmazinBookStore.Publisher.PublisherService;
+import ca.carleton.AmazinBookStore.User.UserRepository;
+import ca.carleton.AmazinBookStore.User.UserService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,9 +72,12 @@ public class ShoppingCartWebTest {
     private PublisherService publisherService;
 
     private GenreService genreService;
+    @Autowired
+    private UserService userRepository;
+
     @BeforeEach
     void setUp() {
-        this.shoppingCartService = new ShoppingCartService(cartRepository, itemRepository);
+        this.shoppingCartService = new ShoppingCartService(cartRepository, itemRepository, userRepository);
         this.bookstoreService = new BookstoreService(bookstoreRepository,listingRepository);
         this.listingService = new ListingService(listingRepository);
         this.bookService = new BookService(bookRepository);
