@@ -63,7 +63,7 @@ public class BookRecommendation {
         for (Book element : list2) {
 
             // if the element is not in list1, add it to the difference list
-            if (!list1.contains(element)) {
+            if (!list1.contains(element) ) {
                 diff.add(element);
             }
         }
@@ -71,15 +71,22 @@ public class BookRecommendation {
         return diff;
     }
 
-    public BookRecommendation getRecommendationOfUser(User userOriginal, List<User> users){
+    private void getBestUserMatch(User userOriginal, List<User> users){
         double highestValue = 0.0;
         List<Book> recommendation = new ArrayList<>();
         for (User userComparing: users) {
-            if(calculateJaccardIndex(userOriginal, userComparing) > highestValue && calculateJaccardIndex(userOriginal, userComparing) != 1){
+            double index = calculateJaccardIndex(userOriginal, userComparing);
+            if(index > highestValue && index != 1){
                 recommendation = difference(userOriginal, userComparing);
+                highestValue = index;
             }
         }
         recommendations = recommendation;
+    }
+
+
+    public BookRecommendation getRecommendationOfUser(User userOriginal, List<User> users){
+        getBestUserMatch(userOriginal, users);
         return this;
     }
 }
