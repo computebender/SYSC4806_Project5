@@ -24,6 +24,7 @@ import ca.carleton.AmazinBookStore.Listing.ListingService;
 import ca.carleton.AmazinBookStore.Publisher.Publisher;
 import ca.carleton.AmazinBookStore.Publisher.PublisherRepository;
 import ca.carleton.AmazinBookStore.Publisher.PublisherService;
+import ca.carleton.AmazinBookStore.User.User;
 import ca.carleton.AmazinBookStore.User.UserRepository;
 import ca.carleton.AmazinBookStore.User.UserService;
 import jakarta.transaction.Transactional;
@@ -73,11 +74,11 @@ class ShoppingCartServiceTest {
 
     private GenreService genreService;
     @Autowired
-    private UserService userRepository;
+    private UserService userService;
 
     @BeforeEach
     void setUp() {
-        this.shoppingCartService = new ShoppingCartService(cartRepository, itemRepository, userRepository);
+        this.shoppingCartService = new ShoppingCartService(cartRepository, itemRepository, userService);
         this.bookstoreService = new BookstoreService(bookstoreRepository,listingRepository);
         this.listingService = new ListingService(listingRepository);
         this.bookService = new BookService(bookRepository);
@@ -333,6 +334,15 @@ class ShoppingCartServiceTest {
     @Test
     @Transactional
     public void testCheckoutShoppingCart(){
+        //create User
+        User testUser = new User();
+        testUser.setFirstName("John");
+        testUser.setLastName("Doe");
+        testUser.setEmail("johndoe@example.com");
+        testUser.setPassword("password");
+        testUser.setPurchaseHistory(new ArrayList<>());
+        User savedUser = userService.createUser(testUser);
+
         //Create Author
         Author author = new Author();
         author.setFirstName("First");
@@ -401,15 +411,16 @@ class ShoppingCartServiceTest {
         Listing newListing2 = this.listingService.createListing(listing2);
 
         ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setUser(savedUser);
         shoppingCart.setItems(new ArrayList<CartItem>());
-        this.shoppingCartService.createShoppingCart(shoppingCart);
+        ShoppingCart savedSc = this.shoppingCartService.createShoppingCart(shoppingCart);
 
         // Add listing to shopping cart
-        ShoppingCart updatedShoppingCart = this.shoppingCartService.addShoppingCartItem(listing, 1L);
-        updatedShoppingCart = this.shoppingCartService.addShoppingCartItem(listing2, 1L);
+        ShoppingCart updatedShoppingCart = this.shoppingCartService.addShoppingCartItem(newListing1, savedSc.getId());
+        updatedShoppingCart = this.shoppingCartService.addShoppingCartItem(listing2, savedSc.getId());
 
         assertNotNull(updatedShoppingCart.getId());
-        assertEquals(1L, updatedShoppingCart.getId());
+        assertEquals(savedSc.getId(), updatedShoppingCart.getId());
         assertEquals(2, updatedShoppingCart.getItems().size());
         CartItem addedCartItem = updatedShoppingCart.getItems().get(0);
         assertNotNull(addedCartItem.getId());
@@ -417,8 +428,8 @@ class ShoppingCartServiceTest {
         assertEquals(1, addedCartItem.getQuantity());
         assertEquals(listing.getPrice() * addedCartItem.getQuantity(), addedCartItem.getPrice());
         //clear shopping cart and check to see 0 items remain
-        this.shoppingCartService.checkoutShoppingCart(1L);
-        ShoppingCart shoppingCart1 = this.shoppingCartService.findShoppingCartById(1L);
+        this.shoppingCartService.checkoutShoppingCart(savedSc.getId());
+        ShoppingCart shoppingCart1 = this.shoppingCartService.findShoppingCartById(savedSc.getId());
         assertEquals(0,shoppingCart1.getItems().size());
     }
 

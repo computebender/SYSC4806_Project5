@@ -108,7 +108,16 @@ public class UserService {
         if (optionalUser.isEmpty()) {
             throw new ResourceNotFoundException("User with ID " + id + " not found.");
         }
+        User user = optionalUser.get();
+        Optional<ShoppingCart> sc = this.cartRepository.findById(user.getShoppingCart().getId());
+        ShoppingCart savedSc = sc.get();
+        savedSc.setUser(null);
+        cartRepository.save(savedSc);
+        user.setShoppingCart(null);
+        userRepository.save(user);
+
         userRepository.deleteById(id);
+        cartRepository.deleteById(savedSc.getId());
     }
 }
 
