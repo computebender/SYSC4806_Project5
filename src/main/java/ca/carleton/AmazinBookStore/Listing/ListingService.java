@@ -64,11 +64,16 @@ public class ListingService {
         this.listingRepository.deleteById(optionalListing.get().getId());
     }
 
-    public List<Listing> searchListings(Long bookstoreId, Long authorId, Long genreId, Long bookId) {
+    public List<Listing> searchListings(Long bookstoreId, Long authorId, Long genreId, Long bookId, Long listingId) {
         List<Listing> listings = this.listingRepository.findAll();
         List<Listing> listingsMatch = this.listingRepository.findAll();
 
         for (Listing listing : listings) {
+            if (Objects.equals(listing.getId(), listingId) && listingId != 0L) {
+                List<Listing> singleListingsMatch = new ArrayList<>();
+                singleListingsMatch.add(listing);
+                return singleListingsMatch;
+            }
             if (!Objects.equals(listing.getLocation().getId(), bookstoreId) && bookstoreId != 0L) {
                 listingsMatch.remove(listing);
                 continue;

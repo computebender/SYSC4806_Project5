@@ -23,13 +23,128 @@
     <script src="/js/userService.js"></script>
     <script src="/js/authService.js"></script>
     <script src="/js/listingService.js"></script>
+    <script src="/js/component/listingComponent.js"></script>
+    <script src="/js/component/fullListingComponent.js"></script>
+    <script src="/js/component/bookComponent.js"></script>
     <script src="/js/cartService.js"></script>
-
-
     <script th:inline="javascript">
+
+        function getAllBookstores() {
+            bookstoreService().getAllBookstores(function(bookstores) {
+                var dropdown = document.getElementById("bookstores-select");
+                dropdown.innerHTML = "";
+
+                var option = document.createElement("option");
+                option.value = "0";
+                option.text = "Select Bookstore";
+                option.hidden = true;
+                option.selected = true;
+                option.disabled = true;
+                dropdown.appendChild(option);
+
+                bookstores.forEach(function(bookstore) {
+                    var option = document.createElement("option");
+                    option.disabled = false;
+                    option.value = bookstore.id;
+                    option.text = bookstore.bookstoreName;
+                    dropdown.appendChild(option);
+                });
+            });
+        }
+
+        function getAllAuthors() {
+            authorService.getAllAuthors(function(authors) {
+                var dropdown = document.getElementById("authors-select");
+                dropdown.innerHTML = "";
+
+                var option = document.createElement("option");
+                option.value = "0";
+                option.text = "Select Author";
+                option.hidden = true;
+                option.selected = true;
+                option.disabled = true;
+                dropdown.appendChild(option);
+
+                authors.forEach(function(author) {
+                    var option = document.createElement("option");
+                    option.disabled = false;
+                    option.value = author.id;
+                    option.text = author.firstName + " " + author.lastName;
+                    dropdown.appendChild(option);
+                });
+            });
+        }
+        function getAllGenres() {
+            genreService.getAllGenres(function(genres) {
+                var dropdown = document.getElementById("genres-select");
+                dropdown.innerHTML = "";
+
+                var option = document.createElement("option");
+                option.value = "0";
+                option.text = "Select Genre";
+                option.hidden = true;
+                option.selected = true;
+                option.disabled = true;
+                dropdown.appendChild(option);
+
+                genres.forEach(function(genre) {
+                    var option = document.createElement("option");
+                    option.disabled = false;
+                    option.value = genre.id;
+                    option.text = genre.name;
+                    dropdown.appendChild(option);
+                });
+            });
+        }
+
+        function getAllBooks() {
+            bookService.getAllBooks(function(books) {
+                var dropdown = document.getElementById("books-select");
+                dropdown.innerHTML = "";
+
+                var option = document.createElement("option");
+                option.value = "0";
+                option.text = "Select Book";
+                option.hidden = true;
+                option.selected = true;
+                option.disabled = true;
+                dropdown.appendChild(option);
+
+                books.forEach(function(book) {
+                    var option = document.createElement("option");
+                    option.disabled = false;
+                    option.value = book.id;
+                    option.text = book.title;
+                    dropdown.appendChild(option);
+                });
+            });
+        }
+
+        function getListingsFromSearch() {
+            var bookstoreId = $("#bookstores-select").val();
+            var authorId = $("#authors-select").val();
+            var genreId = $("#genres-select").val();
+            var bookId = $("#books-select").val();
+
+            if (bookstoreId == null) {
+                bookstoreId = 0;
+            }
+            if (authorId == null) {
+                authorId = 0;
+            }
+            if (genreId == null) {
+                genreId = 0;
+            }
+            if (bookId == null) {
+                bookId = 0;
+            }
+
+            window.location.href = "http://localhost:8080/listing?bookstoreId=" + bookstoreId + "&authorId=" + authorId + "&genreId=" + genreId + "&bookId=" + bookId
+        }
+
         function getListingIdFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('listing');
+            return urlParams.get('listingId');
         }
 
         function displayBookDetails(listing) {
@@ -43,7 +158,9 @@
             $("#book-isbn").text(book.isbn);
             $("#book-genres").text(genres);
             $("#book-description").text(book.description);
-            $("#book-price").text("$" + listing.price);
+            $("#listing-price").text("$" + listing.price);
+            $("#listing-location").text(listing.location.bookstoreName);
+            $("#listing-copies").text(listing.copies);
         }
 
         function addToCart(listing) { // Change: Accept listing as an argument
@@ -56,6 +173,44 @@
         }
 
         $(document).ready(function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            var bookstoreQuery = urlParams.get('bookstoreId');
+            var authorQuery = urlParams.get('authorId');
+            var genreQuery = urlParams.get('genreId');
+            var bookQuery = urlParams.get('bookId');
+            var listingQuery = urlParams.get('listingId');
+
+            if (bookstoreQuery == null) {
+                bookstoreQuery = 0;
+            }
+            if (authorQuery == null) {
+                authorQuery = 0;
+            }
+            if (genreQuery == null) {
+                genreQuery = 0;
+            }
+            if (bookQuery == null) {
+                bookQuery = 0;
+            }
+            if (listingQuery == null) {
+                listingQuery = 0;
+            }
+
+            listingService.getListingsBySearch(bookstoreQuery, authorQuery, genreQuery, bookQuery, listingQuery, function (listings) {
+                var listingsContainer = $('#listingsContainer');
+                for (var i = 0; i < listings.length; i++) {
+                    var book = listings[i].book;
+                    const listing = listings[i];
+                    const bookstore = listings[i].location;
+                    var genresString = ""
+                    book.genres.forEach(function(genre){
+                        genresString += genre.name +",";
+                    })
+                    var fullListingCard = listingsContainer.fulllistingCard(book.title, book.author.firstName + " " + book.author.lastName, book.publisher.name, book.isbn, genresString, listings[i].price, book.picture, listing, bookstore, listings[i].copies);
+                    listingsContainer.append(fullListingCard);
+                }
+            });
+
             const listingId = getListingIdFromUrl();
             listingService.getListingById(listingId, function (listing) {
                 displayBookDetails(listing);
@@ -64,42 +219,46 @@
                 });
             });
         });
+
+        $(function() {
+            getAllBookstores();
+            getAllAuthors();
+            getAllGenres();
+            getAllBooks();
+        });
     </script>
 </head>
 <body>
 <div th:replace="fragments/navbar :: navbar"></div>
-<div class="container mt-5">
-    <h1 id="book-title"></h1>
-    <div id="book-details" class="row">
-        <div id="book-template" class="d-flex flex-row gap-3">
-            <div class="card h-100">
-                <div class="card-body">
-                    <img id="book-img" alt="book title" class="img-fluid" src="">
-                </div>
-            </div>
-            <div class="card flex-grow-1 h-100">
-                <div class="card-body">
-                    <div class="d-flex flex-column justify-content-between">
-                        <div>
-                            <p><strong>Author:</strong> <span id="book-author"></span></p>
-                            <p><strong>Publisher:</strong> <span id="book-publisher"></span></p>
-                            <p><strong>ISBN:</strong> <span id="book-isbn"></span></p>
-                            <p><strong>Genres:</strong> <span id="book-genres"></span></p>
-                            <p><strong>Price:</strong> <span id="book-price"></span></p>
-                        </div>
-                        <div>
-                            <p id="book-description"></p>
-                        </div>
-                        <div>
-                            <!--                            <button id="add-to-cart" class="btn btn-primary">Add to Cart</button>-->
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="container">
+    <h5>Search Options</h5>
+    <form onsubmit="getListingsFromSearch(); return false;">
+        <div id="bookstores-dropdown">
+            <label for="bookstores-select">Bookstore:</label>
+            <select id="bookstores-select"></select>
         </div>
+        <div id="authors-dropdown">
+            <label for="authors-select">Author:</label>
+            <select id="authors-select"></select>
+        </div>
+        <div id="genres-dropdown">
+            <label for="genres-select">Genre:</label>
+            <select id="genres-select"></select>
+        </div>
+        <div id="books-dropdown">
+            <label for="books-select">Book:</label>
+            <select id="books-select"></select>
+        </div>
+        <button type="submit">Search</button>
+    </form>
+</div>
+<div class="container">
+    <h1>Listings</h1>
+    <div id="listingsContainer" class="d-flex flex-row flex-wrap justify-content-center gap-3">
+
     </div>
 </div>
-
+<div style="height: 10rem;"></div>
 <div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>

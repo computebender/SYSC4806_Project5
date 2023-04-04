@@ -41,7 +41,7 @@ $.fn.listingCard = function (title, author, price, coverUrl, listing, bookstore)
     const priceEl = $('<p>').addClass('card-text').text('$' + price);
     const soldByEl = $('<p>').addClass('card-text').text('Sold by: ' + bookstore.bookstoreName);
     const buttonContainer = $('<div>').addClass('button-container').css(buttonContainerStyle);
-    const buttonEl = $('<a>').addClass('btn btn-primary').text('View Listing').attr('href', '/listing?listing=' + listing.id);
+    const buttonEl = $('<a>').addClass('btn btn-primary').text('View Listing').attr('href', '/listing?listingId=' + listing.id);
     const addCartButton = $('<button>').addClass('btn btn-primary').text('Add to Cart').attr('id', 'add-cart-btn').click(function() {
         addToCart(listing);
     });

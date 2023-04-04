@@ -200,7 +200,7 @@ public class ListingControllerTest {
         Listing savedListing2 = response2.getBody();
 
         ResponseEntity<List<Listing>> response = restTemplate.exchange(
-                baseUrl + "/search?bookstoreId=2&authorId=0&genreId=0&bookId=0",
+                baseUrl + "?bookstoreId=2&authorId=0&genreId=0&bookId=0&listingId=0",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Listing>>() {

@@ -140,7 +140,7 @@ public class ListingServiceTest {
         listings.add(listing2);
         when(listingRepository.findAll()).thenReturn(listings);
 
-        List<Listing> matchListings = listingService.searchListings(1L, 0L, 0L, 0L);
+        List<Listing> matchListings = listingService.searchListings(1L, 0L, 0L, 0L, 0L);
 
         Assertions.assertEquals(1, matchListings.size());
     }
