@@ -46,6 +46,9 @@ $.fn.listingCard = function (title, author, price, coverUrl, listing, bookstore)
         addToCart(listing);
     });
 
+    if(listing.copies === 0){
+        addCartButton.prop('disabled',true).addClass('disabled');
+    }
 
     body.append(titleEl);
     body.append(authorEl);
