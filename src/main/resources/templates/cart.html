@@ -269,6 +269,18 @@
                     if(shoppingCart.items.length===0){
                         return notificationService.addErrorNotification("Shopping cart empty. Checkout unsuccessful.");
                     }else{
+                        //decrease the number of available listings after user purchases a listing
+                        const itemsQuantity = shoppingCart.items;
+                        itemsQuantity.forEach(function(item){
+                            var listing = {
+                                "book" : item.bookListing.book,
+                                "copies" : item.bookListing.copies - item.quantity,
+                                "id" : item.bookListing.id,
+                                "location" : item.bookListing.location,
+                                "price" : item.bookListing.price
+                            }
+                            listingService.updateListingById(item.bookListing.id,listing)
+                        })
                         cartService.checkoutShoppingCart(user.id, function () {
                             notificationService.addSuccessNotification("Checkout successful.");
                             getAllListings();
