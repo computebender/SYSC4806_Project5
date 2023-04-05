@@ -52,11 +52,19 @@ public class JwtTokenUtil {
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
+        System.out.println("Secret: " + secret);
+        System.out.println("Expiration: " + expiration);
+
+        String username;
+        try {
+            username = extractUsername(token);
+        } catch (Exception e) {
+            return false;
+        }
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         final Date expiration = extractExpiration(token);
         return expiration.before(new Date());
     }
