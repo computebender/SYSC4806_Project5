@@ -27,6 +27,10 @@
 
     <script th:inline="javascript">
         $(document).ready(function () {
+            if(!authenticationService.isTokenValid()){
+                $('#recommendationDiv').hide();
+            }
+
             listingService.getAllListings(function (listings) {
                 var listingsContainer = $('#listingsContainer');
                 for (var i = 0; i < listings.length; i++) {
@@ -41,13 +45,13 @@
 
             userService.getCurrentUser(function(user)
             {
-                console.log(user);
                 userService.getUserRecommendation(user.id, function (data) {
-                    console.log(data.recommendations);
                     var recommendationContainer = $('#recommendationContainer');
+                    if(data.recommendations.length == 0){
+                        $('#recommendationDiv').hide();
+                    }
                     for (var i = 0; i < data.recommendations.length; i++) {
                         var recommendation = data.recommendations[i];
-                        console.log(recommendation);
                         var recommendationCard = recommendationContainer.bookCard(recommendation.title, recommendation.author.firstName + " " + recommendation.author.lastName, recommendation.picture);
                         recommendationContainer.append(recommendationCard);
                     }
@@ -67,7 +71,7 @@
         Happy reading!
     </p>
 </div>
-<div class="container">
+<div id="recommendationDiv" class="container">
     <h1>Recommendations</h1>
     <div id="recommendationContainer" class="d-flex flex-row flex-wrap justify-content-start gap-3">
 

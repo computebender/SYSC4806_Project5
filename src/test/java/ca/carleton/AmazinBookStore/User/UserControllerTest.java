@@ -1,5 +1,7 @@
 package ca.carleton.AmazinBookStore.User;
 
+import ca.carleton.AmazinBookStore.ShoppingCart.CartRepository;
+import ca.carleton.AmazinBookStore.ShoppingCart.ShoppingCart;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -32,6 +34,8 @@ public class UserControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private CartRepository cartRepository;
 
     private HttpHeaders headers;
 
@@ -52,11 +56,24 @@ public class UserControllerTest {
         testUser.setEmail("johndoe@example.com");
         testUser.setPassword("password");
         testUser.setPurchaseHistory(new ArrayList<>());
+        ShoppingCart shoppingCart = new ShoppingCart();
+        cartRepository.save(shoppingCart);
+        testUser.setShoppingCart(shoppingCart);
+
         testUser = userRepository.save(testUser);
     }
 
     @AfterEach
     public void cleanup() {
+        for(ShoppingCart sc: cartRepository.findAll()){
+            sc.setUser(null);
+            cartRepository.save(sc);
+        }
+        for(User u: userRepository.findAll()){
+            u.setShoppingCart(null);
+            userRepository.save(u);
+        }
+        cartRepository.deleteAll();
         userRepository.deleteAll();
     }
 
@@ -68,6 +85,10 @@ public class UserControllerTest {
         newUser.setEmail("janedoe@example.com");
         newUser.setPassword("password");
         newUser.setPurchaseHistory(new ArrayList<>());
+        ShoppingCart shoppingCart = new ShoppingCart();
+        cartRepository.save(shoppingCart);
+        newUser.setShoppingCart(shoppingCart);
+
 
         TestObjectMapper objectMapper = new TestObjectMapper();
         try {

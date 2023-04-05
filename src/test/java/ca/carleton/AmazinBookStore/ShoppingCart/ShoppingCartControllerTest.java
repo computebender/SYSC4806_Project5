@@ -6,6 +6,14 @@ import ca.carleton.AmazinBookStore.Bookstore.Bookstore;
 import ca.carleton.AmazinBookStore.Genre.Genre;
 import ca.carleton.AmazinBookStore.Listing.Listing;
 import ca.carleton.AmazinBookStore.Publisher.Publisher;
+import ca.carleton.AmazinBookStore.User.User;
+import ca.carleton.AmazinBookStore.User.UserControllerTest;
+import ca.carleton.AmazinBookStore.User.UserService;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,10 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -26,6 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -34,14 +41,22 @@ public class ShoppingCartControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    private HttpHeaders headers;
+
     @LocalServerPort
     private int port;
 
     private String baseUrl;
+    private String userUrl;
+    @Autowired
+    private CartRepository cartRepository;
 
     @BeforeEach
     public void setUp() {
+        headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
         baseUrl = "http://localhost:" + port + "/api/carts";
+        userUrl = "http://localhost:" + port + "/api/users";
     }
 
     @Test
@@ -446,7 +461,29 @@ public class ShoppingCartControllerTest {
 
     @Test
     @Transactional
-    public void checkoutCart(){
+    public void checkoutCart() {
+        //create User
+        User testUser = new User();
+        testUser.setFirstName("John");
+        testUser.setLastName("Doe");
+        testUser.setEmail("johndoe@example.com");
+        testUser.setPassword("password");
+        testUser.setPurchaseHistory(new ArrayList<>());
+        ;
+
+        TestObjectMapper objectMapper = new TestObjectMapper();
+        User createdUser = null;
+        try {
+            String newUserJson = objectMapper.writeValueAsString(testUser);
+            HttpEntity<String> userRequest = new HttpEntity<>(newUserJson, headers);
+            ResponseEntity<User> userResponse = restTemplate.exchange(
+                    userUrl, HttpMethod.POST, userRequest, User.class);
+
+            createdUser = userResponse.getBody();
+        } catch (JsonProcessingException e) {
+            System.out.println("Failed to serialize user object: " + e.getMessage());
+        }
+
         //Create Author
         Author author = new Author();
         author.setFirstName("First");
@@ -518,14 +555,6 @@ public class ShoppingCartControllerTest {
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals("John's Bookstore", savedBookstore.getbookstoreName());
 
-        //Create ShoppingCart
-        Long id = 1L;
-        HttpEntity<String> request1 = new HttpEntity<>("");
-        ResponseEntity<ShoppingCart> response1 = restTemplate.postForEntity(baseUrl + "/" +id, request1, ShoppingCart.class);
-        ShoppingCart cartResponse = response1.getBody();
-        assertEquals(cartResponse.getItems().size(),0);
-        assertEquals(cartResponse.getId(), id);
-
         //Create Listing
         String bookstoreId = "1";
         Listing listing = new Listing();
@@ -556,9 +585,11 @@ public class ShoppingCartControllerTest {
         HttpEntity<Listing> request4 = new HttpEntity<>(listing_1);
         HttpEntity<Listing> request6 = new HttpEntity<>(listing_2);
 
-        ResponseEntity<ShoppingCart> response4 = restTemplate.postForEntity(baseUrl + "/" + id +"/add-item", request4, ShoppingCart.class);
+        Long id = createdUser.getShoppingCart().getId();
+
+        ResponseEntity<ShoppingCart> response4 = restTemplate.postForEntity(baseUrl + "/" + id + "/add-item", request4, ShoppingCart.class);
         assertEquals(response4.getBody().getItems().get(0).getBookListing().getBook().getIsbn(), listing.getBook().getIsbn());
-        ResponseEntity<ShoppingCart> response6 = restTemplate.postForEntity(baseUrl + "/" + id +"/add-item", request6, ShoppingCart.class);
+        ResponseEntity<ShoppingCart> response6 = restTemplate.postForEntity(baseUrl + "/" + id + "/add-item", request6, ShoppingCart.class);
         assertEquals(response6.getBody().getItems().get(1).getBookListing().getBook().getIsbn(), listing2.getBook().getIsbn());
         //Get shopping cart
         ResponseEntity<ShoppingCart> response_cart = restTemplate.getForEntity(baseUrl + "/" + id, ShoppingCart.class);
@@ -599,6 +630,25 @@ public class ShoppingCartControllerTest {
         assertEquals(listing_2.getCopies(),5);
         assertEquals(listing_3.getCopies(), 9);
         assertEquals(listing_4.getCopies(), 4);
+        
+        ResponseEntity<Double> response9 = restTemplate.postForEntity(baseUrl + "/" + id + "/checkout", new HttpEntity<String>(""), Double.class);
+        assertEquals(HttpStatus.CREATED, response9.getStatusCode());
+        assertEquals(45, response9.getBody());
+    }
+
+    public class TestObjectMapper extends ObjectMapper {
+        public TestObjectMapper() {
+            super();
+            this.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
+            this.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+            this.addMixIn(User.class, TestObjectMapper.UserMixin.class);
+        }
+
+        @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE)
+        abstract class UserMixin {
+            @JsonProperty
+            abstract String getPassword();
+        }
     }
 
 }
