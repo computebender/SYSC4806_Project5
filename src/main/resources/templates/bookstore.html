@@ -95,7 +95,8 @@
 <div th:replace="fragments/navbar :: navbar">
 </div>
 <div class="container">
-<h1>Bookstore</h1>
+    <h1>Bookstore</h1>
+    <div class="container">
     <form id="create-bookstore" onsubmit="createBookstore(); return false;">
         <div>
             <label for="bookstoreName" class="form-label">Bookstore Name:</label>
@@ -103,6 +104,7 @@
         </div>
         <button type="submit" form="create-bookstore" class="btn btn-primary">Create Bookstore</button>
     </form>
+</div>
 </div>
 <div class="container">
     <h1>Listing</h1>
