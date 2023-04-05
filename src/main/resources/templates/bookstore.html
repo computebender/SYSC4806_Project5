@@ -33,15 +33,6 @@
     <script th:inline="javascript">
         function getAllBookstores() {
             bookstoreService().getAllBookstores(function (data) {
-                var bookstoresTable = $("#bookstores-table tbody");
-                bookstoresTable.empty();
-                $.each(data, function (index, bookstore) {
-                    var row = "<tr>";
-                    row += "<td>" + bookstore.bookstoreName + "</td>";
-                    row += "</tr>";
-                    bookstoresTable.append(row);
-                });
-
                 var dropdown = document.getElementById("bookstores-select");
                 dropdown.innerHTML = "";
                 dropdown.required = true;
@@ -105,16 +96,6 @@
 </div>
 <div class="container">
 <h1>Bookstore</h1>
-    <table id="bookstores-table" class="table-primary">
-        <thead>
-        <tr>
-            <th>Bookstore Name</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
     <form id="create-bookstore" onsubmit="createBookstore(); return false;">
         <div>
             <label for="bookstoreName" class="form-label">Bookstore Name:</label>
