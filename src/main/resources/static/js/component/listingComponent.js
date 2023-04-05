@@ -48,6 +48,7 @@ $.fn.listingCard = function (title, author, price, coverUrl, listing, bookstore)
 
     if(listing.copies === 0){
         addCartButton.prop('disabled',true).addClass('disabled');
+        addCartButton.text('Out of Stock')
     }
 
     body.append(titleEl);
