@@ -596,9 +596,43 @@ public class ShoppingCartControllerTest {
 
         assertEquals(response_cart.getBody().getItems().size(), 2);
         //checkout shopping cart
-        ResponseEntity<Double> response9 = restTemplate.postForEntity(baseUrl + "/" + id + "/checkout", new HttpEntity<String>(""), Double.class);
-        assertEquals(HttpStatus.CREATED, response9.getStatusCode());
-        assertEquals(45, response9.getBody());
+        ResponseEntity<Double> response9 = restTemplate.postForEntity(baseUrl + "/" + id +"/checkout", new HttpEntity<String>(""), Double.class);
+        assertEquals(HttpStatus.CREATED,response9.getStatusCode());
+        assertEquals(45,response9.getBody());
+
+        //Update listings
+        Listing partialListing1 = new Listing();
+        partialListing1.setPrice(listing_1.getPrice());
+        partialListing1.setBook(listing_1.getBook());
+        partialListing1.setCopies(listing_1.getCopies()-1);
+        partialListing1.setLocation(listing_1.getLocation());
+        partialListing1.setId(listing_1.getId());
+
+        Listing partialListing2 = new Listing();
+        partialListing2.setPrice(listing_2.getPrice());
+        partialListing2.setBook(listing_2.getBook());
+        partialListing2.setCopies(listing_2.getCopies()-1);
+        partialListing2.setLocation(listing_2.getLocation());
+        partialListing2.setId(listing_2.getId());
+
+        HttpEntity<Listing> request7 = new HttpEntity<>(partialListing1);
+        HttpEntity<Listing> request8 = new HttpEntity<>(partialListing2);
+        restTemplate.put(listingUrl + "/" + listing_1.getId(),request7, Listing.class);
+        restTemplate.put(listingUrl + "/" + listing_2.getId(),request8, Listing.class);
+
+
+        //check listing copies has been changed
+        ResponseEntity<Listing> response10 = restTemplate.getForEntity(listingUrl + "/" + response2.getBody().getId(), Listing.class);
+        Listing listing_3 = response10.getBody();
+        ResponseEntity<Listing> response11 = restTemplate.getForEntity(listingUrl + "/" + response5.getBody().getId(), Listing.class);
+        Listing listing_4 = response11.getBody();
+        assertEquals(listing_1.getCopies(),10);
+        assertEquals(listing_2.getCopies(),5);
+        assertEquals(listing_3.getCopies(), 9);
+        assertEquals(listing_4.getCopies(), 4);
+        
+        ResponseEntity<Double> response13 = restTemplate.postForEntity(baseUrl + "/" + id + "/checkout", new HttpEntity<String>(""), Double.class);
+        assertEquals(HttpStatus.CREATED, response13.getStatusCode());
     }
 
     public class TestObjectMapper extends ObjectMapper {

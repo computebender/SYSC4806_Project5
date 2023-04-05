@@ -12,6 +12,10 @@
             crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+<!--    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
 
     <!--Services-->
     <script src="/js/authorService.js"></script>
@@ -30,19 +34,17 @@
     $(document).ready(function() {
         userService.getCurrentUser(function (user) {
             console.log(user)
+            $("#name").val(user.firstName + " " + user.lastName);
+            $("#email").val(user.email);
         });
         getAllListings();
     });
     function getAllListings() {
         userService.getCurrentUser(function (user) {
-            console.log(user.shoppingCart.id)
             cartService.getShoppingCartById(user.shoppingCart.id, function (shoppingCart){
-                console.log("Test Shopping Cart:")
-                console.log(shoppingCart)
-                console.log(shoppingCart.items)
                 var shoppingCartTable = $("#shopping-cart-table");
                 shoppingCartTable.empty();
-                var row = '<tr><th>Book Title</th><th>Price</th><th>Quantity</th><th>Total Price</th><th>Remove Item</th><</tr>';
+                var row = '<tr><th>Book Title</th><th>Price</th><th>Quantity</th><th>Total Price</th><th></th><</tr>';
                 shoppingCartTable.append(row)
                 var totalPrice = 0;
                 var totalQuantity = 0;
@@ -53,13 +55,13 @@
                     row += "<td>" + shoppingCart.items[index].bookListing.book.title + "</td>";
                     row += "<td>" +"$"+  shoppingCart.items[index].bookListing.price.toFixed(2) + "</td>";
                     row += "<td>"
-                       + "<button class='btn btn-light' onclick=decreaseQuantity("+shoppingCart.items[index].id+")>-</button>"
+                       + "<button type='button' class='btn btn-light' onclick=decreaseQuantity("+shoppingCart.items[index].id+")>-</button>"
                         + " " + shoppingCart.items[index].quantity + " "
-                        + "<button class='btn btn-light' onclick=increaseQuantity("+shoppingCart.items[index].id+")>+</button>" +"</td>";
+                        + "<button type='button' class='btn btn-light' onclick=increaseQuantity("+shoppingCart.items[index].id+")>+</button>" +"</td>";
                     row += "<td>" +"$"+ shoppingCart.items[index].price.toFixed(2) + "</td>";
 
                     row += "</td>";
-                    row += "<td><button class='btn btn-danger' onclick='removeItem("+shoppingCart.items[index].id+")'>Remove Item</button></td>";
+                    row += "<td><button type='button' class='close' aria-label='Close' onclick='removeItem("+shoppingCart.items[index].id+")'><span aria-hidden='true'>&times;</span></button></td>";
                     row += "</tr>";
                     shoppingCartTable.append(row);
                 })
@@ -81,8 +83,6 @@
     function increaseQuantity(itemId){
         userService.getCurrentUser(function (user) {
             cartService.getShoppingCartItemById(user.id, itemId, function (cartItem){
-                console.log("Testing retrieving cart item by id:")
-                console.log(cartItem)
                 var maxListings = cartItem.bookListing.copies;
                 var currentCopies = cartItem.quantity;
                 if(currentCopies+1<=maxListings){
@@ -94,10 +94,8 @@
                         "quantity" : cartItem.quantity + 1
                     };
                 }else{
-                    console.log("Quantity Listing limit reached.")
+                    return notificationService.addErrorNotification("Maximum purchase quantity reached.\nPlease check back later for more stock.")
                 }
-                console.log("Updated Cart Item:")
-                console.log(updatedCartItem)
 
                 cartService.updateItem(user.id,itemId,updatedCartItem, function (){
                     getAllListings();
@@ -108,8 +106,6 @@
     function decreaseQuantity(itemId){
         userService.getCurrentUser(function (user) {
             cartService.getShoppingCartItemById(user.id, itemId, function (cartItem){
-                console.log("Testing retrieving cart item by id:")
-                console.log(cartItem)
                 var min = 1;
                 var currentCopies = cartItem.quantity;
                 if(currentCopies-1>=min){
@@ -121,10 +117,9 @@
                         "quantity" : cartItem.quantity - 1
                     };
                 }else{
-                    console.log("Cannot purchase less than 1 book.")
+                    return notificationService.addErrorNotification("Minimum purchase quantity of 1 item required.")
                 }
-                console.log("Updated Cart Item:")
-                console.log(updatedCartItem)
+
                 cartService.updateItem(user.id,itemId,updatedCartItem, function (){
                     getAllListings();
                 });
@@ -141,12 +136,174 @@
     }
 
     function checkoutCart(){
-        userService.getCurrentUser(function (user) {
-        cartService.checkoutShoppingCart(user.id, function (){
-            notificationService.addSuccessNotification("Checkout successful.");
-            getAllListings();
-        });
-        });
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const address = document.getElementById('address').value;
+        const city = document.getElementById('city').value;
+        const province = document.getElementById('province').value;
+        const zip = document.getElementById('zip').value;
+        const cardname = document.getElementById('cardname').value;
+        const cardnumber = document.getElementById('cardnumber').value;
+        const expmonth = document.getElementById('expmonth').value;
+        const expyear = document.getElementById('expyear').value;
+        const cvv = document.getElementById('cvv').value;
+
+        let error = false;
+
+        if (name === "") {
+            document.getElementById("name").classList.add("is-invalid");
+            document.getElementById("nameError").innerHTML = "Please enter a name.";
+            error = true;
+        } else {
+            document.getElementById("name").classList.remove("is-invalid");
+            document.getElementById("nameError").innerHTML = "";
+        }
+
+        if (email === "") {
+            document.getElementById("email").classList.add("is-invalid");
+            document.getElementById("emailError").innerHTML = "Please enter an email address.";
+            error = true;
+        } else {
+            document.getElementById("email").classList.remove("is-invalid");
+            document.getElementById("emailError").innerHTML = "";
+        }
+
+        if (address === "") {
+            document.getElementById("address").classList.add("is-invalid");
+            document.getElementById("addressError").innerHTML = "Please enter an address.";
+            error = true;
+        } else {
+            document.getElementById("address").classList.remove("is-invalid");
+            document.getElementById("addressError").innerHTML = "";
+        }
+
+        if (city === "") {
+            document.getElementById("city").classList.add("is-invalid");
+            document.getElementById("cityError").innerHTML = "Please enter a city.";
+            error = true;
+        } else {
+            document.getElementById("city").classList.remove("is-invalid");
+            document.getElementById("cityError").innerHTML = "";
+        }
+
+        if (province === "") {
+            document.getElementById("province").classList.add("is-invalid");
+            document.getElementById("provinceError").innerHTML = "Please enter a province.";
+            error = true;
+        } else {
+            document.getElementById("province").classList.remove("is-invalid");
+            document.getElementById("provinceError").innerHTML = "";
+        }
+
+        if (zip === "") {
+            document.getElementById("zip").classList.add("is-invalid");
+            document.getElementById("zipError").innerHTML = "Please enter a postal code.";
+            error = true;
+        } else {
+            document.getElementById("zip").classList.remove("is-invalid");
+            document.getElementById("zipError").innerHTML = "";
+        }
+
+        if (cardname === "") {
+            document.getElementById("cardname").classList.add("is-invalid");
+            document.getElementById("cardnameError").innerHTML = "Please enter a credit card name.";
+            error = true;
+        } else {
+            document.getElementById("cardname").classList.remove("is-invalid");
+            document.getElementById("cardnameError").innerHTML = "";
+        }
+
+        if (cardnumber === "") {
+            document.getElementById("cardnumber").classList.add("is-invalid");
+            document.getElementById("cardnumberError").innerHTML = "Please enter a credit card number.";
+            error = true;
+        } else {
+            document.getElementById("cardnumber").classList.remove("is-invalid");
+            document.getElementById("cardnumberError").innerHTML = "";
+        }
+
+        if (expmonth === "") {
+            document.getElementById("expmonth").classList.add("is-invalid");
+            document.getElementById("expmonthError").innerHTML = "Please enter a credit card expiration month.";
+            error = true;
+        } else {
+            document.getElementById("expmonth").classList.remove("is-invalid");
+            document.getElementById("expmonthError").innerHTML = "";
+        }
+
+        if (expyear === "") {
+            document.getElementById("expyear").classList.add("is-invalid");
+            document.getElementById("expyearError").innerHTML = "Please enter a credit card expiration year.";
+            error = true;
+        } else {
+            document.getElementById("expyear").classList.remove("is-invalid");
+            document.getElementById("expyearError").innerHTML = "";
+        }
+
+        if (cvv === "") {
+            document.getElementById("cvv").classList.add("is-invalid");
+            document.getElementById("cvvError").innerHTML = "Please enter a credit card cvv number.";
+            error = true;
+        } else {
+            document.getElementById("cvv").classList.remove("is-invalid");
+            document.getElementById("cvvError").innerHTML = "";
+        }
+
+        if (error) {
+            const collapseShippingTarget = document.querySelector('#collapseShipping');
+            const collapsePaymentTarget = document.querySelector('#collapsePayment');
+            if (collapseShippingTarget.classList.contains('hide')) {
+                // if the shipping information is currently hidden, show it
+                $(collapseShippingTarget).collapse('show');
+                $(collapseShippingTarget).innerHTML = "Close";
+            }
+            if (collapsePaymentTarget.classList.contains('hide')) {
+                // if the payment information is currently hidden, show it
+                $(collapsePaymentTarget).collapse('show');
+                $(collapsePaymentTarget).innerHTML = "Close";
+            }
+            return false;
+        }else {
+            userService.getCurrentUser(function (user) {
+                cartService.getShoppingCartById(user.shoppingCart.id, function (shoppingCart){
+                    if(shoppingCart.items.length===0){
+                        return notificationService.addErrorNotification("Shopping cart empty. Checkout unsuccessful.");
+                    }else{
+                        //decrease the number of available listings after user purchases a listing
+                        const itemsQuantity = shoppingCart.items;
+                        itemsQuantity.forEach(function(item){
+                            var listing = {
+                                "book" : item.bookListing.book,
+                                "copies" : item.bookListing.copies - item.quantity,
+                                "id" : item.bookListing.id,
+                                "location" : item.bookListing.location,
+                                "price" : item.bookListing.price
+                            }
+                            listingService.updateListingById(item.bookListing.id,listing)
+                        })
+                        cartService.checkoutShoppingCart(user.id, function () {
+                            notificationService.addSuccessNotification("Checkout successful.");
+                            getAllListings();
+                        });
+                    }
+                });
+            });
+        }
+    }
+
+    function toggleButton(button) {
+        if (button.innerHTML === "Change") {
+            button.innerHTML = "Close";
+        } else {
+            button.innerHTML = "Change";
+        }
+    }
+    function togglePaymentButton(button){
+        if(button.innerHTML === "Change"){
+            button.innerHTML = "Close";
+        }else{
+            button.innerHTML = "Change";
+        }
     }
 
   </script>
@@ -164,7 +321,7 @@
   }
   table {
     border-collapse: collapse;
-    width: 80%;
+    width: 100%;
     margin: 0 auto;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   }
@@ -198,9 +355,17 @@
   button[type="submit"]:hover {
     background-color: #3071a9;
   }
-  .actions {
-    text-align: center;
-    margin-top: 30px;
+  button[type="clear"] {
+      border: none;
+      background-color: #428bca;
+      color: #fff;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+  }
+  button[type="clear"]:hover {
+      background-color: #3071a9;
   }
   .actions button {
     margin: 0 10px;
@@ -208,38 +373,156 @@
   .btn-form {
     display: flex;
     justify-content: center;
-      margin-top: 40px;
+    margin-top: 40px;
+    margin-bottom: 60px;
   }
   .btn-sub {
     margin-right: 10px;
+    border: none;
+    background-color: #428bca;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  .btn-sub:hover {
+      background-color: #3071a9;
+  }
+
+  .paymentInfo {
+    margin-bottom: 30px;
+  }
+  .sub-title {
+    font-size: 20px;
   }
 </style>
 <body>
 <div th:replace="fragments/navbar :: navbar">
 </div>
 <div class="container">
-  <h1>Shopping Cart Checkout</h1>
-  <table id="shopping-cart-table">
-    <thead>
-    <tr>
-      <th>Title</th>
-      <th>Price</th>
-      <th>Quantity</th>
-        <th>Total Price</th>
-        <th>Remove Item</th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
-  <div class="btn-form">
-    <form id="clear-form" onsubmit="clearCart(); return false;">
-      <button class="btn-sub" type="submit">Clear Cart</button>
-    </form>
-    <form id="checkout-form" onsubmit="checkoutCart(); return false;">
-      <button type="submit">Checkout</button>
-    </form>
-  </div>
+<!--New feature ml3-->
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Shopping Cart Checkout</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <form>
+                    <div class="accordion" id="accordionShipping">
+                        <div class="card">
+                            <div class="card-header" id="shippingHeading">
+                                <h2 class="mb-0">
+                                    <label class="sub-title">Shipping Information</label>
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseShipping" aria-expanded="true" aria-controls="collapseShipping" onclick="toggleButton(this)">Close</button>
+                                </h2>
+                            </div>
+
+                            <div id="collapseShipping" class="hide collapse show" aria-labelledby="shippingHeading" data-parent="#accordionShipping">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="name">Name:</label>
+                                        <input type="text" class="form-control" id="name" name="name" required>
+                                        <div class="invalid-feedback" id="nameError"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email:</label>
+                                        <input type="text" class="form-control" id="email" name="email" required>
+                                        <div class="invalid-feedback" id="emailError"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address">Address:</label>
+                                        <input type="text" class="form-control" id="address" name="address" required>
+                                        <div class="invalid-feedback" id="addressError"></div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="city">City:</label>
+                                            <input type="text" class="form-control" id="city" name="city" required>
+                                            <div class="invalid-feedback" id="cityError"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="province">Province:</label>
+                                            <input type="text" class="form-control" id="province" name="province" required>
+                                            <div class="invalid-feedback" id="provinceError"></div>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label for="zip">Postal Code:</label>
+                                            <input type="text" class="form-control" id="zip" name="zip" required>
+                                            <div class="invalid-feedback" id="zipError"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="paymentInfo">
+                        <div class="accordion mt-4" id="accordionPayment">
+                            <div class="card">
+                                <div class="card-header" id="paymentHeading">
+                                    <h2 class="mb-0">
+                                        <label class="sub-title">Payment Information</label>
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapsePayment" aria-expanded="false" aria-controls="collapsePayment" onclick="togglePaymentButton(this)">Change</button>
+                                    </h2>
+                                </div>
+                                <div id="collapsePayment" class="collapse hide" aria-labelledby="paymentHeading" data-parent="#accordionPayment">
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="cardname">Name on Card:</label>
+                                            <input type="text" class="form-control" id="cardname" name="cardname" required>
+                                            <div class="invalid-feedback" id="cardnameError"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cardnumber">Card Number:</label>
+                                            <input type="text" class="form-control" id="cardnumber" name="cardnumber" required>
+                                            <div class="invalid-feedback" id="cardnumberError"></div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="expmonth">Expiration Month:</label>
+                                                <input type="text" class="form-control" id="expmonth" name="expmonth" required>
+                                                <div class="invalid-feedback" id="expmonthError"></div>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="expyear">Expiration Year:</label>
+                                                <input type="text" class="form-control" id="expyear" name="expyear" required>
+                                                <div class="invalid-feedback" id="expyearError"></div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cvv">CVV:</label>
+                                            <input type="text" class="form-control" id="cvv" name="cvv" required>
+                                            <div class="invalid-feedback" id="cvvError"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <table id="shopping-cart-table">
+                        <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total Price</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <div class="btn-form">
+                        <form id="clear-form" >
+                            <button class="btn-sub" type="button" onclick="clearCart(); return false;">Clear Cart</button>
+                        </form>
+                        <form id="checkout-form" onsubmit="checkoutCart(); return false;">
+                            <button type="submit">Checkout</button>
+                        </form>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 <div th:replace="fragments/footer :: footer"> </div>
 </body>
