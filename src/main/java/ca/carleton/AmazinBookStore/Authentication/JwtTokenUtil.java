@@ -52,9 +52,6 @@ public class JwtTokenUtil {
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
-        System.out.println("Secret: " + secret);
-        System.out.println("Expiration: " + expiration);
-
         String username;
         try {
             username = extractUsername(token);
