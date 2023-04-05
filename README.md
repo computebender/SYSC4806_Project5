@@ -60,9 +60,6 @@ This group project is a web application that provides an online platform for sel
 |     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/85 |
 |     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/89 |
 |     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/100 |
-|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/ |
-|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/ |
-|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/ |
 
 
 
