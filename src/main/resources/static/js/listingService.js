@@ -52,6 +52,15 @@ const listingService = (function() {
                 success: successCallback,
                 error: handleAjaxError
             });
+        },
+
+        getListingsBySearch: function(bookstoreId, authorId, genreId, bookId, listingId, successCallback) {
+            $.ajax({
+                url: "/api/listings?bookstoreId=" + bookstoreId + "&authorId=" + authorId + "&genreId=" + genreId + "&bookId=" + bookId + "&listingId=" + listingId,
+                type: "GET",
+                success: successCallback,
+                error: handleAjaxError
+            });
         }
 
     };

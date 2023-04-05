@@ -27,11 +27,11 @@ public class ListingController {
         this.bookstoreService = bookstoreService;
     }
 
-    @GetMapping()
-    public ResponseEntity<List<Listing>> getAllListings(){
-        List<Listing> listings = this.listingService.findAll();
-        return ResponseEntity.ok(listings);
-    }
+//    @GetMapping()
+//    public ResponseEntity<List<Listing>> getAllListings(){
+//        List<Listing> listings = this.listingService.findAll();
+//        return ResponseEntity.ok(listings);
+//    }
 
     @PostMapping()
     public ResponseEntity<Listing> createListing(@RequestBody Listing listing){
@@ -81,12 +81,29 @@ public class ListingController {
 
     }
 
-    @GetMapping("/search")
+    @GetMapping()
     public ResponseEntity<List<Listing>> searchListings(@Param("bookstoreId") Long bookstoreId, @Param("authorId") Long authorId,
-                                                        @Param("genreId") Long genreId, @Param("bookId") Long bookId) {
+                                                        @Param("genreId") Long genreId, @Param("bookId") Long bookId, @Param("listingId") Long listingId) {
+
+        if (bookstoreId == null) {
+            bookstoreId = 0L;
+        }
+        if (authorId == null) {
+            authorId = 0L;
+        }
+        if (genreId == null) {
+            genreId = 0L;
+        }
+        if (bookId == null) {
+            bookId = 0L;
+        }
+        if (listingId == null) {
+            listingId = 0L;
+        }
+
         List<Listing> listings;
         try {
-            listings = this.listingService.searchListings(bookstoreId, authorId, genreId, bookId);
+            listings = this.listingService.searchListings(bookstoreId, authorId, genreId, bookId, listingId);
         }  catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
