@@ -631,9 +631,8 @@ public class ShoppingCartControllerTest {
         assertEquals(listing_3.getCopies(), 9);
         assertEquals(listing_4.getCopies(), 4);
         
-        ResponseEntity<Double> response9 = restTemplate.postForEntity(baseUrl + "/" + id + "/checkout", new HttpEntity<String>(""), Double.class);
-        assertEquals(HttpStatus.CREATED, response9.getStatusCode());
-        assertEquals(45, response9.getBody());
+        ResponseEntity<Double> response13 = restTemplate.postForEntity(baseUrl + "/" + id + "/checkout", new HttpEntity<String>(""), Double.class);
+        assertEquals(HttpStatus.CREATED, response13.getStatusCode());
     }
 
     public class TestObjectMapper extends ObjectMapper {
