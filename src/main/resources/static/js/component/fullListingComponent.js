@@ -45,10 +45,16 @@ $.fn.fulllistingCard = function (title, author, publisher, isbn, genres, price, 
 
 
     const card = $('<div>').addClass('d-flex flex-row gap-3').css(cardStyle)
-    const imageDiv = $('<div>').addClass('left-block')
+    const imageDiv = $('<div>').addClass('left-block').css({
+        display: 'inline-block',
+        width: '20%'
+    });
     const imageContainer = $('<div>').addClass('image-container').css(imageContainerStyle);
     const image = $('<img>').addClass('card-img-top').attr('src', coverUrl || defaultCover).css(imageStyle);
-    const bodyDiv = $('<div>').addClass('right-block')
+    const bodyDiv = $('<div>').addClass('right-block').css({
+        display: 'inline-block',
+        width: '80%',
+    });
     const body = $('<div>').addClass('card-body');
 
     const titleEl = $('<h3>').addClass('card-title').text(title);

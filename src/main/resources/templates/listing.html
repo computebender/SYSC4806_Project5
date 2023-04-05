@@ -233,29 +233,30 @@
 <div class="container">
     <h5>Search Options</h5>
     <form onsubmit="getListingsFromSearch(); return false;">
-        <div id="bookstores-dropdown">
+        <div id="bookstores-dropdown" style="float: left">
             <label for="bookstores-select">Bookstore:</label>
             <select id="bookstores-select"></select>
         </div>
-        <div id="authors-dropdown">
+        <div id="authors-dropdown" style="float: left; padding-left: 20px">
             <label for="authors-select">Author:</label>
             <select id="authors-select"></select>
         </div>
-        <div id="genres-dropdown">
+        <div id="genres-dropdown" style="float: left; padding-left: 20px; padding-right: 20px">
             <label for="genres-select">Genre:</label>
             <select id="genres-select"></select>
         </div>
-        <div id="books-dropdown">
+        <div id="books-dropdown" style="padding-left: 20px">
             <label for="books-select">Book:</label>
             <select id="books-select"></select>
         </div>
-        <button type="submit">Search</button>
+        <div class="button-container">
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
     </form>
 </div>
 <div class="container">
     <h1>Listings</h1>
     <div id="listingsContainer" class="d-flex flex-row flex-wrap justify-content-center gap-3">
-
     </div>
 </div>
 <div style="height: 10rem;"></div>
