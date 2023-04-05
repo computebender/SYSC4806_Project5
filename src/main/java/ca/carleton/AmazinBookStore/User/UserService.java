@@ -1,7 +1,9 @@
 package ca.carleton.AmazinBookStore.User;
 
+import ca.carleton.AmazinBookStore.Listing.Listing;
 import ca.carleton.AmazinBookStore.ShoppingCart.CartRepository;
 import ca.carleton.AmazinBookStore.ShoppingCart.ShoppingCart;
+import ca.carleton.AmazinBookStore.ShoppingCart.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,7 +32,11 @@ public class UserService {
         ShoppingCart shoppingCart = new ShoppingCart();
         ShoppingCart savedShoppingCart = cartRepository.save(shoppingCart);
         user.setShoppingCart(savedShoppingCart);
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        savedShoppingCart.setUser(savedUser);
+        shoppingCart.setUser(savedUser);
+        cartRepository.save(shoppingCart);
+        return savedUser;
     }
 
     public User getUserById(Long id) {
@@ -86,12 +92,32 @@ public class UserService {
         return user;
     }
 
+    public User updatePurchaseHistory(Long id, List<Listing> purchaseHistory){
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isEmpty()) {
+            throw new ResourceNotFoundException("User with ID " + id + " not found.");
+        }
+        User user = optionalUser.get();
+        user.expandPurchaseHistory(purchaseHistory);
+        User saveUser = userRepository.save(user);
+        return saveUser;
+    }
+
     public void deleteUserById(Long id) {
         Optional<User> optionalUser = this.userRepository.findById(id);
         if (optionalUser.isEmpty()) {
             throw new ResourceNotFoundException("User with ID " + id + " not found.");
         }
+        User user = optionalUser.get();
+        Optional<ShoppingCart> sc = this.cartRepository.findById(user.getShoppingCart().getId());
+        ShoppingCart savedSc = sc.get();
+        savedSc.setUser(null);
+        cartRepository.save(savedSc);
+        user.setShoppingCart(null);
+        userRepository.save(user);
+
         userRepository.deleteById(id);
+        cartRepository.deleteById(savedSc.getId());
     }
 }
 

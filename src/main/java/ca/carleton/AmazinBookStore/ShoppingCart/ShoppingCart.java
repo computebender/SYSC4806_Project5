@@ -1,5 +1,7 @@
 package ca.carleton.AmazinBookStore.ShoppingCart;
 
+import ca.carleton.AmazinBookStore.User.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -13,6 +15,10 @@ public class ShoppingCart {
 
     @OneToMany
     private List<CartItem> items;
+
+    @OneToOne(fetch=FetchType.EAGER, targetEntity = User.class)
+    @JsonIgnore
+    private User user;
 
     public ShoppingCart() {
     }
@@ -55,5 +61,13 @@ public class ShoppingCart {
         }
         this.items.clear();
         return total_price;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

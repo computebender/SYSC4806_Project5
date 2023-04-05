@@ -24,7 +24,7 @@ public class User {
 
     private String lastName;
 
-    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, targetEntity = Listing.class)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, targetEntity = Listing.class)
     private List<Listing> purchaseHistory;
     
     @OneToOne(fetch=FetchType.EAGER, targetEntity = ShoppingCart.class)
@@ -77,6 +77,10 @@ public class User {
 
     public void setPurchaseHistory(List<Listing> purchaseHistory) {
         this.purchaseHistory = purchaseHistory;
+    }
+
+    public void expandPurchaseHistory(List<Listing> purchaseHistory) {
+        this.purchaseHistory.addAll(purchaseHistory);
     }
 
     public ShoppingCart getShoppingCart() {
