@@ -12,15 +12,6 @@ public class UIController {
         return "landing";
     }
 
-    @GetMapping("/author")
-    public String author() {
-        return "author";
-    }
-
-    @GetMapping("/genre")
-    public String genre() {
-        return "genre";
-    }
 
     @GetMapping("/login")
     public String loginUI(){
@@ -47,10 +38,6 @@ public class UIController {
         return "cart";
     }
 
-    @GetMapping("/publisher")
-    public String publisherUI(){
-        return "publisher";
-    }
 
     @GetMapping("/book")
     public String bookUI(){

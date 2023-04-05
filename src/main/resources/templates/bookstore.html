@@ -1,22 +1,51 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+            crossorigin="anonymous"></script>
+    <style>
+        .footer-padding{
+            box-sizing: border-box;
+            height: 100px;
+            padding: 10px;
+        }
+    </style>
     <meta charset="UTF-8">
     <title>Bookstores</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!--Services-->
+    <script src="/js/authorService.js"></script>
+    <script src="/js/bookService.js"></script>
     <script src="/js/bookstoreService.js"></script>
+    <script src="/js/genreService.js"></script>
+    <script src="/js/notificationService.js"></script>
+    <script src="/js/publisherService.js"></script>
+    <script src="/js/userService.js"></script>
+    <script src="/js/authService.js"></script>
+    <script src="/js/listingService.js"></script>
+    <script src="/js/component/listingComponent.js"></script>
+    <script src="/js/component/newPotentialListingComponent.js"></script>
+    <script src="/js/component/bookComponent.js"></script>
+    <script src="/js/cartService.js"></script>
     <script th:inline="javascript">
         function getAllBookstores() {
             bookstoreService().getAllBookstores(function (data) {
-                var bookstoresTable = $("#bookstores-table tbody");
-                bookstoresTable.empty();
-                $.each(data, function (index, bookstore) {
-                    var row = "<tr>";
-                    row += "<td>" + bookstore.bookstoreName + "</td>";
-                    row += "<td><button class='btn btn-danger' onclick='deleteBookstore(" + bookstore.id + ")'>Delete</button></td>";
-                    row += "</tr>";
-                    bookstoresTable.append(row);
+                var dropdown = document.getElementById("bookstores-select");
+                dropdown.innerHTML = "";
+                dropdown.required = true;
+
+                data.forEach(function(bookstore) {
+                    var option = document.createElement("option");
+                    option.disabled = false;
+                    option.value = bookstore.id;
+                    option.text = bookstore.bookstoreName;
+                    dropdown.appendChild(option);
                 });
+
+                $("#bookstores-select").val(null);
             });
         }
 
@@ -30,35 +59,78 @@
             });
         }
 
-        function deleteBookstore(bookstoreId) {
-            bookstoreService().deleteBookstoreById(bookstoreId, function () {
-                getAllBookstores();
+        function getAllBooks() {
+            bookService.getAllBooks(function (books) {
+                var listingsContainer = $('#listingsContainer');
+                for (var i = 0; i < books.length; i++) {
+                    var book = books[i];
+                    var bookCard = listingsContainer.listingNewCard(book.title, book.author.firstName + " " + book.author.lastName, book.picture, book.id);
+                    listingsContainer.append(bookCard);
+                }
             });
         }
 
+        function createListing(event) {
+            var listing = {
+                book: {id: event.submitter.value},
+                location: {id: $("#bookstores-select").val()},
+                price: $("#price").val(),
+                copies: $("#copies").val(),
+            };
+            listingService.createListing(listing, function () {
+                $("#bookstores-select").val(null);
+                $("#price").val("");
+                $("#copies").val("");
+            });
+        }
+
+
         $(function () {
             getAllBookstores();
+            getAllBooks();
         });
     </script>
 </head>
 <body>
-<h1>Bookstore</h1>
-<table id="bookstores-table">
-    <thead>
-    <tr>
-        <th>Bookstore Name</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
-<form onsubmit="createBookstore(); return false;">
-    <div>
-        <label for="bookstoreName">Bookstore Name:</label>
-        <input type="text" id="bookstoreName" required>
+<div th:replace="fragments/navbar :: navbar">
+</div>
+<div class="container">
+    <h1>Bookstore</h1>
+    <div class="container">
+    <form id="create-bookstore" onsubmit="createBookstore(); return false;">
+        <div>
+            <label for="bookstoreName" class="form-label">Bookstore Name:</label>
+            <input type="text" id="bookstoreName" class="form-control" required>
+        </div>
+        <button type="submit" form="create-bookstore" class="btn btn-primary">Create Bookstore</button>
+    </form>
+</div>
+</div>
+<div class="container">
+    <h1>Listing</h1>
+    <div class="container">
+        <form id="create-listing" onsubmit="createListing(event); return false;">
+            <div id="bookstores-dropdown">
+                <label for="bookstores-select" class="form-label">Bookstore:</label>
+                <select id="bookstores-select" class="form-select"></select>
+            </div>
+            <div>
+                <label for="price" class="form-label">Price ($):</label>
+                <input type="text" id="price" class="form-control" required>
+            </div>
+            <div>
+                <label for="copies" class="form-label">Copies:</label>
+                <input type="text" id="copies" class="form-control" required>
+            </div>
+        <div id="listingsContainer" class="d-flex flex-row flex-wrap justify-content-center gap-3">
+
+        </div>
+        </form>
     </div>
-    <button type="submit">Create Bookstore</button>
-</form>
+</div>
+<div class="footer-padding">
+</div>
+<div th:replace="fragments/footer :: footer">
+</div>
 </body>
 </html>
