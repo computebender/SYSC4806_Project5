@@ -14,7 +14,7 @@ This group project is a web application that provides an online platform for sel
 ## Project Build/Deployment Status
 [![sysc4806_project5-master Actions Status](https://github.com/computebender/SYSC4806_Project5/actions/workflows/maven.yml/badge.svg)](https://github.com/computebender/SYSC4806_Project5/actions)
 ## Database Schema
-![public](https://user-images.githubusercontent.com/8071151/227016286-5539dd84-2e6b-456a-97a2-6c1ce1dd0a68.png)
+![ER Diagram](https://user-images.githubusercontent.com/8071151/230138065-a8ea9ccc-b099-4e58-916c-7e1a678c64ac.png)
 
 
 ## UML Class Diagram
