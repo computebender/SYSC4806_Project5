@@ -23,12 +23,12 @@ This group project is a web application that provides an online platform for sel
 ## Milestone 2 Project Kanban Status
 | Todo        | In Progress |                                                               Done |
 | :---        |    :----:   |-------------------------------------------------------------------:|
-| Issue https://github.com/computebender/SYSC4806_Project5/issues/5   |        | Issue https://github.com/computebender/SYSC4806_Project5/issues/11 |
-| Issue https://github.com/computebender/SYSC4806_Project5/issues/12   |      |  Issue https://github.com/computebender/SYSC4806_Project5/issues/2 |
-| Issue https://github.com/computebender/SYSC4806_Project5/issues/76   |        |  Issue https://github.com/computebender/SYSC4806_Project5/issues/1 |
-| Issue https://github.com/computebender/SYSC4806_Project5/issues/84  |        | Issue https://github.com/computebender/SYSC4806_Project5/issues/16 |
-| Issue https://github.com/computebender/SYSC4806_Project5/issues/85     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/14 |
-| Issue https://github.com/computebender/SYSC4806_Project5/issues/89    |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/10 |
+|    |        | Issue https://github.com/computebender/SYSC4806_Project5/issues/11 |
+|    |      |  Issue https://github.com/computebender/SYSC4806_Project5/issues/2 |
+|    |        |  Issue https://github.com/computebender/SYSC4806_Project5/issues/1 |
+|   |        | Issue https://github.com/computebender/SYSC4806_Project5/issues/16 |
+|      |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/14 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/10 |
 |     |      |  Issue https://github.com/computebender/SYSC4806_Project5/issues/7 |
 |     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/21 |
 |     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/27 |
@@ -53,6 +53,16 @@ This group project is a web application that provides an online platform for sel
 |     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/58 |
 |     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/60 |
 |     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/69 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/5 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/12 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/76 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/84 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/85 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/89 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/100 |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/ |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/ |
+|     |      | Issue https://github.com/computebender/SYSC4806_Project5/issues/ |
 
 
 
@@ -68,7 +78,6 @@ This group project is a web application that provides an online platform for sel
 - User can select and add or remove books from a shopping cart and proceed to checkout/purchase the book if inventory is not exceeded.
 - User can view book recommendations based on user past purchase history and similar purchases from other users.
 - Persistent database configuration.
-
 ## Milestone 2 Features
 - Users can register and login to application.
 - Users are authenticated during login process.
@@ -85,6 +94,12 @@ This group project is a web application that provides an online platform for sel
 - User book, bookstore, listing configuration user interface
 - View interface for search
 - Logic to add bought books to purchase history
+## Milestone 3 Features
+- Shopping Cart feature expanded to allow for user to enter shipping and payment information.
+- Shopping cart additional error message handling & listing quantities adjusted based on # of books purchased in checkout.
+- Listing card component reflects if 0 copies of a book are available by indicating Out of Stock.
+- Ability to create a bookstore and book in the application interface.
+- Feature to search for books by filtering by bookstore, book, genre, author or publisher. 
 
 ## Environment Configurations
 Java Version: Java 17
